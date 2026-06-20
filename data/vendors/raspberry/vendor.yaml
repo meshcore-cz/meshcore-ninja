@@ -1,5 +1,6 @@
 name: "Raspberry Pi"
 website: "https://www.raspberrypi.com"
+country: "United Kingdom"
 logo: logo.svg
 description: >
   Raspberry Pi single-board computers and microcontrollers.

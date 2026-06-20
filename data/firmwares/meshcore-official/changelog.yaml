@@ -1,0 +1,985 @@
+source: script
+repo: meshcore-dev/MeshCore
+updatedAt: '2026-06-20T20:17:30.665Z'
+releases:
+  - version: room-server-v1.16.0
+    name: Room Server Firmware v1.16.0
+    datetime: '2026-06-06T15:54:36Z'
+    url: https://github.com/meshcore-dev/MeshCore/releases/tag/room-server-v1.16.0
+    prerelease: false
+    notes: >-
+      ## Download
+
+
+      Latest firmwares are in the [flasher.meshcore.io](https://flasher.meshcore.io/)
+
+
+      ## Change Log
+
+
+      ### New Features
+
+
+      -   New CLI config var ‘flood.max.unscoped’
+      [#2661](https://github.com/meshcore-dev/MeshCore/pull/2661)
+
+      -   New CLI config var ‘flood.max.advert’
+      [#2702](https://github.com/meshcore-dev/MeshCore/pull/2702)
+
+      -   longer preamble now for lower SF. (32 for SF<=8, 16 for SF>8)
+      [#1954](https://github.com/meshcore-dev/MeshCore/pull/1954)
+
+      -   app/companion can now do anon\_req/response with non-contact nodes
+      [#2672](https://github.com/meshcore-dev/MeshCore/pull/2672)
+
+      -   companion auto-shutdown, disabled when on external power, new UI warning on display
+      [#2663](https://github.com/meshcore-dev/MeshCore/pull/2663)
+
+      -   new ‘region def …’ CLI command [#2540](https://github.com/meshcore-dev/MeshCore/pull/2540)
+
+      -   extended ACK support [#2594](https://github.com/meshcore-dev/MeshCore/pull/2594)
+
+      -   app/companion can now compose and send raw packets
+      [#2543](https://github.com/meshcore-dev/MeshCore/pull/2543)
+
+      -   companion can now override default scope to explicit unscoped
+      [#2492](https://github.com/meshcore-dev/MeshCore/pull/2492)
+
+
+      ### Enhancements
+
+
+      -   All ESP repeaters, power saving improvements
+      [#1687](https://github.com/meshcore-dev/MeshCore/pull/1687)
+
+      -   nRF companions, power saving [#2286](https://github.com/meshcore-dev/MeshCore/pull/2286)
+
+
+      ### New device support
+
+
+      -   NEW: LilyGo T-Echo Card support
+      [#2517](https://github.com/meshcore-dev/MeshCore/pull/2517)
+
+      -   NEW: LilyGo T-Impulse Plus support
+      [#2522](https://github.com/meshcore-dev/MeshCore/pull/2522)
+
+      -   NEW: Station G3 support [#2515](https://github.com/meshcore-dev/MeshCore/pull/2515)
+
+      -   NEW: Heltec Mesh Node T1 support
+      [#2520](https://github.com/meshcore-dev/MeshCore/pull/2520)
+
+      -   new Xiao S3 variants (repeater, companion, etc)
+      [#2383](https://github.com/meshcore-dev/MeshCore/pull/2383)
+
+
+      ### Bug fixes and Other
+
+
+      -   RP2040 target build fixes. [#2684](https://github.com/meshcore-dev/MeshCore/pull/2684)
+
+      -   companion protocol max frame size increase (now 176)
+      [#2022](https://github.com/meshcore-dev/MeshCore/pull/2022)
+
+      -   RAK Wismesh Tag fixes [#2664](https://github.com/meshcore-dev/MeshCore/pull/2664)
+
+      -   Bug fix: repeater neighbor discovery fail when path.hash.mode != 0
+
+      -   RAK4631, now using Bosch driver for BME680 sensor
+      [#2634](https://github.com/meshcore-dev/MeshCore/pull/2634)
+
+      -   enable radio.rxgain CLI command for LR1110 (T1000e)
+      [#2235](https://github.com/meshcore-dev/MeshCore/pull/2235)
+
+      -   default flood advert interval now 47 hours (was 12)
+      [#2608](https://github.com/meshcore-dev/MeshCore/pull/2608)
+
+      -   Client repeat (off-grid) EU freq change (from 869.0 to 869.495)
+      [#2604](https://github.com/meshcore-dev/MeshCore/pull/2604)
+
+      -   CLI validation on rxdelay, txdelay and direct.txdelay
+      [#2443](https://github.com/meshcore-dev/MeshCore/pull/2443)
+
+      -   Heltec T096, sensor node support
+      [#2576](https://github.com/meshcore-dev/MeshCore/pull/2576)
+
+      -   Heltec E290 USB companion fix [#2562](https://github.com/meshcore-dev/MeshCore/pull/2562)
+
+      -   WiFi companion, reconnect logic redesigned for non-blocking
+      [#2493](https://github.com/meshcore-dev/MeshCore/pull/2493)
+
+      -   RAM usage reduced for older boards
+      [#2497](https://github.com/meshcore-dev/MeshCore/pull/2497)
+
+      -   nRF variants, CustomLFS lib upgrade to v2.2
+      [#2519](https://github.com/meshcore-dev/MeshCore/pull/2519)
+
+      -   T-Echo Lite, fixes to RXEN, TXEN and TCXO
+      [#2511](https://github.com/meshcore-dev/MeshCore/pull/2511)
+
+      -   KISS modem frame timeout fixes [#2490](https://github.com/meshcore-dev/MeshCore/pull/2490)
+
+      -   sensor manager redesign [#2327](https://github.com/meshcore-dev/MeshCore/pull/2327)
+
+      -   startup tune suppressed if sound pref off
+      [#2460](https://github.com/meshcore-dev/MeshCore/pull/2460)
+
+      -   added KISS Modem variants for most boards
+      [#2620](https://github.com/meshcore-dev/MeshCore/pull/2620)
+      [#2432](https://github.com/meshcore-dev/MeshCore/pull/2432)
+
+      -   Adafruit nRF BLE fork, to prevent lockup during rapid connect/disconnect
+      [#2430](https://github.com/meshcore-dev/MeshCore/pull/2430)
+
+      -   RAK3401 companion, analog button support
+      [#2436](https://github.com/meshcore-dev/MeshCore/pull/2436)
+
+      -   Heltec boards, LNA disabled by default
+      [#2439](https://github.com/meshcore-dev/MeshCore/pull/2439)
+
+      -   new splash screens [#2424](https://github.com/meshcore-dev/MeshCore/pull/2424)
+
+      -   Sensecap Solar Tx LED fix [#2157](https://github.com/meshcore-dev/MeshCore/pull/2157)
+
+      -   new repeater variant: Heltec V4 expansion kit
+      [#2326](https://github.com/meshcore-dev/MeshCore/pull/2326)
+
+      -   new T-Echo Lite non-shell companion variants
+      [#2503](https://github.com/meshcore-dev/MeshCore/pull/2503)
+      [#2353](https://github.com/meshcore-dev/MeshCore/pull/2353)
+
+      -   T-Echo Lite, battery measure fix
+      [#2287](https://github.com/meshcore-dev/MeshCore/pull/2287)
+
+      -   RAK4631, sx1262 reset pin fix [#2008](https://github.com/meshcore-dev/MeshCore/pull/2008)
+
+      -   Heltec T096, Wireless Tracker: FEM/LNA enable by default
+      [#2340](https://github.com/meshcore-dev/MeshCore/pull/2340)
+
+      -   R1 Neo, shutdown fix [#2371](https://github.com/meshcore-dev/MeshCore/pull/2371)
+
+      -   Heltec V4, set adc.multiplier support
+      [#2335](https://github.com/meshcore-dev/MeshCore/pull/2335)
+
+
+      ## Limiting Unscoped Traffic
+
+
+      The new `flood.max.unscoped` CLI config variable is specifically for limiting unscoped flood
+      traffic. Like `flood.max`, it drops unscoped flood packets which have already had a given
+      number of hops. By default it is 64, which is essentially _off_.
+
+
+      ## Limiting Advert Traffic
+
+
+      The new `flood.max.advert` CLI config variable is specifically for limiting adverts. Like
+      `flood.max`, it drops advert packets which have already had a given number of hops. By default
+      it is **8**.
+
+
+      ## New Preamble
+
+
+      When using the lower Spreading Factors, the radio has less time to _lock onto_ an incoming
+      packet, so this change gives the faster SF’s a longer preamble, and thus decreasing the chance
+      of the preamble being missed. For SF <= 8, the preamble is now 32 symbols.
+
+
+      ## Improved Region Discovery in Mobile App
+
+
+      The new companion firmware, and latest app, will be able to do ad-hoc requests to near by
+      repeaters _without_ having to add them to contacts first. This will streamline both repeater
+      discovery, and region discovery.
+
+
+      ## New `region def` Command
+
+
+      Defining regions via the CLI is currently quite verbose, and the latest CLI handling
+      introduces a new `region def...` command which has a short-hand notation for defining regions,
+      especially ones which have deep nesting.
+
+
+      See the [CLI Command Reference](https://docs.meshcore.io/cli_commands/) for more details.
+
+
+      ## Extended ACK Support
+
+
+      The latest firmwares introduce support for ‘extended ACKs’, which are 6 bytes instead of 4.
+      The extra bytes contain an extended attempt number, and additional random byte. This is in
+      preparation for a later app feature which will enable much more than 4 attempts for direct
+      messages. For now, repeaters will have to be updated first.
+
+
+      ## Companion Raw Packets
+
+
+      The latest companion firmwares now enable apps to compose the _full_ packet, ie. headers, path
+      and payload. This can correspond with the existing RxLog ability, so app can do its own raw
+      send and receive of packets.
+    notesUrl: https://blog.meshcore.io/2026/06/06/release-1-16-0
+  - version: repeater-v1.16.0
+    name: Repeater Firmware v1.16.0
+    datetime: '2026-06-06T15:54:59Z'
+    url: https://github.com/meshcore-dev/MeshCore/releases/tag/repeater-v1.16.0
+    prerelease: false
+    notes: >-
+      ## Download
+
+
+      Latest firmwares are in the [flasher.meshcore.io](https://flasher.meshcore.io/)
+
+
+      ## Change Log
+
+
+      ### New Features
+
+
+      -   New CLI config var ‘flood.max.unscoped’
+      [#2661](https://github.com/meshcore-dev/MeshCore/pull/2661)
+
+      -   New CLI config var ‘flood.max.advert’
+      [#2702](https://github.com/meshcore-dev/MeshCore/pull/2702)
+
+      -   longer preamble now for lower SF. (32 for SF<=8, 16 for SF>8)
+      [#1954](https://github.com/meshcore-dev/MeshCore/pull/1954)
+
+      -   app/companion can now do anon\_req/response with non-contact nodes
+      [#2672](https://github.com/meshcore-dev/MeshCore/pull/2672)
+
+      -   companion auto-shutdown, disabled when on external power, new UI warning on display
+      [#2663](https://github.com/meshcore-dev/MeshCore/pull/2663)
+
+      -   new ‘region def …’ CLI command [#2540](https://github.com/meshcore-dev/MeshCore/pull/2540)
+
+      -   extended ACK support [#2594](https://github.com/meshcore-dev/MeshCore/pull/2594)
+
+      -   app/companion can now compose and send raw packets
+      [#2543](https://github.com/meshcore-dev/MeshCore/pull/2543)
+
+      -   companion can now override default scope to explicit unscoped
+      [#2492](https://github.com/meshcore-dev/MeshCore/pull/2492)
+
+
+      ### Enhancements
+
+
+      -   All ESP repeaters, power saving improvements
+      [#1687](https://github.com/meshcore-dev/MeshCore/pull/1687)
+
+      -   nRF companions, power saving [#2286](https://github.com/meshcore-dev/MeshCore/pull/2286)
+
+
+      ### New device support
+
+
+      -   NEW: LilyGo T-Echo Card support
+      [#2517](https://github.com/meshcore-dev/MeshCore/pull/2517)
+
+      -   NEW: LilyGo T-Impulse Plus support
+      [#2522](https://github.com/meshcore-dev/MeshCore/pull/2522)
+
+      -   NEW: Station G3 support [#2515](https://github.com/meshcore-dev/MeshCore/pull/2515)
+
+      -   NEW: Heltec Mesh Node T1 support
+      [#2520](https://github.com/meshcore-dev/MeshCore/pull/2520)
+
+      -   new Xiao S3 variants (repeater, companion, etc)
+      [#2383](https://github.com/meshcore-dev/MeshCore/pull/2383)
+
+
+      ### Bug fixes and Other
+
+
+      -   RP2040 target build fixes. [#2684](https://github.com/meshcore-dev/MeshCore/pull/2684)
+
+      -   companion protocol max frame size increase (now 176)
+      [#2022](https://github.com/meshcore-dev/MeshCore/pull/2022)
+
+      -   RAK Wismesh Tag fixes [#2664](https://github.com/meshcore-dev/MeshCore/pull/2664)
+
+      -   Bug fix: repeater neighbor discovery fail when path.hash.mode != 0
+
+      -   RAK4631, now using Bosch driver for BME680 sensor
+      [#2634](https://github.com/meshcore-dev/MeshCore/pull/2634)
+
+      -   enable radio.rxgain CLI command for LR1110 (T1000e)
+      [#2235](https://github.com/meshcore-dev/MeshCore/pull/2235)
+
+      -   default flood advert interval now 47 hours (was 12)
+      [#2608](https://github.com/meshcore-dev/MeshCore/pull/2608)
+
+      -   Client repeat (off-grid) EU freq change (from 869.0 to 869.495)
+      [#2604](https://github.com/meshcore-dev/MeshCore/pull/2604)
+
+      -   CLI validation on rxdelay, txdelay and direct.txdelay
+      [#2443](https://github.com/meshcore-dev/MeshCore/pull/2443)
+
+      -   Heltec T096, sensor node support
+      [#2576](https://github.com/meshcore-dev/MeshCore/pull/2576)
+
+      -   Heltec E290 USB companion fix [#2562](https://github.com/meshcore-dev/MeshCore/pull/2562)
+
+      -   WiFi companion, reconnect logic redesigned for non-blocking
+      [#2493](https://github.com/meshcore-dev/MeshCore/pull/2493)
+
+      -   RAM usage reduced for older boards
+      [#2497](https://github.com/meshcore-dev/MeshCore/pull/2497)
+
+      -   nRF variants, CustomLFS lib upgrade to v2.2
+      [#2519](https://github.com/meshcore-dev/MeshCore/pull/2519)
+
+      -   T-Echo Lite, fixes to RXEN, TXEN and TCXO
+      [#2511](https://github.com/meshcore-dev/MeshCore/pull/2511)
+
+      -   KISS modem frame timeout fixes [#2490](https://github.com/meshcore-dev/MeshCore/pull/2490)
+
+      -   sensor manager redesign [#2327](https://github.com/meshcore-dev/MeshCore/pull/2327)
+
+      -   startup tune suppressed if sound pref off
+      [#2460](https://github.com/meshcore-dev/MeshCore/pull/2460)
+
+      -   added KISS Modem variants for most boards
+      [#2620](https://github.com/meshcore-dev/MeshCore/pull/2620)
+      [#2432](https://github.com/meshcore-dev/MeshCore/pull/2432)
+
+      -   Adafruit nRF BLE fork, to prevent lockup during rapid connect/disconnect
+      [#2430](https://github.com/meshcore-dev/MeshCore/pull/2430)
+
+      -   RAK3401 companion, analog button support
+      [#2436](https://github.com/meshcore-dev/MeshCore/pull/2436)
+
+      -   Heltec boards, LNA disabled by default
+      [#2439](https://github.com/meshcore-dev/MeshCore/pull/2439)
+
+      -   new splash screens [#2424](https://github.com/meshcore-dev/MeshCore/pull/2424)
+
+      -   Sensecap Solar Tx LED fix [#2157](https://github.com/meshcore-dev/MeshCore/pull/2157)
+
+      -   new repeater variant: Heltec V4 expansion kit
+      [#2326](https://github.com/meshcore-dev/MeshCore/pull/2326)
+
+      -   new T-Echo Lite non-shell companion variants
+      [#2503](https://github.com/meshcore-dev/MeshCore/pull/2503)
+      [#2353](https://github.com/meshcore-dev/MeshCore/pull/2353)
+
+      -   T-Echo Lite, battery measure fix
+      [#2287](https://github.com/meshcore-dev/MeshCore/pull/2287)
+
+      -   RAK4631, sx1262 reset pin fix [#2008](https://github.com/meshcore-dev/MeshCore/pull/2008)
+
+      -   Heltec T096, Wireless Tracker: FEM/LNA enable by default
+      [#2340](https://github.com/meshcore-dev/MeshCore/pull/2340)
+
+      -   R1 Neo, shutdown fix [#2371](https://github.com/meshcore-dev/MeshCore/pull/2371)
+
+      -   Heltec V4, set adc.multiplier support
+      [#2335](https://github.com/meshcore-dev/MeshCore/pull/2335)
+
+
+      ## Limiting Unscoped Traffic
+
+
+      The new `flood.max.unscoped` CLI config variable is specifically for limiting unscoped flood
+      traffic. Like `flood.max`, it drops unscoped flood packets which have already had a given
+      number of hops. By default it is 64, which is essentially _off_.
+
+
+      ## Limiting Advert Traffic
+
+
+      The new `flood.max.advert` CLI config variable is specifically for limiting adverts. Like
+      `flood.max`, it drops advert packets which have already had a given number of hops. By default
+      it is **8**.
+
+
+      ## New Preamble
+
+
+      When using the lower Spreading Factors, the radio has less time to _lock onto_ an incoming
+      packet, so this change gives the faster SF’s a longer preamble, and thus decreasing the chance
+      of the preamble being missed. For SF <= 8, the preamble is now 32 symbols.
+
+
+      ## Improved Region Discovery in Mobile App
+
+
+      The new companion firmware, and latest app, will be able to do ad-hoc requests to near by
+      repeaters _without_ having to add them to contacts first. This will streamline both repeater
+      discovery, and region discovery.
+
+
+      ## New `region def` Command
+
+
+      Defining regions via the CLI is currently quite verbose, and the latest CLI handling
+      introduces a new `region def...` command which has a short-hand notation for defining regions,
+      especially ones which have deep nesting.
+
+
+      See the [CLI Command Reference](https://docs.meshcore.io/cli_commands/) for more details.
+
+
+      ## Extended ACK Support
+
+
+      The latest firmwares introduce support for ‘extended ACKs’, which are 6 bytes instead of 4.
+      The extra bytes contain an extended attempt number, and additional random byte. This is in
+      preparation for a later app feature which will enable much more than 4 attempts for direct
+      messages. For now, repeaters will have to be updated first.
+
+
+      ## Companion Raw Packets
+
+
+      The latest companion firmwares now enable apps to compose the _full_ packet, ie. headers, path
+      and payload. This can correspond with the existing RxLog ability, so app can do its own raw
+      send and receive of packets.
+    notesUrl: https://blog.meshcore.io/2026/06/06/release-1-16-0
+  - version: companion-v1.16.0
+    name: Companion Firmware v1.16.0
+    datetime: '2026-06-06T15:55:20Z'
+    url: https://github.com/meshcore-dev/MeshCore/releases/tag/companion-v1.16.0
+    prerelease: false
+    notes: >-
+      ## Download
+
+
+      Latest firmwares are in the [flasher.meshcore.io](https://flasher.meshcore.io/)
+
+
+      ## Change Log
+
+
+      ### New Features
+
+
+      -   New CLI config var ‘flood.max.unscoped’
+      [#2661](https://github.com/meshcore-dev/MeshCore/pull/2661)
+
+      -   New CLI config var ‘flood.max.advert’
+      [#2702](https://github.com/meshcore-dev/MeshCore/pull/2702)
+
+      -   longer preamble now for lower SF. (32 for SF<=8, 16 for SF>8)
+      [#1954](https://github.com/meshcore-dev/MeshCore/pull/1954)
+
+      -   app/companion can now do anon\_req/response with non-contact nodes
+      [#2672](https://github.com/meshcore-dev/MeshCore/pull/2672)
+
+      -   companion auto-shutdown, disabled when on external power, new UI warning on display
+      [#2663](https://github.com/meshcore-dev/MeshCore/pull/2663)
+
+      -   new ‘region def …’ CLI command [#2540](https://github.com/meshcore-dev/MeshCore/pull/2540)
+
+      -   extended ACK support [#2594](https://github.com/meshcore-dev/MeshCore/pull/2594)
+
+      -   app/companion can now compose and send raw packets
+      [#2543](https://github.com/meshcore-dev/MeshCore/pull/2543)
+
+      -   companion can now override default scope to explicit unscoped
+      [#2492](https://github.com/meshcore-dev/MeshCore/pull/2492)
+
+
+      ### Enhancements
+
+
+      -   All ESP repeaters, power saving improvements
+      [#1687](https://github.com/meshcore-dev/MeshCore/pull/1687)
+
+      -   nRF companions, power saving [#2286](https://github.com/meshcore-dev/MeshCore/pull/2286)
+
+
+      ### New device support
+
+
+      -   NEW: LilyGo T-Echo Card support
+      [#2517](https://github.com/meshcore-dev/MeshCore/pull/2517)
+
+      -   NEW: LilyGo T-Impulse Plus support
+      [#2522](https://github.com/meshcore-dev/MeshCore/pull/2522)
+
+      -   NEW: Station G3 support [#2515](https://github.com/meshcore-dev/MeshCore/pull/2515)
+
+      -   NEW: Heltec Mesh Node T1 support
+      [#2520](https://github.com/meshcore-dev/MeshCore/pull/2520)
+
+      -   new Xiao S3 variants (repeater, companion, etc)
+      [#2383](https://github.com/meshcore-dev/MeshCore/pull/2383)
+
+
+      ### Bug fixes and Other
+
+
+      -   RP2040 target build fixes. [#2684](https://github.com/meshcore-dev/MeshCore/pull/2684)
+
+      -   companion protocol max frame size increase (now 176)
+      [#2022](https://github.com/meshcore-dev/MeshCore/pull/2022)
+
+      -   RAK Wismesh Tag fixes [#2664](https://github.com/meshcore-dev/MeshCore/pull/2664)
+
+      -   Bug fix: repeater neighbor discovery fail when path.hash.mode != 0
+
+      -   RAK4631, now using Bosch driver for BME680 sensor
+      [#2634](https://github.com/meshcore-dev/MeshCore/pull/2634)
+
+      -   enable radio.rxgain CLI command for LR1110 (T1000e)
+      [#2235](https://github.com/meshcore-dev/MeshCore/pull/2235)
+
+      -   default flood advert interval now 47 hours (was 12)
+      [#2608](https://github.com/meshcore-dev/MeshCore/pull/2608)
+
+      -   Client repeat (off-grid) EU freq change (from 869.0 to 869.495)
+      [#2604](https://github.com/meshcore-dev/MeshCore/pull/2604)
+
+      -   CLI validation on rxdelay, txdelay and direct.txdelay
+      [#2443](https://github.com/meshcore-dev/MeshCore/pull/2443)
+
+      -   Heltec T096, sensor node support
+      [#2576](https://github.com/meshcore-dev/MeshCore/pull/2576)
+
+      -   Heltec E290 USB companion fix [#2562](https://github.com/meshcore-dev/MeshCore/pull/2562)
+
+      -   WiFi companion, reconnect logic redesigned for non-blocking
+      [#2493](https://github.com/meshcore-dev/MeshCore/pull/2493)
+
+      -   RAM usage reduced for older boards
+      [#2497](https://github.com/meshcore-dev/MeshCore/pull/2497)
+
+      -   nRF variants, CustomLFS lib upgrade to v2.2
+      [#2519](https://github.com/meshcore-dev/MeshCore/pull/2519)
+
+      -   T-Echo Lite, fixes to RXEN, TXEN and TCXO
+      [#2511](https://github.com/meshcore-dev/MeshCore/pull/2511)
+
+      -   KISS modem frame timeout fixes [#2490](https://github.com/meshcore-dev/MeshCore/pull/2490)
+
+      -   sensor manager redesign [#2327](https://github.com/meshcore-dev/MeshCore/pull/2327)
+
+      -   startup tune suppressed if sound pref off
+      [#2460](https://github.com/meshcore-dev/MeshCore/pull/2460)
+
+      -   added KISS Modem variants for most boards
+      [#2620](https://github.com/meshcore-dev/MeshCore/pull/2620)
+      [#2432](https://github.com/meshcore-dev/MeshCore/pull/2432)
+
+      -   Adafruit nRF BLE fork, to prevent lockup during rapid connect/disconnect
+      [#2430](https://github.com/meshcore-dev/MeshCore/pull/2430)
+
+      -   RAK3401 companion, analog button support
+      [#2436](https://github.com/meshcore-dev/MeshCore/pull/2436)
+
+      -   Heltec boards, LNA disabled by default
+      [#2439](https://github.com/meshcore-dev/MeshCore/pull/2439)
+
+      -   new splash screens [#2424](https://github.com/meshcore-dev/MeshCore/pull/2424)
+
+      -   Sensecap Solar Tx LED fix [#2157](https://github.com/meshcore-dev/MeshCore/pull/2157)
+
+      -   new repeater variant: Heltec V4 expansion kit
+      [#2326](https://github.com/meshcore-dev/MeshCore/pull/2326)
+
+      -   new T-Echo Lite non-shell companion variants
+      [#2503](https://github.com/meshcore-dev/MeshCore/pull/2503)
+      [#2353](https://github.com/meshcore-dev/MeshCore/pull/2353)
+
+      -   T-Echo Lite, battery measure fix
+      [#2287](https://github.com/meshcore-dev/MeshCore/pull/2287)
+
+      -   RAK4631, sx1262 reset pin fix [#2008](https://github.com/meshcore-dev/MeshCore/pull/2008)
+
+      -   Heltec T096, Wireless Tracker: FEM/LNA enable by default
+      [#2340](https://github.com/meshcore-dev/MeshCore/pull/2340)
+
+      -   R1 Neo, shutdown fix [#2371](https://github.com/meshcore-dev/MeshCore/pull/2371)
+
+      -   Heltec V4, set adc.multiplier support
+      [#2335](https://github.com/meshcore-dev/MeshCore/pull/2335)
+
+
+      ## Limiting Unscoped Traffic
+
+
+      The new `flood.max.unscoped` CLI config variable is specifically for limiting unscoped flood
+      traffic. Like `flood.max`, it drops unscoped flood packets which have already had a given
+      number of hops. By default it is 64, which is essentially _off_.
+
+
+      ## Limiting Advert Traffic
+
+
+      The new `flood.max.advert` CLI config variable is specifically for limiting adverts. Like
+      `flood.max`, it drops advert packets which have already had a given number of hops. By default
+      it is **8**.
+
+
+      ## New Preamble
+
+
+      When using the lower Spreading Factors, the radio has less time to _lock onto_ an incoming
+      packet, so this change gives the faster SF’s a longer preamble, and thus decreasing the chance
+      of the preamble being missed. For SF <= 8, the preamble is now 32 symbols.
+
+
+      ## Improved Region Discovery in Mobile App
+
+
+      The new companion firmware, and latest app, will be able to do ad-hoc requests to near by
+      repeaters _without_ having to add them to contacts first. This will streamline both repeater
+      discovery, and region discovery.
+
+
+      ## New `region def` Command
+
+
+      Defining regions via the CLI is currently quite verbose, and the latest CLI handling
+      introduces a new `region def...` command which has a short-hand notation for defining regions,
+      especially ones which have deep nesting.
+
+
+      See the [CLI Command Reference](https://docs.meshcore.io/cli_commands/) for more details.
+
+
+      ## Extended ACK Support
+
+
+      The latest firmwares introduce support for ‘extended ACKs’, which are 6 bytes instead of 4.
+      The extra bytes contain an extended attempt number, and additional random byte. This is in
+      preparation for a later app feature which will enable much more than 4 attempts for direct
+      messages. For now, repeaters will have to be updated first.
+
+
+      ## Companion Raw Packets
+
+
+      The latest companion firmwares now enable apps to compose the _full_ packet, ie. headers, path
+      and payload. This can correspond with the existing RxLog ability, so app can do its own raw
+      send and receive of packets.
+    notesUrl: https://blog.meshcore.io/2026/06/06/release-1-16-0
+  - version: room-server-v1.15.0
+    name: Room Server Firmware v1.15.0
+    datetime: '2026-04-19T03:07:54Z'
+    url: https://github.com/meshcore-dev/MeshCore/releases/tag/room-server-v1.15.0
+    prerelease: false
+    notes: >-
+      **Download**
+
+
+      Latest firmwares are in the [flasher.meshcore.io](https://flasher.meshcore.io/)
+
+
+      **Change Log**
+
+
+      -   Default Scope support
+
+      -   Support for New GROUP\_DATA (binary) packets
+      [#1928](https://github.com/meshcore-dev/MeshCore/pull/1928)
+      [#2130](https://github.com/meshcore-dev/MeshCore/pull/2130)
+
+      -   Heltec V4.3 support [#1867](https://github.com/meshcore-dev/MeshCore/pull/1867)
+
+      -   Heltec nRF Tracker (T096) support
+      [#2097](https://github.com/meshcore-dev/MeshCore/pull/2097)
+
+      -   GAT562 Mesh EVB Pro repeater and room server support
+      [#2042](https://github.com/meshcore-dev/MeshCore/pull/2042)
+
+      -   Radio rxgain now ON by default [#2124](https://github.com/meshcore-dev/MeshCore/pull/2124)
+
+      -   Radio freq range now supported down to 150Mhz
+      [#2126](https://github.com/meshcore-dev/MeshCore/pull/2126)
+
+      -   GPS pref peristence fix [#2018](https://github.com/meshcore-dev/MeshCore/pull/2018)
+
+      -   New `get|set dutycycle` CLI command
+      [#1961](https://github.com/meshcore-dev/MeshCore/pull/1961)
+
+      -   Muzi Works R1 Neo support [#2007](https://github.com/meshcore-dev/MeshCore/pull/2007)
+
+      -   GAT562 Watch support [#2138](https://github.com/meshcore-dev/MeshCore/pull/2138)
+      [#2228](https://github.com/meshcore-dev/MeshCore/pull/2228)
+
+      -   BME680 sensor init fix [#2227](https://github.com/meshcore-dev/MeshCore/pull/2227)
+
+      -   Heltec Wireless Paper battery read fix
+      [#2164](https://github.com/meshcore-dev/MeshCore/pull/2164)
+
+      -   WiFi companion fixes for Heltec V4,TBeam 1W
+      [#1833](https://github.com/meshcore-dev/MeshCore/pull/1833)
+
+      -   Waveshare RP2040: RXEN fix [#2298](https://github.com/meshcore-dev/MeshCore/pull/2298)
+
+      -   nRF companion, support for OTA updates
+      [#2323](https://github.com/meshcore-dev/MeshCore/pull/2323)
+
+      -   Added companion for Heltec Wireless Paper
+      [#2315](https://github.com/meshcore-dev/MeshCore/pull/2315)
+
+      -   Misc [#2134](https://github.com/meshcore-dev/MeshCore/pull/2134)
+      [#2190](https://github.com/meshcore-dev/MeshCore/pull/2190)
+      [#1425](https://github.com/meshcore-dev/MeshCore/pull/1425)
+      [#2075](https://github.com/meshcore-dev/MeshCore/pull/2075)
+      [#2302](https://github.com/meshcore-dev/MeshCore/pull/2302)
+      [#2306](https://github.com/meshcore-dev/MeshCore/pull/2306)
+
+      -   Xiao C3 bootloop fix [#2328](https://github.com/meshcore-dev/MeshCore/pull/2328)
+
+
+      **Documentation Links**
+
+
+      For info on the new Default Scope feature, please see [this
+      article](https://blog.meshcore.io/2026/04/17/default-scope).
+
+
+      For low level format of the GROUP\_DATA packets, please see [this docs
+      link](https://docs.meshcore.io/payloads/?h=group+datagram#group-datagram).
+    notesUrl: https://blog.meshcore.io/2026/04/19/release-1-15-0
+  - version: repeater-v1.15.0
+    name: Repeater Firmware v1.15.0
+    datetime: '2026-04-19T03:08:26Z'
+    url: https://github.com/meshcore-dev/MeshCore/releases/tag/repeater-v1.15.0
+    prerelease: false
+    notes: >-
+      **Download**
+
+
+      Latest firmwares are in the [flasher.meshcore.io](https://flasher.meshcore.io/)
+
+
+      **Change Log**
+
+
+      -   Default Scope support
+
+      -   Support for New GROUP\_DATA (binary) packets
+      [#1928](https://github.com/meshcore-dev/MeshCore/pull/1928)
+      [#2130](https://github.com/meshcore-dev/MeshCore/pull/2130)
+
+      -   Heltec V4.3 support [#1867](https://github.com/meshcore-dev/MeshCore/pull/1867)
+
+      -   Heltec nRF Tracker (T096) support
+      [#2097](https://github.com/meshcore-dev/MeshCore/pull/2097)
+
+      -   GAT562 Mesh EVB Pro repeater and room server support
+      [#2042](https://github.com/meshcore-dev/MeshCore/pull/2042)
+
+      -   Radio rxgain now ON by default [#2124](https://github.com/meshcore-dev/MeshCore/pull/2124)
+
+      -   Radio freq range now supported down to 150Mhz
+      [#2126](https://github.com/meshcore-dev/MeshCore/pull/2126)
+
+      -   GPS pref peristence fix [#2018](https://github.com/meshcore-dev/MeshCore/pull/2018)
+
+      -   New `get|set dutycycle` CLI command
+      [#1961](https://github.com/meshcore-dev/MeshCore/pull/1961)
+
+      -   Muzi Works R1 Neo support [#2007](https://github.com/meshcore-dev/MeshCore/pull/2007)
+
+      -   GAT562 Watch support [#2138](https://github.com/meshcore-dev/MeshCore/pull/2138)
+      [#2228](https://github.com/meshcore-dev/MeshCore/pull/2228)
+
+      -   BME680 sensor init fix [#2227](https://github.com/meshcore-dev/MeshCore/pull/2227)
+
+      -   Heltec Wireless Paper battery read fix
+      [#2164](https://github.com/meshcore-dev/MeshCore/pull/2164)
+
+      -   WiFi companion fixes for Heltec V4,TBeam 1W
+      [#1833](https://github.com/meshcore-dev/MeshCore/pull/1833)
+
+      -   Waveshare RP2040: RXEN fix [#2298](https://github.com/meshcore-dev/MeshCore/pull/2298)
+
+      -   nRF companion, support for OTA updates
+      [#2323](https://github.com/meshcore-dev/MeshCore/pull/2323)
+
+      -   Added companion for Heltec Wireless Paper
+      [#2315](https://github.com/meshcore-dev/MeshCore/pull/2315)
+
+      -   Misc [#2134](https://github.com/meshcore-dev/MeshCore/pull/2134)
+      [#2190](https://github.com/meshcore-dev/MeshCore/pull/2190)
+      [#1425](https://github.com/meshcore-dev/MeshCore/pull/1425)
+      [#2075](https://github.com/meshcore-dev/MeshCore/pull/2075)
+      [#2302](https://github.com/meshcore-dev/MeshCore/pull/2302)
+      [#2306](https://github.com/meshcore-dev/MeshCore/pull/2306)
+
+      -   Xiao C3 bootloop fix [#2328](https://github.com/meshcore-dev/MeshCore/pull/2328)
+
+
+      **Documentation Links**
+
+
+      For info on the new Default Scope feature, please see [this
+      article](https://blog.meshcore.io/2026/04/17/default-scope).
+
+
+      For low level format of the GROUP\_DATA packets, please see [this docs
+      link](https://docs.meshcore.io/payloads/?h=group+datagram#group-datagram).
+    notesUrl: https://blog.meshcore.io/2026/04/19/release-1-15-0
+  - version: companion-v1.15.0
+    name: Companion Firmware v1.15.0
+    datetime: '2026-04-19T06:48:14Z'
+    url: https://github.com/meshcore-dev/MeshCore/releases/tag/companion-v1.15.0
+    prerelease: false
+    notes: >-
+      **Download**
+
+
+      Latest firmwares are in the [flasher.meshcore.io](https://flasher.meshcore.io/)
+
+
+      **Change Log**
+
+
+      -   Default Scope support
+
+      -   Support for New GROUP\_DATA (binary) packets
+      [#1928](https://github.com/meshcore-dev/MeshCore/pull/1928)
+      [#2130](https://github.com/meshcore-dev/MeshCore/pull/2130)
+
+      -   Heltec V4.3 support [#1867](https://github.com/meshcore-dev/MeshCore/pull/1867)
+
+      -   Heltec nRF Tracker (T096) support
+      [#2097](https://github.com/meshcore-dev/MeshCore/pull/2097)
+
+      -   GAT562 Mesh EVB Pro repeater and room server support
+      [#2042](https://github.com/meshcore-dev/MeshCore/pull/2042)
+
+      -   Radio rxgain now ON by default [#2124](https://github.com/meshcore-dev/MeshCore/pull/2124)
+
+      -   Radio freq range now supported down to 150Mhz
+      [#2126](https://github.com/meshcore-dev/MeshCore/pull/2126)
+
+      -   GPS pref peristence fix [#2018](https://github.com/meshcore-dev/MeshCore/pull/2018)
+
+      -   New `get|set dutycycle` CLI command
+      [#1961](https://github.com/meshcore-dev/MeshCore/pull/1961)
+
+      -   Muzi Works R1 Neo support [#2007](https://github.com/meshcore-dev/MeshCore/pull/2007)
+
+      -   GAT562 Watch support [#2138](https://github.com/meshcore-dev/MeshCore/pull/2138)
+      [#2228](https://github.com/meshcore-dev/MeshCore/pull/2228)
+
+      -   BME680 sensor init fix [#2227](https://github.com/meshcore-dev/MeshCore/pull/2227)
+
+      -   Heltec Wireless Paper battery read fix
+      [#2164](https://github.com/meshcore-dev/MeshCore/pull/2164)
+
+      -   WiFi companion fixes for Heltec V4,TBeam 1W
+      [#1833](https://github.com/meshcore-dev/MeshCore/pull/1833)
+
+      -   Waveshare RP2040: RXEN fix [#2298](https://github.com/meshcore-dev/MeshCore/pull/2298)
+
+      -   nRF companion, support for OTA updates
+      [#2323](https://github.com/meshcore-dev/MeshCore/pull/2323)
+
+      -   Added companion for Heltec Wireless Paper
+      [#2315](https://github.com/meshcore-dev/MeshCore/pull/2315)
+
+      -   Misc [#2134](https://github.com/meshcore-dev/MeshCore/pull/2134)
+      [#2190](https://github.com/meshcore-dev/MeshCore/pull/2190)
+      [#1425](https://github.com/meshcore-dev/MeshCore/pull/1425)
+      [#2075](https://github.com/meshcore-dev/MeshCore/pull/2075)
+      [#2302](https://github.com/meshcore-dev/MeshCore/pull/2302)
+      [#2306](https://github.com/meshcore-dev/MeshCore/pull/2306)
+
+      -   Xiao C3 bootloop fix [#2328](https://github.com/meshcore-dev/MeshCore/pull/2328)
+
+
+      **Documentation Links**
+
+
+      For info on the new Default Scope feature, please see [this
+      article](https://blog.meshcore.io/2026/04/17/default-scope).
+
+
+      For low level format of the GROUP\_DATA packets, please see [this docs
+      link](https://docs.meshcore.io/payloads/?h=group+datagram#group-datagram).
+    notesUrl: https://blog.meshcore.io/2026/04/19/release-1-15-0
+  - version: room-server-v1.14.1
+    name: Room Server Firmware v1.14.1
+    datetime: '2026-03-20T02:54:49Z'
+    url: https://github.com/meshcore-dev/MeshCore/releases/tag/room-server-v1.14.1
+    prerelease: false
+    notes: "change log:\r\nAdded GPS support for SenseCAP Solar P1 in #1589\r\nPower off switch long press support for SenseCAP Solar P1 #1871\r\nAdded nRF52 power management for RAK3401 in #1984\r\nAdded token bucket based duty cycle enforcement in #1297\r\nAdded support for new GAT562 30S Mesh Kit device in #2009\r\nAdded support for new GAT562 Mesh Tracker Pro device in #1980\r\nAdded LNA toggle CLI commands radio.rxgain on and radio.rxgain off in #1653\r\nAdded MCU temperature to telemetry responses from room servers in #2052\r\nMigrated Heltec Tracker v2 to KCT8103L in #1936\r\nNodes with GPS enabled will now auto sync time every 30 minutes in #1350\r\nFixed bug where some queued packets would not get transmit in #1877\r\nFixed bug where automatic adverts were not using the configured multibyte path setting in fcfdc5f"
+  - version: repeater-v1.14.1
+    name: Repeater Firmware v1.14.1
+    datetime: '2026-03-20T02:55:43Z'
+    url: https://github.com/meshcore-dev/MeshCore/releases/tag/repeater-v1.14.1
+    prerelease: false
+    notes: "change log:\r\nAdded GPS support for SenseCAP Solar P1 in #1589\r\nPower off switch long press support for SenseCAP Solar P1 #1871\r\nAdded nRF52 power management for RAK3401 in #1984\r\nAdded token bucket based duty cycle enforcement in #1297\r\nAdded support for new GAT562 30S Mesh Kit device in #2009\r\nAdded support for new GAT562 Mesh Tracker Pro device in #1980\r\nAdded LNA toggle CLI commands radio.rxgain on and radio.rxgain off in #1653\r\nAdded MCU temperature to telemetry responses from room servers in #2052\r\nMigrated Heltec Tracker v2 to KCT8103L in #1936\r\nNodes with GPS enabled will now auto sync time every 30 minutes in #1350\r\nFixed bug where some queued packets would not get transmit in #1877\r\nFixed bug where automatic adverts were not using the configured multibyte path setting in https://github.com/meshcore-dev/MeshCore/commit/fcfdc5fc5b1e0cf81b4ca2dfbc51d714f3eb1ead"
+  - version: companion-v1.14.1
+    name: Companion Firmware v1.14.1
+    datetime: '2026-03-20T03:53:00Z'
+    url: https://github.com/meshcore-dev/MeshCore/releases/tag/companion-v1.14.1
+    prerelease: false
+    notes: "change log:\r\nAdded GPS support for SenseCAP Solar P1 in #1589\r\nAdded nRF52 power management for RAK3401 in #1984\r\nAdded token bucket based duty cycle enforcement in #1297\r\nAdded support for new GAT562 30S Mesh Kit device in #2009\r\nAdded support for new GAT562 Mesh Tracker Pro device in #1980\r\nAdded LNA toggle CLI commands radio.rxgain on and radio.rxgain off in #1653\r\nAdded MCU temperature to telemetry responses from room servers in #2052\r\nMigrated Heltec Tracker v2 to KCT8103L in #1936\r\nFixed bug where some queued packets would not get transmit in #1877\r\nFixed bug where BLE would stay on if turned off from companion screen when already connected in #1991"
+  - version: room-server-v1.14.0
+    name: Room Server Firmware v1.14.0
+    datetime: '2026-03-06T02:37:59Z'
+    url: https://github.com/meshcore-dev/MeshCore/releases/tag/room-server-v1.14.0
+    prerelease: false
+    notes: "Change log:\r\n* multibyte path hash support\r\n* new radio AGC reset implementation\r\n* HeltecV4 power fixes\r\n* RAK3401 power optimisations\r\n* Heltec Tracker V2 power fixes"
+  - version: repeater-v1.14.0
+    name: Repeater Firmware v1.14.0
+    datetime: '2026-03-06T02:37:28Z'
+    url: https://github.com/meshcore-dev/MeshCore/releases/tag/repeater-v1.14.0
+    prerelease: false
+    notes: "Change log:\r\n* multibyte path hash support\r\n* new CLI command: “get/set loop.detect …”\r\n* new CLI command: “get/set path.hash.mode …”\r\n* new CLI command: “get bootloader.ver”\r\n* new CLI command: “discover.neighbors”\r\n* new radio AGC reset implementation\r\n* HeltecV4 power fixes\r\n* RAK3401 power optimisations\r\n* Heltec Tracker V2 power fixes"
+  - version: companion-v1.14.0
+    name: Companion Firmware v1.14.0
+    datetime: '2026-03-06T03:52:31Z'
+    url: https://github.com/meshcore-dev/MeshCore/releases/tag/companion-v1.14.0
+    prerelease: false
+    notes: "Change log:\r\n* multibyte path hash support\r\n* new ‘auto add max hops’ preference\r\n* new radio AGC reset implementation\r\n* HeltecV4 power fixes\r\n* RAK3401 power optimisations\r\n* Heltec Tracker V2 power fixes"
+  - version: room-server-v1.13.0
+    name: Room Server Firmware v1.13.0
+    datetime: '2026-02-15T07:48:23Z'
+    url: https://github.com/meshcore-dev/MeshCore/releases/tag/room-server-v1.13.0
+    prerelease: false
+    notes: "Change log:\r\n* Thinknode M3 fixes\r\n* new boards: T-Beam 1W, M5 Stack C6\r\n* nRF board sleep optimisations\r\n* Heltec V4: improved RX sensitivity, low power fixes\r\n* WIO Tracker L1 Grove sensor support"
+  - version: repeater-v1.13.0
+    name: Repeater Firmware v1.13.0
+    datetime: '2026-02-15T07:47:04Z'
+    url: https://github.com/meshcore-dev/MeshCore/releases/tag/repeater-v1.13.0
+    prerelease: false
+    notes: "Change log:\r\n* Thinknode M3 fixes\r\n* new boards: T-Beam 1W, M5 Stack C6\r\n* new stats field: receive errors\r\n* nRF board sleep optimisations\r\n* Heltec V4: improved RX sensitivity, low power fixes\r\n* WIO Tracker L1 Grove sensor support"
+  - version: companion-v1.13.0
+    name: Companion Firmware v1.13.0
+    datetime: '2026-02-15T08:49:34Z'
+    url: https://github.com/meshcore-dev/MeshCore/releases/tag/companion-v1.13.0
+    prerelease: false
+    notes: "Change log:\r\n* off-grid (client repeat) mode support\r\n* buzzer sound logic reverted\r\n* new boards: T-Beam 1W, M5 Stack C6\r\n* some UI fixes, mute icon\r\n* blob file cleanup added\r\n* Heltec V4: improved RX sensitivity, low power fixes\r\n* WIO Tracker L1 Grove sensor support"
+  - version: room-server-v1.12.0
+    name: Room Server Firmware v1.12.0
+    datetime: '2026-01-29T11:18:49Z'
+    url: https://github.com/meshcore-dev/MeshCore/releases/tag/room-server-v1.12.0
+    prerelease: false
+    notes: "Change log:\r\n* new boards: Thinknode M6, M3, RAK3401, RAK11310, Meshtiny\r\n* nRF low power recovery manager\r\n* sensor fixes: BMP280, LPS22HB, SHTC3\r\n* new “clkreboot” CLI\r\n* on-boot adverts now zero-hop\r\n* remote “set prv.key” CLI \r\n* new “get/set owner.info” CLI\r\n* flood.advert.interval range now 3..168 hours\r\n* MCU temperature now in telemetry responses"
+  - version: repeater-v1.12.0
+    name: Repeater Firmware v1.12.0
+    datetime: '2026-01-29T11:26:04Z'
+    url: https://github.com/meshcore-dev/MeshCore/releases/tag/repeater-v1.12.0
+    prerelease: false
+    notes: "Change log:\r\n* new boards: Thinknode M6, M3, RAK3401, RAK11310, Meshtiny\r\n* nRF low power recovery manager (CLI ‘pwrmgt’)\r\n* Stats: new recv errors counter\r\n* region names now without ‘#’, new ‘region list’ CLI\r\n* ESP32: new “powersaving on/off” CLI\r\n* new “clkreboot” CLI\r\n* on-boot adverts now zero-hop\r\n* new “get/set owner.info” CLI\r\n* flood.advert.interval range now 3..168 hours\r\n* remote “set prv.key” CLI \r\n* new zero-hop anonReq types (Region discovery, owner info, clock sync)\r\n* MCU temperature now in telemetry responses"
+  - version: companion-v1.12.0
+    name: Companion Firmware v1.12.0
+    datetime: '2026-01-29T12:10:45Z'
+    url: https://github.com/meshcore-dev/MeshCore/releases/tag/companion-v1.12.0
+    prerelease: false
+    notes: "Change log:\r\n* new boards: Thinknode M6, M3, RAK3401, RAK11310, Meshtiny\r\n* nRF low power recovery manager\r\n* BLE code rewritten\r\n* WiFi serial fixes\r\n* contacts db can now overwrite old entries\r\n* new prefs: buzzer quiet, gps enabled, gps interval"
+  - version: room-server-v1.11.0
+    name: Room Server Firmware v1.11.0
+    datetime: '2025-11-30T08:34:45Z'
+    url: https://github.com/meshcore-dev/MeshCore/releases/tag/room-server-v1.11.0
+    prerelease: false
+    notes: "Change log:\r\n* remote login bug fix (no responses after login)\r\n* Extended Trace support\r\n* get/set adc,multiplier support\r\n* New boards: Ikoka handheld, Keepteen LT1"
+  - version: repeater-v1.11.0
+    name: Repeater Firmware v1.11.0
+    datetime: '2025-11-30T08:33:44Z'
+    url: https://github.com/meshcore-dev/MeshCore/releases/tag/repeater-v1.11.0
+    prerelease: false
+    notes: "Change log:\r\n* remote login bug fix (no responses after login)\r\n* Extended Trace support\r\n* get/set adc,multiplier support\r\n* RAK4631: Uart bridge support\r\n* New boards: Ikoka handheld, Keepteen LT1"

@@ -15,14 +15,22 @@ function urlMap(glob) {
 const imageByDevice = urlMap(
   import.meta.glob('../../data/devices/*/*.svg', { query: '?url', import: 'default', eager: true })
 );
-const logoByVendor = urlMap(
-  import.meta.glob('../../data/vendors/*/*.svg', { query: '?url', import: 'default', eager: true })
-);
+const logoByVendorFile = {};
+for (const [path, url] of Object.entries(
+  import.meta.glob('../../data/vendors/*/*.{svg,png,jpg,jpeg,webp}', {
+    query: '?url',
+    import: 'default',
+    eager: true
+  })
+)) {
+  const parts = path.split('/');
+  logoByVendorFile[`${parts.at(-2)}/${parts.at(-1)}`] = url;
+}
 
 /** All vendors (from data.json), with their bundled logo URL attached. */
 export const vendors = dataset.vendors.map((v) => ({
   ...v,
-  logoUrl: logoByVendor[v.id] ?? null
+  logoUrl: v.logo ? (logoByVendorFile[`${v.id}/${v.logo}`] ?? null) : null
 }));
 
 const vendorById = new Map(vendors.map((v) => [v.id, v]));
@@ -84,6 +92,74 @@ export function compatibilityMatrix() {
     return { device, cells };
   });
   return { firmwares, rows };
+}
+
+/**
+ * Group a firmware's flat release list by version, collapsing per-variant
+ * releases (e.g. companion-/repeater-/room-server-v1.16.0) into one entry.
+ * @returns {Array<{version: string, datetime: string|null, prerelease: boolean,
+ *   notes: string|null, variants: Array<any>}>}
+ */
+export function groupReleases(releases = []) {
+  const groups = new Map();
+  for (const r of releases) {
+    const tag = r.version ?? '';
+    // Split an optional leading variant ("companion-") from the version token.
+    const m = /^(?:(.*?)-)?v?(\d[\w.+-]*)$/.exec(tag);
+    const variant = m && m[1] ? m[1] : null;
+    const versionKey = m ? m[2] : tag;
+
+    if (!groups.has(versionKey)) {
+      groups.set(versionKey, {
+        version: versionKey,
+        datetime: null,
+        prerelease: false,
+        notes: null,
+        notesHtml: null,
+        variants: []
+      });
+    }
+    const g = groups.get(versionKey);
+    g.variants.push({ ...r, variant });
+    const dt = r.datetime ?? r.date ?? '';
+    if (dt > (g.datetime ?? '')) g.datetime = dt || g.datetime;
+    if (r.notes && !g.notes) g.notes = r.notes;
+    if (r.notesHtml && !g.notesHtml) g.notesHtml = r.notesHtml;
+    if (r.prerelease) g.prerelease = true;
+  }
+
+  for (const g of groups.values()) {
+    g.variants.sort((a, b) => (a.variant ?? '').localeCompare(b.variant ?? ''));
+  }
+  return [...groups.values()].sort((a, b) =>
+    (b.datetime ?? '').localeCompare(a.datetime ?? '')
+  );
+}
+
+/**
+ * Newest release groups across all firmwares, each tagged with its firmware.
+ * Variants are already collapsed by groupReleases().
+ */
+export function latestReleases(limit = 12) {
+  const out = [];
+  for (const fw of firmwares) {
+    for (const g of groupReleases(fw.releases)) {
+      out.push({ firmware: { id: fw.id, name: fw.name, type: fw.type }, ...g });
+    }
+  }
+  out.sort((a, b) => (b.datetime ?? '').localeCompare(a.datetime ?? ''));
+  return limit ? out.slice(0, limit) : out;
+}
+
+/** The single newest release group for each firmware, newest firmware first. */
+export function latestReleasePerFirmware() {
+  const out = [];
+  for (const fw of firmwares) {
+    const [newest] = groupReleases(fw.releases);
+    if (newest) out.push({ firmware: { id: fw.id, name: fw.name, type: fw.type }, ...newest });
+  }
+  out.sort((a, b) => (b.datetime ?? '').localeCompare(a.datetime ?? ''));
+  return out;
 }
 
 export const STATUS_META = {

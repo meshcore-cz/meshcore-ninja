@@ -8,14 +8,25 @@
 
 <a class="mb-4 inline-block text-[0.9rem] text-dim hover:underline" href="{base}/vendors/">← All vendors</a>
 
-<header class="mb-7 flex flex-wrap items-center gap-5">
-  <div class="flex h-[84px] w-[84px] shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-elev2">
-    {#if v.logoUrl}<img src={v.logoUrl} alt={v.name} class="h-full w-full object-contain" />{/if}
+<header class="mb-7 flex flex-wrap items-center gap-6">
+  <div class="flex h-[128px] w-[128px] shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white p-3.5">
+    {#if v.logoUrl}
+      <img src={v.logoUrl} alt={v.name} class="max-h-full max-w-full object-contain" />
+    {:else}
+      <svg class="h-16 w-16 text-slate-400" viewBox="0 0 32 32" aria-hidden="true">
+        <rect x="9" y="9" width="14" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2.2" />
+        <path d="M12 5v4M20 5v4M12 23v4M20 23v4M5 12h4M5 20h4M23 12h4M23 20h4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2.2" />
+        <circle cx="16" cy="16" r="2.8" fill="currentColor" opacity="0.45" />
+      </svg>
+    {/if}
   </div>
   <div class="min-w-[240px] flex-1">
     <h1 class="mb-1 text-[clamp(1.5rem,5vw,2rem)] font-bold">{v.name}</h1>
     {#if v.description}<p class="mb-1 max-w-[70ch] text-dim">{v.description}</p>{/if}
-    {#if v.website}<a class="text-accent2 hover:underline" href={v.website} target="_blank" rel="noreferrer">{v.website} ↗</a>{/if}
+    <div class="flex flex-wrap gap-x-4 gap-y-1 text-[0.92rem]">
+      {#if v.country}<span class="text-dim">{v.country}</span>{/if}
+      {#if v.website}<a class="text-accent2 hover:underline" href={v.website} target="_blank" rel="noreferrer">{v.website} ↗</a>{/if}
+    </div>
   </div>
 </header>
 

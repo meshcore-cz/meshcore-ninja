@@ -1,8 +1,13 @@
 <script>
   import { base } from '$app/paths';
-  import { STATUS_META, TYPE_META, FW_STATUS_TW } from '$lib/data.js';
+  import { STATUS_META, TYPE_META, FW_STATUS_TW, groupReleases } from '$lib/data.js';
+  import ReleaseGroupList from '$lib/ReleaseGroupList.svelte';
   let { data } = $props();
   let fw = $derived(data.firmware);
+
+  const PREVIEW = 3;
+  let releaseGroups = $derived(groupReleases(fw.releases));
+  let previewGroups = $derived(releaseGroups.slice(0, PREVIEW));
 </script>
 
 <svelte:head><title>{fw.name} — MeshCore Firmware Atlas</title></svelte:head>
@@ -46,6 +51,25 @@
     <ul class="mt-3 flex flex-wrap gap-1.5">
       {#each fw.features as f}<li class="rounded-md bg-elev2 px-2.5 py-1 text-[0.85rem]">{f}</li>{/each}
     </ul>
+  </section>
+{/if}
+
+{#if fw.releases?.length}
+  <section class="mb-7">
+    <div class="mb-3 flex flex-wrap items-baseline justify-between gap-2 border-b border-edge pb-1.5">
+      <h2 class="text-[1.1rem] font-semibold">Releases</h2>
+      {#if fw.changelogUpdatedAt}
+        <span class="text-[0.72rem] text-dim">
+          {fw.changelogSource === 'github' ? 'from GitHub · ' : ''}updated {fw.changelogUpdatedAt.slice(0, 10)}
+        </span>
+      {/if}
+    </div>
+    <ReleaseGroupList groups={previewGroups} openFirst={false} markFirstLatest={true} />
+    {#if releaseGroups.length > PREVIEW}
+      <a class="mt-3 inline-block text-[0.88rem] text-accent2 hover:underline" href="{base}/firmware/{fw.id}/releases/">
+        Show all {releaseGroups.length} releases →
+      </a>
+    {/if}
   </section>
 {/if}
 

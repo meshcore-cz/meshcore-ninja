@@ -46,6 +46,46 @@ Create `data/firmwares/<id>/firmware.yaml`.
 | `status` | yes      | `supported` \| `partial` \| `untested` \| `unsupported`. |
 | `notes`  | no       | Short caveat shown in the matrix tooltip / detail page. |
 
+### `changelog` (release source)
+
+Optional. Controls where a firmware's release history comes from. The releases
+themselves are cached in a sibling `changelog.yaml` (see below).
+
+| Field    | Notes |
+|----------|-------|
+| `source` | `github` (default when `repository` is a GitHub URL), `manual`, or `script`. |
+| `repo`   | `owner/name` override; otherwise parsed from `repository`. |
+| `script` | For `source: script`, the enrichment script filename in the firmware dir (default `fetch-changelog.js`). |
+
+**`source: script`** lets a firmware ship a custom fetcher next to its data, for
+when releases live somewhere other than plain GitHub release bodies. The updater
+fetches the GitHub releases (for tags/dates/links), then calls the script's
+default export — `async ({ githubReleases, mapRelease, fetch }) => releases` —
+to produce the final list. Example: `data/firmwares/meshcore-official/fetch-changelog.js`
+pulls the real notes from the MeshCore blog's Atom feed.
+
+## Changelogs (`changelog.yaml`)
+
+Each firmware may have `data/firmwares/<id>/changelog.yaml` holding its releases.
+For `github` sources this file is **generated** — `npm run changelogs`
+(`scripts/update-changelogs.js`) fetches the GitHub releases, and a daily
+GitHub Action keeps it fresh. For `manual` sources, write it by hand; the
+updater leaves it untouched.
+
+```yaml
+source: github            # github | manual
+repo: owner/name          # github only
+updatedAt: 2026-06-20T…Z  # set by the updater
+releases:
+  - version: v1.16.0      # required
+    name: Companion v1.16.0
+    date: 2026-06-06       # YYYY-MM-DD
+    url: https://github.com/owner/name/releases/tag/v1.16.0
+    prerelease: false
+    notes: |
+      Release notes…
+```
+
 ## Adding a device
 
 Create `data/devices/<id>/device.yaml`.
@@ -79,8 +119,9 @@ Create `data/vendors/<id>/vendor.yaml` plus a `logo.svg`.
 | Field         | Required | Type   | Notes |
 |---------------|----------|--------|-------|
 | `name`        | yes      | string | Manufacturer name. |
-| `website`     | no       | url    | Official site. |
-| `logo`        | no       | string | SVG filename in the same directory (e.g. `logo.svg`). |
+| `website`     | no       | url    | Official site, starting with `http://` or `https://`. |
+| `country`     | no       | string | Company or project country, when known. Use `Various` for generic board families. |
+| `logo`        | no       | string | Logo filename in the same directory. Prefer SVG, but PNG/JPG/WebP are allowed. |
 | `description` | no       | string | One short paragraph. |
 
 ## Build & validate

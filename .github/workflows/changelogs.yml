@@ -1,0 +1,55 @@
+name: Update changelogs
+
+on:
+  schedule:
+    # Once a day at 06:00 UTC.
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: changelogs
+  cancel-in-progress: false
+
+jobs:
+  update:
+    name: Fetch firmware releases
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      # Pull releases for every firmware whose changelog source is GitHub.
+      - name: Fetch releases
+        run: node scripts/update-changelogs.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Make sure the fetched data still validates before committing.
+      - name: Validate
+        run: npm test
+
+      - name: Commit changes and redeploy
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- data/firmwares; then
+            echo "No changelog changes."
+          else
+            git add data/firmwares/*/changelog.yaml
+            git commit -m "chore: update firmware changelogs"
+            git push
+            # Token pushes don't trigger other workflows, so kick off the deploy.
+            gh workflow run "Test & Deploy" --ref "${{ github.ref_name }}"
+          fi

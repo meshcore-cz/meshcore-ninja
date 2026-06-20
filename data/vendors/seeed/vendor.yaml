@@ -1,5 +1,6 @@
 name: "Seeed Studio"
 website: "https://www.seeedstudio.com"
-logo: logo.svg
+country: "China"
+logo: logo.jpg
 description: >
   Hardware platform company behind the XIAO, Wio and SenseCAP LoRa product lines.

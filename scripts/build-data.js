@@ -26,7 +26,10 @@ function readDir(root, kind, file) {
 }
 
 /** Compile the YAML sources and write both data.json copies. Returns counts. */
-export function buildData(root = defaultRoot) {
+export async function buildData(root = defaultRoot) {
+  // Dynamically imported so the markdown libs stay out of the Vite config bundle.
+  const { renderMarkdown } = await import('./lib/markdown.js');
+
   const vendors = readDir(root, 'vendors', 'vendor.yaml').sort((a, b) =>
     a.name.localeCompare(b.name)
   );
@@ -42,11 +45,29 @@ export function buildData(root = defaultRoot) {
   }
 
   const typeRank = { official: 0, fork: 1, custom: 2 };
-  const firmwares = readDir(root, 'firmwares', 'firmware.yaml').sort((a, b) => {
-    const ra = typeRank[a.type] ?? 9;
-    const rb = typeRank[b.type] ?? 9;
-    return ra !== rb ? ra - rb : a.name.localeCompare(b.name);
-  });
+  const firmwares = readDir(root, 'firmwares', 'firmware.yaml')
+    .map((fw) => {
+      // Attach cached releases from the sibling changelog.yaml, if present.
+      const clPath = join(root, 'data', 'firmwares', fw.id, 'changelog.yaml');
+      if (existsSync(clPath)) {
+        const cl = yaml.load(readFileSync(clPath, 'utf8')) ?? {};
+        return {
+          ...fw,
+          releases: (cl.releases ?? []).map((r) => ({
+            ...r,
+            notesHtml: renderMarkdown(r.notes)
+          })),
+          changelogSource: cl.source ?? null,
+          changelogUpdatedAt: cl.updatedAt ?? null
+        };
+      }
+      return { ...fw, releases: [] };
+    })
+    .sort((a, b) => {
+      const ra = typeRank[a.type] ?? 9;
+      const rb = typeRank[b.type] ?? 9;
+      return ra !== rb ? ra - rb : a.name.localeCompare(b.name);
+    });
 
   const dataset = {
     schemaVersion: 2,
@@ -71,7 +92,7 @@ export function buildData(root = defaultRoot) {
 
 // Run as a CLI when invoked directly (npm run build:data / pre-hooks).
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
-  const { firmwares, devices, vendors } = buildData();
+  const { firmwares, devices, vendors } = await buildData();
   console.log(
     `✓ Wrote data.json — ${firmwares} firmware(s), ${devices} device(s), ${vendors} vendor(s).`
   );

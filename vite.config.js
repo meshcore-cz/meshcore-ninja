@@ -16,10 +16,10 @@ function yamlDataPlugin() {
     name: 'meshcore-yaml-data',
     configureServer(server) {
       server.watcher.add(dataDir);
-      const regen = (file) => {
+      const regen = async (file) => {
         if (!isYaml(file)) return;
         try {
-          const c = buildData(projectRoot);
+          const c = await buildData(projectRoot);
           server.config.logger.info(
             `[32m[data][0m rebuilt data.json — ${c.firmwares} firmwares, ${c.devices} devices`
           );

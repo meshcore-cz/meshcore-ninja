@@ -11,6 +11,10 @@ description: >
 repository: https://github.com/meshcore-dev/MeshCore
 website: https://meshcore.io
 license: MIT
+# Release notes live on the MeshCore blog; a custom script pulls them in.
+changelog:
+  source: script
+  script: fetch-changelog.js
 status: active           # active | maintenance | inactive | experimental
 latest_version: "1.16.0"
 released: "2026-06-01"

@@ -1,5 +1,5 @@
 name: "Ikoka"
-website: ""
-logo: logo.svg
+website: "https://github.com/ndoo/ikoka-nano-meshtastic-device"
+country: "Singapore"
 description: >
   Maker of compact Ikoka Nano / Stick mesh nodes.

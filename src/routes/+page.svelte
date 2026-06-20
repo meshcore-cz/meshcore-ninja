@@ -1,6 +1,7 @@
 <script>
   import { base } from '$app/paths';
   import { TYPE_META, FW_STATUS_TW } from '$lib/data.js';
+  import ReleaseRow from '$lib/ReleaseRow.svelte';
   let { data } = $props();
 
   let query = $state('');
@@ -39,6 +40,8 @@
     <a class="text-accent2 hover:underline" href="{base}/matrix/">compatibility matrix</a>.
   </p>
 </section>
+
+<h2 class="mb-3 text-[1.1rem] font-semibold">All firmwares</h2>
 
 <div class="mb-4 flex flex-wrap items-center gap-4">
   <input
@@ -91,3 +94,17 @@
     </a>
   {/each}
 </div>
+
+{#if data.latest?.length}
+  <section class="mt-9">
+    <div class="mb-3 flex items-baseline justify-between border-b border-edge pb-1.5">
+      <h2 class="text-[1.1rem] font-semibold">Latest releases</h2>
+      <a class="text-[0.85rem] text-accent2 hover:underline" href="{base}/releases/">Show all releases →</a>
+    </div>
+    <ol class="flex flex-col">
+      {#each data.latest as r}
+        <li><ReleaseRow release={r} /></li>
+      {/each}
+    </ol>
+  </section>
+{/if}

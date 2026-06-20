@@ -59,6 +59,7 @@ function validateAll(records, validate) {
 const deviceSchema = loadSchema('device');
 const firmwareSchema = loadSchema('firmware');
 const vendorSchema = loadSchema('vendor');
+const changelogSchema = loadSchema('changelog');
 
 const vendors = readCollection('vendors', 'vendor.yaml');
 const devices = readCollection('devices', 'device.yaml');
@@ -67,6 +68,24 @@ const firmwares = readCollection('firmwares', 'firmware.yaml');
 validateAll(vendors, vendorSchema);
 validateAll(devices, deviceSchema);
 validateAll(firmwares, firmwareSchema);
+
+// Optional changelog.yaml alongside each firmware.
+for (const f of firmwares) {
+  const path = join(root, 'data', 'firmwares', f.id, 'changelog.yaml');
+  if (!existsSync(path)) continue;
+  let cl;
+  try {
+    cl = yaml.load(readFileSync(path, 'utf8'));
+  } catch (e) {
+    err(`firmwares/${f.id}/changelog`, `YAML parse error: ${e.message}`);
+    continue;
+  }
+  if (!changelogSchema(cl)) {
+    for (const e of changelogSchema.errors) {
+      err(`firmwares/${f.id}/changelog`, `${e.instancePath || '/'} ${e.message}`);
+    }
+  }
+}
 
 // Referential integrity.
 const vendorIds = new Set(vendors.map((v) => v.id));

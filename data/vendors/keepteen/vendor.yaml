@@ -1,5 +1,6 @@
 name: "Keepteen"
-website: ""
-logo: logo.svg
+website: "https://www.keepteen.com"
+country: "China"
+logo: logo.png
 description: >
   Maker of the Keepteen LT1 node.

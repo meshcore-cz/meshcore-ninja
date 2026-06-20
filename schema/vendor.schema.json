@@ -8,8 +8,9 @@
   "required": ["name"],
   "properties": {
     "name": { "type": "string", "minLength": 1 },
-    "website": { "type": "string" },
-    "logo": { "type": "string", "pattern": "\\.svg$" },
+    "website": { "type": "string", "pattern": "^https?://" },
+    "country": { "type": "string", "minLength": 1 },
+    "logo": { "type": "string", "pattern": "\\.(svg|png|jpe?g|webp)$" },
     "description": { "type": "string" }
   }
 }

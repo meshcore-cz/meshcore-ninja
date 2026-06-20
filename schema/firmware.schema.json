@@ -19,6 +19,16 @@
     "released": { "type": "string" },
     "roles": { "type": "array", "items": { "type": "string" } },
     "features": { "type": "array", "items": { "type": "string" } },
+    "changelog": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Release source config. Defaults to GitHub releases parsed from `repository`.",
+      "properties": {
+        "source": { "enum": ["github", "manual", "script"] },
+        "repo": { "type": "string", "description": "owner/name override" },
+        "script": { "type": "string", "description": "filename in the firmware dir, for source: script" }
+      }
+    },
     "devices": {
       "type": "array",
       "items": {

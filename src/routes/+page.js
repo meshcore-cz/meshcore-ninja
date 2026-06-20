@@ -1,5 +1,5 @@
-import { firmwares } from '$lib/data.js';
+import { firmwares, latestReleasePerFirmware } from '$lib/data.js';
 
 export function load() {
-  return { firmwares };
+  return { firmwares, latest: latestReleasePerFirmware() };
 }
