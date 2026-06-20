@@ -1,30 +1,32 @@
-# MeshCore firmware definition
-# Schema: see data/SCHEMA.md
 name: MeshCore (Official)
-type: official            # official | fork | custom
+type: official
 maintainer: meshcore-dev (community project, originated by Scott Powell / ripplebiz)
 description: >
-  The official MeshCore firmware — a lightweight C++ library and firmware for
-  multi-hop packet routing over LoRa radios. It powers decentralized,
-  self-healing mesh networks for off-grid, emergency and tactical
-  communication, with prebuilt images and a web flasher.
+  The official MeshCore firmware — a lightweight C++ library and firmware for multi-hop packet
+  routing over LoRa radios. It powers decentralized, self-healing mesh networks for off-grid,
+  emergency and tactical communication, with prebuilt images and a web flasher.
 repository: https://github.com/meshcore-dev/MeshCore
 website: https://meshcore.io
 license: MIT
-# Release notes live on the MeshCore blog; a custom script pulls them in.
 changelog:
   source: script
   script: fetch-changelog.js
-status: active           # active | maintenance | inactive | experimental
-latest_version: "1.16.0"
-released: "2026-06-01"
-
+status: active
+latest_version: 1.16.0
+released: '2026-06-01'
+lifecycle: active
+maturity: stable
+distribution: official
+lineage:
+  kind: upstream
+runtime:
+  framework: arduino
+  language: cpp
 roles:
   - companion
   - repeater
   - room-server
   - sensor
-
 features:
   - Multi-hop packet routing
   - End-to-end encrypted DMs
@@ -32,7 +34,32 @@ features:
   - Web, iOS, Android, Python & NodeJS clients
   - Native flood-advert traffic management (1.16+)
   - Web-based flasher
-
+capabilities:
+  protocol:
+    meshcoreCompatible: true
+    rawPacketSend: true
+    rawPacketObserve: true
+  transports:
+    ble: true
+    usbSerial: true
+    nativeTcp: true
+    wifiAp: true
+  operations:
+    webFlasher: true
+    ota: true
+    bleDfu: true
+    configurationBackup: true
+  networking:
+    repeater: true
+    roomServer: true
+    observer: false
+    mqtt: false
+    kissModem: true
+  hardware:
+    gps: true
+    display: true
+    sensors: true
+    lowPowerRx: true
 devices:
   - id: ebyte-eora-s3
     status: supported

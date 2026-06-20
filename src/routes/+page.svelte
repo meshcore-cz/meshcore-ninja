@@ -89,7 +89,7 @@
       </div>
       <div class="flex items-center justify-between border-t border-edge pt-2.5 text-[0.8rem] text-dim">
         <span>{fw.maintainer}</span>
-        {#if fw.latest_version}<span class="font-mono">v{fw.latest_version}</span>{/if}
+        {#if fw.latest_version}<span class="font-mono">{fw.latest_version}</span>{/if}
       </div>
     </a>
   {/each}

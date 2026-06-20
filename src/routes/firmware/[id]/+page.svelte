@@ -31,7 +31,9 @@
 <dl class="mb-7 grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] gap-4 rounded-xl border border-edge bg-elev p-[1.1rem]">
   <div><dt class="text-[0.72rem] tracking-wide text-dim uppercase">Maintainer</dt><dd class="mt-1 text-[0.95rem]">{fw.maintainer}</dd></div>
   <div><dt class="text-[0.72rem] tracking-wide text-dim uppercase">Status</dt><dd class="mt-1 text-[0.95rem] {FW_STATUS_TW[fw.status] ?? ''}">{fw.status}</dd></div>
-  {#if fw.latest_version}<div><dt class="text-[0.72rem] tracking-wide text-dim uppercase">Latest version</dt><dd class="mt-1 text-[0.95rem]">v{fw.latest_version}</dd></div>{/if}
+  {#if fw.latest_version}<div><dt class="text-[0.72rem] tracking-wide text-dim uppercase">Latest version</dt><dd class="mt-1 text-[0.95rem]">{fw.latest_version}</dd></div>{/if}
+  {#if fw.lifecycle}<div><dt class="text-[0.72rem] tracking-wide text-dim uppercase">Lifecycle</dt><dd class="mt-1 text-[0.95rem]">{fw.lifecycle}</dd></div>{/if}
+  {#if fw.maturity}<div><dt class="text-[0.72rem] tracking-wide text-dim uppercase">Maturity</dt><dd class="mt-1 text-[0.95rem]">{fw.maturity}</dd></div>{/if}
   {#if fw.released}<div><dt class="text-[0.72rem] tracking-wide text-dim uppercase">Released</dt><dd class="mt-1 text-[0.95rem]">{fw.released}</dd></div>{/if}
   {#if fw.license}<div><dt class="text-[0.72rem] tracking-wide text-dim uppercase">License</dt><dd class="mt-1 text-[0.95rem]">{fw.license}</dd></div>{/if}
 </dl>

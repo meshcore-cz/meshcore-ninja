@@ -2,29 +2,56 @@ name: Meshcomod
 type: fork
 maintainer: ALLFATHER-BV
 description: >
-  A multi-transport companion firmware built on MeshCore that exposes USB,
-  Bluetooth and TCP connectivity simultaneously, so phones, web clients and
-  Home Assistant can all talk to one radio at once. Adds runtime Wi-Fi config
-  and an on-device UI.
+  A multi-transport companion firmware built on MeshCore that exposes USB, Bluetooth and TCP
+  connectivity simultaneously, so phones, web clients and Home Assistant can all talk to one radio
+  at once. Adds runtime Wi-Fi config and an on-device UI.
 repository: https://github.com/ALLFATHER-BV/meshcomod
 website: https://meshcomod.com
 license: MIT
 status: active
-latest_version: "1.16.0.4"
-released: "2026-06-16"
-
+latest_version: 1.16.0.4
+released: '2026-06-16'
+lifecycle: active
+maturity: stable
+distribution: community
+lineage:
+  kind: fork
+  upstreamFirmwareId: meshcore-official
+  upstreamRepository: https://github.com/meshcore-dev/MeshCore
+runtime:
+  framework: arduino
+  language: cpp
 roles:
   - companion
   - repeater
   - room-server
-
 features:
   - Simultaneous USB + BLE + TCP connections
   - Real-time push to all connected clients
   - Home Assistant sidebar integration
   - Runtime Wi-Fi configuration (no CLI recovery)
   - On-device UI tabs (BLE pairing, TCP status)
-
+capabilities:
+  protocol:
+    meshcoreCompatible: true
+  transports:
+    ble: true
+    usbSerial: true
+    nativeTcp: true
+    wifiAp: true
+  operations:
+    ota: true
+    webFlasher: false
+  networking:
+    repeater: true
+    roomServer: true
+    observer: false
+    kissModem: false
+  hardware:
+    gps: true
+    display: true
+    sensors: false
+    lowPowerRx: false
 devices:
   - id: heltec-v4
     status: supported

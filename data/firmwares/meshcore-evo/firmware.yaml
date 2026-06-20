@@ -2,28 +2,55 @@ name: MeshCore-Evo
 type: fork
 maintainer: mattzzw
 description: >
-  An improved repeater-focused fork of MeshCore that bundled pending upstream
-  PRs and improvements for dense meshes — notably flood-advert traffic
-  mitigation and enhanced `denyf *` handling. Largely superseded once official
-  1.16.0 added native flood traffic management.
+  An improved repeater-focused fork of MeshCore that bundled pending upstream PRs and improvements
+  for dense meshes — notably flood-advert traffic mitigation and enhanced `denyf *` handling.
+  Largely superseded once official 1.16.0 added native flood traffic management.
 repository: https://github.com/mattzzw/MeshCore-Evo
 website: https://meshcore.io
 license: MIT
 status: maintenance
-latest_version: "1.15.0_0.1.21"
-released: "2026-05-25"
-
+latest_version: 1.15.0_0.1.21
+released: '2026-05-25'
+lifecycle: maintenance
+maturity: beta
+distribution: community
+lineage:
+  kind: fork
+  upstreamFirmwareId: meshcore-official
+  upstreamRepository: https://github.com/meshcore-dev/MeshCore
+runtime:
+  framework: arduino
+  language: cpp
 roles:
   - companion
   - repeater
   - room-server
-
 features:
   - Flood-advert traffic mitigation
   - Enhanced denyf "*" handling
   - Tuned for dense repeater meshes
   - Tracks upstream MeshCore releases
-
+capabilities:
+  protocol:
+    meshcoreCompatible: true
+  transports:
+    ble: true
+    usbSerial: true
+    nativeTcp: true
+    wifiAp: true
+  operations:
+    ota: true
+    webFlasher: false
+  networking:
+    repeater: true
+    roomServer: true
+    observer: false
+    kissModem: false
+  hardware:
+    gps: true
+    display: true
+    sensors: true
+    lowPowerRx: true
 devices:
   - id: heltec-v3
     status: supported

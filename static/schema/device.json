@@ -22,6 +22,44 @@
       "type": "string",
       "pattern": "^[a-z0-9-]+$"
     },
+    "kind": {
+      "enum": [
+        "product",
+        "dev-board",
+        "module",
+        "kit",
+        "generic-build"
+      ]
+    },
+    "lifecycle": {
+      "enum": [
+        "announced",
+        "active",
+        "discontinued",
+        "unknown"
+      ]
+    },
+    "familyId": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "revision": {
+      "type": "string"
+    },
+    "variantOf": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "aliases": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "replaces": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$"
+    },
     "chip_type": {
       "type": "string"
     },
@@ -45,6 +83,77 @@
         "type": "string"
       }
     },
+    "roles": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "companion",
+          "repeater",
+          "room-server",
+          "observer",
+          "sensor",
+          "kiss-modem",
+          "standalone-ui"
+        ]
+      }
+    },
+    "transports": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "ble",
+          "usb",
+          "tcp",
+          "wifi",
+          "ethernet",
+          "serial"
+        ]
+      }
+    },
+    "variants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "role"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$"
+          },
+          "role": {
+            "enum": [
+              "companion",
+              "repeater",
+              "room-server",
+              "observer",
+              "sensor",
+              "kiss-modem",
+              "standalone-ui"
+            ]
+          },
+          "transports": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "ble",
+                "usb",
+                "tcp",
+                "wifi",
+                "ethernet",
+                "serial"
+              ]
+            }
+          },
+          "sourceRole": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "frequency_bands": {
       "type": "array",
       "items": {
@@ -62,6 +171,177 @@
     },
     "gps": {
       "type": "boolean"
+    },
+    "hardware": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mcu": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "family": {
+              "type": "string"
+            },
+            "model": {
+              "type": "string"
+            },
+            "architecture": {
+              "type": "string"
+            },
+            "flashMb": {
+              "type": "number"
+            },
+            "psramMb": {
+              "type": "number"
+            }
+          }
+        },
+        "radios": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "technology": {
+                "enum": [
+                  "lora",
+                  "esp-now",
+                  "other"
+                ]
+              },
+              "chip": {
+                "type": "string"
+              },
+              "frequencyVariants": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "display": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "enum": [
+                "unknown",
+                "none",
+                "present"
+              ]
+            },
+            "technology": {
+              "type": "string"
+            },
+            "controller": {
+              "type": "string"
+            },
+            "resolution": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "width": {
+                  "type": "integer"
+                },
+                "height": {
+                  "type": "integer"
+                }
+              }
+            },
+            "touch": {
+              "type": "boolean"
+            }
+          }
+        },
+        "gnss": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "enum": [
+                "unknown",
+                "none",
+                "present"
+              ]
+            },
+            "chip": {
+              "type": "string"
+            }
+          }
+        },
+        "power": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "batterySupported": {
+              "type": "boolean"
+            },
+            "charging": {
+              "type": "boolean"
+            },
+            "solarInput": {
+              "type": "boolean"
+            },
+            "pmic": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "interfaces": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "usb": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "connector": {
+              "type": "string"
+            },
+            "capabilities": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "power",
+                  "serial",
+                  "flashing",
+                  "dfu"
+                ]
+              }
+            }
+          }
+        },
+        "bluetooth": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "version": {
+              "type": "string"
+            },
+            "ble": {
+              "type": "boolean"
+            }
+          }
+        },
+        "wifi": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "enum": [
+                "unknown",
+                "none",
+                "present"
+              ]
+            }
+          }
+        }
+      }
     },
     "connectivity": {
       "type": "array",

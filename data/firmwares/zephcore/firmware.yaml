@@ -2,23 +2,30 @@ name: ZephCore
 type: custom
 maintainer: liquidraver
 description: >
-  A ground-up port of MeshCore from Arduino to the Zephyr RTOS. Replaces the
-  Arduino loop with Zephyr's event-driven primitives so the CPU sleeps between
-  events, while aiming for full protocol compatibility with stock MeshCore
-  firmware and the MeshCore mobile apps.
+  A ground-up port of MeshCore from Arduino to the Zephyr RTOS. Replaces the Arduino loop with
+  Zephyr's event-driven primitives so the CPU sleeps between events, while aiming for full protocol
+  compatibility with stock MeshCore firmware and the MeshCore mobile apps.
 repository: https://github.com/liquidraver/ZephCore
-website: ""
+website: ''
 license: MIT
 status: active
-latest_version: "v20260619.094253"
-released: "2026-06-19"
-
+latest_version: v20260619.094253
+released: '2026-06-19'
+lifecycle: active
+maturity: beta
+distribution: community
+lineage:
+  kind: reimplementation
+  upstreamFirmwareId: meshcore-official
+  upstreamRepository: https://github.com/meshcore-dev/MeshCore
+runtime:
+  framework: zephyr
+  language: cpp
 roles:
   - companion
   - repeater
   - room-server
   - observer
-
 features:
   - Zephyr RTOS event-driven architecture
   - CAD-based RX power saving
@@ -27,7 +34,31 @@ features:
   - DFU / OTA update support
   - Listen-only observer (WiFi + MQTT)
   - Protocol-compatible with MeshCore apps
-
+capabilities:
+  protocol:
+    meshcoreCompatible: true
+    rawPacketSend: true
+    rawPacketObserve: true
+  transports:
+    ble: true
+    usbSerial: true
+    nativeTcp: true
+    wifiAp: true
+  operations:
+    ota: true
+    bleDfu: true
+    webFlasher: false
+  networking:
+    repeater: true
+    roomServer: true
+    observer: true
+    mqtt: true
+    kissModem: false
+  hardware:
+    gps: true
+    display: true
+    sensors: true
+    lowPowerRx: true
 devices:
   - id: rak-4631
     status: supported

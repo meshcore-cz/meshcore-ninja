@@ -10,7 +10,8 @@
     "type",
     "maintainer",
     "description",
-    "status"
+    "status",
+    "devices"
   ],
   "properties": {
     "name": {
@@ -40,6 +41,66 @@
         "experimental"
       ]
     },
+    "lifecycle": {
+      "enum": [
+        "active",
+        "maintenance",
+        "archived"
+      ]
+    },
+    "maturity": {
+      "enum": [
+        "experimental",
+        "alpha",
+        "beta",
+        "stable"
+      ]
+    },
+    "distribution": {
+      "enum": [
+        "official",
+        "vendor",
+        "community",
+        "personal"
+      ]
+    },
+    "lineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "upstream",
+            "fork",
+            "reimplementation"
+          ]
+        },
+        "upstreamFirmwareId": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "upstreamRepository": {
+          "type": "string"
+        }
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "framework": {
+          "enum": [
+            "arduino",
+            "zephyr",
+            "esp-idf",
+            "other"
+          ]
+        },
+        "language": {
+          "type": "string"
+        }
+      }
+    },
     "repository": {
       "type": "string"
     },
@@ -58,13 +119,120 @@
     "roles": {
       "type": "array",
       "items": {
-        "type": "string"
+        "enum": [
+          "companion",
+          "repeater",
+          "room-server",
+          "observer",
+          "sensor",
+          "kiss-modem",
+          "standalone-ui"
+        ]
       }
     },
     "features": {
       "type": "array",
       "items": {
         "type": "string"
+      }
+    },
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "protocol": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "meshcoreCompatible": {
+              "type": "boolean"
+            },
+            "rawPacketSend": {
+              "type": "boolean"
+            },
+            "rawPacketObserve": {
+              "type": "boolean"
+            }
+          }
+        },
+        "transports": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "ble": {
+              "type": "boolean"
+            },
+            "usbSerial": {
+              "type": "boolean"
+            },
+            "nativeTcp": {
+              "type": "boolean"
+            },
+            "wifiAp": {
+              "type": "boolean"
+            },
+            "ethernet": {
+              "type": "boolean"
+            }
+          }
+        },
+        "operations": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "webFlasher": {
+              "type": "boolean"
+            },
+            "ota": {
+              "type": "boolean"
+            },
+            "bleDfu": {
+              "type": "boolean"
+            },
+            "configurationBackup": {
+              "type": "boolean"
+            }
+          }
+        },
+        "networking": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "repeater": {
+              "type": "boolean"
+            },
+            "roomServer": {
+              "type": "boolean"
+            },
+            "observer": {
+              "type": "boolean"
+            },
+            "mqtt": {
+              "type": "boolean"
+            },
+            "kissModem": {
+              "type": "boolean"
+            }
+          }
+        },
+        "hardware": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "gps": {
+              "type": "boolean"
+            },
+            "display": {
+              "type": "boolean"
+            },
+            "sensors": {
+              "type": "boolean"
+            },
+            "lowPowerRx": {
+              "type": "boolean"
+            }
+          }
+        }
       }
     },
     "changelog": {

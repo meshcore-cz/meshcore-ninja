@@ -3,6 +3,23 @@
   import { STATUS_META, TYPE_META } from '$lib/data.js';
   let { data } = $props();
   let d = $derived(data.device);
+
+  function presenceLabel(record, fallback) {
+    const status = record?.status;
+    if (status === 'present') return record.technology ?? record.chip ?? 'Present';
+    if (status === 'none') return 'None';
+    if (fallback === true) return 'Present';
+    if (fallback === false) return 'None';
+    if (typeof fallback === 'string' && fallback.length) return fallback;
+    return 'Unknown';
+  }
+
+  function batteryLabel(device) {
+    const power = device.hardware?.power;
+    if (power?.batterySupported === true) return power.pmic ?? device.battery ?? 'Supported';
+    if (power?.batterySupported === false) return 'None';
+    return device.battery ?? 'Unknown';
+  }
 </script>
 
 <svelte:head><title>{d.name} — MeshCore Firmware Atlas</title></svelte:head>
@@ -38,12 +55,27 @@
   <div><dt class="text-[0.72rem] tracking-wide text-dim uppercase">Radio</dt><dd class="mt-1 text-[0.95rem]">{d.radio ?? '—'}</dd></div>
   {#if d.frequency_bands?.length}<div><dt class="text-[0.72rem] tracking-wide text-dim uppercase">Bands</dt><dd class="mt-1 text-[0.95rem]">{d.frequency_bands.join(', ')} MHz</dd></div>{/if}
   {#if d.form_factor}<div><dt class="text-[0.72rem] tracking-wide text-dim uppercase">Form factor</dt><dd class="mt-1 text-[0.95rem]">{d.form_factor}</dd></div>{/if}
-  {#if d.display}<div><dt class="text-[0.72rem] tracking-wide text-dim uppercase">Display</dt><dd class="mt-1 text-[0.95rem]">{d.display}</dd></div>{/if}
-  {#if d.battery}<div><dt class="text-[0.72rem] tracking-wide text-dim uppercase">Battery</dt><dd class="mt-1 text-[0.95rem]">{d.battery}</dd></div>{/if}
-  <div><dt class="text-[0.72rem] tracking-wide text-dim uppercase">GPS</dt><dd class="mt-1 text-[0.95rem]">{d.gps ? 'Yes' : 'No'}</dd></div>
+  <div><dt class="text-[0.72rem] tracking-wide text-dim uppercase">Display</dt><dd class="mt-1 text-[0.95rem]">{presenceLabel(d.hardware?.display, d.display)}</dd></div>
+  <div><dt class="text-[0.72rem] tracking-wide text-dim uppercase">Battery</dt><dd class="mt-1 text-[0.95rem]">{batteryLabel(d)}</dd></div>
+  <div><dt class="text-[0.72rem] tracking-wide text-dim uppercase">GPS</dt><dd class="mt-1 text-[0.95rem]">{presenceLabel(d.hardware?.gnss, d.gps)}</dd></div>
   {#if d.connectivity?.length}<div><dt class="text-[0.72rem] tracking-wide text-dim uppercase">Connectivity</dt><dd class="mt-1 text-[0.95rem]">{d.connectivity.join(', ')}</dd></div>{/if}
-  {#if d.flasher_roles?.length}<div><dt class="text-[0.72rem] tracking-wide text-dim uppercase">Flasher roles</dt><dd class="mt-1 text-[0.95rem]">{d.flasher_roles.join(', ')}</dd></div>{/if}
+  {#if d.roles?.length}<div><dt class="text-[0.72rem] tracking-wide text-dim uppercase">Roles</dt><dd class="mt-1 text-[0.95rem]">{d.roles.join(', ')}</dd></div>{/if}
+  {#if d.transports?.length}<div><dt class="text-[0.72rem] tracking-wide text-dim uppercase">Transports</dt><dd class="mt-1 text-[0.95rem]">{d.transports.join(', ')}</dd></div>{/if}
 </dl>
+
+{#if d.variants?.length}
+  <section class="mb-7">
+    <h2 class="mb-3 border-b border-edge pb-1.5 text-[1.1rem] font-semibold">Build variants</h2>
+    <div class="flex flex-wrap gap-1.5">
+      {#each d.variants as variant}
+        <span class="rounded-md bg-elev2 px-2.5 py-1 text-[0.85rem]">
+          {variant.id}
+          <span class="text-dim">· {variant.role}{variant.transports?.length ? ` · ${variant.transports.join('/')}` : ''}</span>
+        </span>
+      {/each}
+    </div>
+  </section>
+{/if}
 
 <section class="mb-7">
   <h2 class="mb-3 border-b border-edge pb-1.5 text-[1.1rem] font-semibold">Firmware support</h2>

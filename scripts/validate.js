@@ -58,14 +58,57 @@ const deviceSchema = loadSchema('device');
 const firmwareSchema = loadSchema('firmware');
 const vendorSchema = loadSchema('vendor');
 const changelogSchema = loadSchema('changelog');
+const compatibilitySchema = loadSchema('compatibility');
 
 const vendors = readCollection('vendors', 'vendor.yaml');
 const devices = readCollection('devices', 'device.yaml');
 const firmwares = readCollection('firmwares', 'firmware.yaml');
+const compatibility = [];
 
 validateAll(vendors, vendorSchema);
 validateAll(devices, deviceSchema);
 validateAll(firmwares, firmwareSchema);
+
+const compatibilityBase = join(root, 'data', 'compatibility');
+if (existsSync(compatibilityBase)) {
+  for (const fwDir of readdirSync(compatibilityBase, { withFileTypes: true })) {
+    if (!fwDir.isDirectory()) continue;
+    for (const versionDir of readdirSync(join(compatibilityBase, fwDir.name), {
+      withFileTypes: true
+    })) {
+      if (!versionDir.isDirectory()) continue;
+      const versionPath = join(compatibilityBase, fwDir.name, versionDir.name);
+      for (const file of readdirSync(versionPath, { withFileTypes: true })) {
+        if (!file.isFile()) continue;
+        if (!file.name.endsWith('.yaml')) {
+          err(`compatibility/${fwDir.name}/${versionDir.name}/${file.name}`, 'must be a .yaml file');
+          continue;
+        }
+        const deviceId = file.name.replace(/\.yaml$/, '');
+        const where = `compatibility/${fwDir.name}/${versionDir.name}/${file.name}`;
+        let data;
+        try {
+          data = yaml.load(readFileSync(join(versionPath, file.name), 'utf8'));
+        } catch (e) {
+          err(where, `YAML parse error: ${e.message}`);
+          continue;
+        }
+        compatibility.push({
+          firmwareId: fwDir.name,
+          firmwareVersion: versionDir.name,
+          deviceId,
+          where,
+          data: data ?? {}
+        });
+        if (!compatibilitySchema(data ?? {})) {
+          for (const e of compatibilitySchema.errors) {
+            err(where, `${e.instancePath || '/'} ${e.message}`);
+          }
+        }
+      }
+    }
+  }
+}
 
 // Optional changelog.yaml alongside each firmware.
 for (const f of firmwares) {
@@ -88,10 +131,20 @@ for (const f of firmwares) {
 // Referential integrity.
 const vendorIds = new Set(vendors.map((v) => v.id));
 const deviceIds = new Set(devices.map((d) => d.id));
+const firmwareIds = new Set(firmwares.map((f) => f.id));
+const firmwareDeviceIds = new Map(
+  firmwares.map((f) => [f.id, new Set((f.data.devices ?? []).map((d) => d.id))])
+);
 
 for (const d of devices) {
   if (d.data.vendorId && !vendorIds.has(d.data.vendorId)) {
     err(d.where, `vendorId "${d.data.vendorId}" has no data/vendors/ entry`);
+  }
+  if (d.data.variantOf && !deviceIds.has(d.data.variantOf)) {
+    err(d.where, `variantOf "${d.data.variantOf}" has no data/devices/ entry`);
+  }
+  if (d.data.replaces && !deviceIds.has(d.data.replaces)) {
+    err(d.where, `replaces "${d.data.replaces}" has no data/devices/ entry`);
   }
 }
 for (const f of firmwares) {
@@ -101,6 +154,17 @@ for (const f of firmwares) {
     }
   }
 }
+for (const c of compatibility) {
+  if (!firmwareIds.has(c.firmwareId)) {
+    err(c.where, `firmware "${c.firmwareId}" has no data/firmwares/ entry`);
+  }
+  if (!deviceIds.has(c.deviceId)) {
+    err(c.where, `device "${c.deviceId}" has no data/devices/ entry`);
+  }
+  if (firmwareIds.has(c.firmwareId) && !firmwareDeviceIds.get(c.firmwareId)?.has(c.deviceId)) {
+    err(c.where, `device "${c.deviceId}" is not listed in firmware "${c.firmwareId}" devices`);
+  }
+}
 
 if (errors.length) {
   console.error(`✗ ${errors.length} validation error(s):\n`);
@@ -108,5 +172,5 @@ if (errors.length) {
   process.exit(1);
 }
 console.log(
-  `✓ valid — ${firmwares.length} firmware(s), ${devices.length} device(s), ${vendors.length} vendor(s).`
+  `✓ valid — ${firmwares.length} firmware(s), ${devices.length} device(s), ${vendors.length} vendor(s), ${compatibility.length} compatibility report(s).`
 );
