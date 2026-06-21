@@ -14,13 +14,16 @@ transports:
 hardware:
   mcu:
     model: stm32wl
+    flashMb: 0.25
+    # Source: https://www.st.com/en/microcontrollers-microprocessors/stm32wle5cc.html
+    ramKb: 64
   radios:
-    - technology: other
+    - technology: lora
       chip: stm32wl
   display:
-    status: unknown
+    status: none
   gnss:
-    status: unknown
+    status: none
 interfaces:
   usb:
     connector: unknown
@@ -29,4 +32,4 @@ interfaces:
       - serial
       - flashing
   wifi:
-    status: unknown
+    status: none

@@ -67,6 +67,13 @@ hardware:
     # Source: https://mesh-sn.de/en/devices/details/seeed-wio-tracker-l1-pro
     consumptionIdleMa: 5
     consumptionTxMa: 85
+  physical:
+    dimensionsMm:
+      width: 60
+      height: 35
+      depth: 20
+    # Source: https://mesh-sn.de/en/devices/details/seeed-wio-tracker-l1-pro
+    weightG: 45
   enclosure:
     builtIn: true
 interfaces:

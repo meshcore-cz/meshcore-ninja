@@ -8,6 +8,10 @@ familyId: seeed-xiao-c6
 image: xiao_esp32c6.svg
 official: false
 product_url: https://wiki.seeedstudio.com/xiao_esp32c6_getting_started/
+description: >-
+  Thumb-sized ESP32-C6 XIAO board with Wi-Fi 6, BLE 5, and Thread/Zigbee-capable
+  radio support. MeshCore uses it as a compact companion or repeater host with
+  the Wio-SX1262 LoRa module attached.
 roles:
   - companion
   - repeater
@@ -20,6 +24,8 @@ hardware:
   mcu:
     model: esp32-c6
     flashMb: 4
+    # Source: https://wiki.seeedstudio.com/xiao_esp32c6_getting_started/
+    ramKb: 400
   radios:
     - technology: lora
       chip: sx1262
@@ -30,6 +36,9 @@ hardware:
     status: none
   gnss:
     status: none
+  leds:
+    status: present
+    description: User LED and charge LED
   input:
     - type: button
       description: Boot
@@ -39,6 +48,11 @@ hardware:
     dimensionsMm:
       width: 21
       height: 17.8
+  power:
+    batterySupported: true
+    batteryBuiltIn: false
+    charging: true
+    solarInput: false
 interfaces:
   usb:
     connector: USB-C

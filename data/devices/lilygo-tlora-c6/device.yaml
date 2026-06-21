@@ -49,6 +49,8 @@ hardware:
       width: 33
       height: 29
       depth: 6
+    # Source: https://mesh-sn.de/en/devices/details/lilygo-t-lora-c6
+    weightG: 6
   power:
     batterySupported: false
     charging: false

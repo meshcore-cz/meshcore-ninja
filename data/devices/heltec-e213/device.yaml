@@ -34,6 +34,8 @@ hardware:
     model: esp32-s3
     flashMb: 16
     psramMb: 16
+    # Source: https://heltec.org/project/vision-master-e213/
+    ramKb: 512
   radios:
     - technology: lora
       chip: sx1262
@@ -54,11 +56,17 @@ hardware:
     colors: monochrome
   gnss:
     status: none
+  leds:
+    status: present
+    description: Status LED
   power:
     batterySupported: true
     batteryBuiltIn: false
     batteryConnector: SH1.25-2
     charging: true
+    solarInput: false
+    # Source: https://heltec.org/project/vision-master-e213/
+    consumptionIdleMa: 0.02
   expansion:
     - type: header-2.54
       count: 2
@@ -76,6 +84,8 @@ hardware:
       width: 66.75
       height: 30.41
       depth: 10
+    # Source: https://heltec.org/project/vision-master-e213/
+    weightG: 35
   environmental:
     operatingTempC:
       min: -20

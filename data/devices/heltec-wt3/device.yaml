@@ -39,6 +39,8 @@ hardware:
     model: esp32-s3
     flashMb: 8
     psramMb: 8
+    # Source: https://mesh-sn.de/hardware/details/heltec-wireless-tracker-v11
+    ramKb: 512
   radios:
     - technology: lora
       chip: sx1262

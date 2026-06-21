@@ -34,6 +34,8 @@ hardware:
     model: esp32
     flashMb: 4
     psramMb: 8
+    # Source: https://mesh-sn.de/hardware/details/lilygo-t-beam-v12-sx1276
+    ramKb: 520
   radios:
     - technology: lora
       chip: sx1276
@@ -62,8 +64,20 @@ hardware:
   power:
     batterySupported: true
     batteryBuiltIn: false
+    batteryConnector: 18650 Holder
     charging: true
     pmic: AXP2101
+    solarInput: true
+    # Source: https://mesh-sn.de/hardware/details/lilygo-t-beam-v12-sx1276
+    consumptionIdleMa: 55
+    consumptionTxMa: 130
+  physical:
+    dimensionsMm:
+      width: 75
+      height: 33
+      depth: 15
+    # Source: https://mesh-sn.de/hardware/details/lilygo-t-beam-v12-sx1276
+    weightG: 50
   expansion:
     - type: header-2.54
       count: 2

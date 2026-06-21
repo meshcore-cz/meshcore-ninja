@@ -29,6 +29,8 @@ hardware:
   mcu:
     model: nrf52
     flashMb: 1
+    # Source: https://mesh-sn.de/en/devices/details/rak3401-wisblock-1w-booster
+    ramKb: 256
   radios:
     - technology: lora
       chip: sx1262
@@ -39,6 +41,25 @@ hardware:
     status: none
   gnss:
     status: none
+  leds:
+    status: present
+    description: Status LEDs
+  power:
+    batterySupported: true
+    batteryBuiltIn: false
+    charging: true
+    solarInput: true
+    batteryConnector: WisBlock Battery Connector
+    # Source: https://mesh-sn.de/en/devices/details/rak3401-wisblock-1w-booster
+    consumptionIdleMa: 15
+    consumptionTxMa: 350
+  physical:
+    dimensionsMm:
+      width: 30
+      height: 20
+      depth: 5
+    # Source: https://mesh-sn.de/en/devices/details/rak3401-wisblock-1w-booster
+    weightG: 8
 interfaces:
   usb:
     connector: USB-C

@@ -29,6 +29,8 @@ hardware:
     model: esp32-s3
     flashMb: 16
     psramMb: 8
+    # Source: https://heltec.org/project/vision-master-t190/
+    ramKb: 512
   radios:
     - technology: lora
       chip: sx1262
@@ -50,6 +52,9 @@ hardware:
     colors: color
   gnss:
     status: none
+  leds:
+    status: present
+    description: Status LED
   input:
     - type: button
   power:
@@ -57,6 +62,9 @@ hardware:
     batteryBuiltIn: false
     batteryConnector: SH1.25-2
     charging: true
+    solarInput: false
+    # Source: https://heltec.org/project/vision-master-t190/
+    consumptionIdleMa: 0.018
   expansion:
     - type: header-2.54
       count: 2
@@ -71,6 +79,7 @@ hardware:
       width: 60
       height: 25.4
       depth: 10.2
+    weightG: 35
   environmental:
     operatingTempC:
       min: -20

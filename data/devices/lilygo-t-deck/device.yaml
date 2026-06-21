@@ -34,6 +34,8 @@ hardware:
     model: esp32-s3
     flashMb: 16
     psramMb: 8
+    # Source: https://mesh-sn.de/hardware/details/lilygo-t-deck
+    ramKb: 512
   radios:
     - technology: lora
       chip: sx1262
@@ -73,6 +75,13 @@ hardware:
     consumptionTxMa: 140
   enclosure:
     builtIn: true
+  physical:
+    dimensionsMm:
+      width: 140
+      height: 70
+      depth: 25
+    # Source: https://mesh-sn.de/hardware/details/lilygo-t-deck
+    weightG: 145
 interfaces:
   usb:
     connector: USB-C

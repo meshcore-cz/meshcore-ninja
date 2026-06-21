@@ -45,6 +45,15 @@ hardware:
     status: none
   gnss:
     status: none
+  power:
+    batterySupported: true
+    batteryBuiltIn: false
+    charging: true
+    solarInput: true
+    batteryConnector: WisBlock Battery Connector
+    # Source: https://mesh-sn.de/hardware/details/rak11310-wisblock-core
+    consumptionIdleMa: 15
+    consumptionTxMa: 90
 interfaces:
   usb:
     connector: none

@@ -7,6 +7,10 @@ lifecycle: active
 familyId: seeed-xiao
 official: true
 product_url: https://wiki.seeedstudio.com/XIAO-RP2040/
+description: >-
+  Tiny RP2040 XIAO board with USB flashing, a 14-pin footprint, and the
+  standard Seeed user and charge LEDs. Suited to small companion-side
+  controller projects and lightweight peripheral glue logic.
 roles:
   - companion
   - repeater
@@ -17,6 +21,8 @@ hardware:
   mcu:
     model: rp2040
     flashMb: 2
+    # Source: https://wiki.seeedstudio.com/XIAO-RP2040/
+    ramKb: 264
   radios:
     - technology: lora
       chip: sx1262
@@ -25,6 +31,9 @@ hardware:
       description: Boot
     - type: button
       description: Reset
+  leds:
+    status: present
+    description: User LED, power LED, and RGB LED
   physical:
     dimensionsMm:
       width: 21
@@ -33,6 +42,11 @@ hardware:
     status: none
   gnss:
     status: none
+  power:
+    batterySupported: true
+    batteryBuiltIn: false
+    charging: false
+    solarInput: false
 interfaces:
   usb:
     connector: USB-C

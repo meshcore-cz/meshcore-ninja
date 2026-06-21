@@ -58,8 +58,19 @@ hardware:
   power:
     batterySupported: true
     batteryBuiltIn: false
+    batteryConnector: LiPo-Pouch extern (JST PicoBlade 1.25mm)
     charging: true
     solarInput: false
+    # Source: https://mesh-sn.de/hardware/details/ikoka-handheld
+    consumptionIdleMa: 6
+    consumptionTxMa: 85
+  physical:
+    dimensionsMm:
+      width: 80
+      height: 35
+      depth: 15
+    # Source: https://mesh-sn.de/hardware/details/ikoka-handheld
+    weightG: 20
 interfaces:
   usb:
     connector: USB-C

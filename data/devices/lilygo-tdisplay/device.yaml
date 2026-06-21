@@ -21,6 +21,8 @@ hardware:
     model: esp32
     flashMb: 16
     psramMb: 8
+    # Source: https://mesh-sn.de/en/devices/details/lilygo-t-display-pro
+    ramKb: 512
   display:
     status: present
     technology: display
@@ -44,6 +46,13 @@ hardware:
     # Source: https://mesh-sn.de/en/devices/details/lilygo-t-display-pro
     consumptionIdleMa: 45
     consumptionTxMa: 80
+  physical:
+    dimensionsMm:
+      width: 65
+      height: 35
+      depth: 8
+    # Source: https://mesh-sn.de/en/devices/details/lilygo-t-display-pro
+    weightG: 16
   input:
     - type: button
       description: boot button

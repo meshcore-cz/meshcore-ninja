@@ -31,6 +31,8 @@ hardware:
   mcu:
     model: esp32
     flashMb: 4
+    # Source: https://mesh-sn.de/hardware/details/lilygo-lora32-v21-16
+    ramKb: 520
   radios:
     - technology: lora
       chip: sx1276
@@ -53,7 +55,18 @@ hardware:
   power:
     batterySupported: true
     batteryBuiltIn: false
+    batteryConnector: JST 1.25mm
     charging: true
+    # Source: https://mesh-sn.de/hardware/details/lilygo-lora32-v21-16
+    consumptionIdleMa: 55
+    consumptionTxMa: 130
+  physical:
+    dimensionsMm:
+      width: 51
+      height: 28
+      depth: 11
+    # Source: https://mesh-sn.de/hardware/details/lilygo-lora32-v21-16
+    weightG: 13
   expansion:
     - type: micro-SD
       count: 1

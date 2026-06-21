@@ -57,6 +57,16 @@ hardware:
     solarInput: false
     pmic: AXP2101
     batteryConnector: 18650 Holder
+    # Source: https://mesh-sn.de/hardware/details/lilygo-t-beam-1w
+    consumptionIdleMa: 60
+    consumptionTxMa: 500
+  physical:
+    dimensionsMm:
+      width: 120
+      height: 50
+      depth: 20
+    # Source: https://mesh-sn.de/hardware/details/lilygo-t-beam-1w
+    weightG: 80
   input:
     - type: button
       description: boot

@@ -32,6 +32,8 @@ hardware:
   mcu:
     model: nrf52840
     flashMb: 1
+    # Source: https://mesh-sn.de/hardware/details/rak4631-wisblock-core
+    ramKb: 256
   radios:
     - technology: lora
       chip: sx1262
@@ -49,7 +51,19 @@ hardware:
   power:
     batterySupported: true
     batteryBuiltIn: false
+    batteryConnector: WisBlock Battery Connector
     charging: true
+    solarInput: true
+    # Source: https://mesh-sn.de/hardware/details/rak4631-wisblock-core
+    consumptionIdleMa: 12
+    consumptionTxMa: 85
+  physical:
+    dimensionsMm:
+      width: 30
+      height: 20
+      depth: 3
+    # Source: https://mesh-sn.de/hardware/details/rak4631-wisblock-core
+    weightG: 5
   environmental:
     operatingTempC:
       min: -40

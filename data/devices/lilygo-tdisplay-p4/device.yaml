@@ -64,6 +64,13 @@ hardware:
     # Source: https://mesh-sn.de/en/devices/details/lilygo-t-display-p4
     consumptionIdleMa: 35
     consumptionTxMa: 110
+  physical:
+    dimensionsMm:
+      width: 80
+      height: 45
+      depth: 10
+    # Source: https://mesh-sn.de/hardware/details/lilygo-t-display-p4
+    weightG: 30
   environmental:
     operatingTempC:
       min: -20

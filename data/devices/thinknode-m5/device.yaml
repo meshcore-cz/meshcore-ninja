@@ -34,6 +34,8 @@ hardware:
     model: esp32-s3
     flashMb: 4
     psramMb: 8
+    # Source: https://mesh-sn.de/hardware/details/elecrow-thinknode-m5
+    ramKb: 512
   radios:
     - technology: lora
       chip: sx1262
@@ -74,6 +76,7 @@ hardware:
     batteryBuiltIn: true
     batteryCapacityMah: 1200
     batteryChemistry: li-po
+    batteryConnector: Built-in LiPo 1200mAh
     charging: true
     # Source: https://mesh-sn.de/en/devices/details/elecrow-thinknode-m5
     consumptionIdleMa: 34
@@ -82,10 +85,11 @@ hardware:
     builtIn: true
   physical:
     dimensionsMm:
-      width: 82
-      height: 51.6
-      depth: 26.3
-    weightG: 81
+      width: 78
+      height: 52
+      depth: 18
+    # Source: https://mesh-sn.de/hardware/details/elecrow-thinknode-m5
+    weightG: 65
   environmental:
     operatingTempC:
       min: -10

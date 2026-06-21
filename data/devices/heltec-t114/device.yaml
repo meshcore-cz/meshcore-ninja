@@ -68,12 +68,20 @@ hardware:
       description: user button
   power:
     batterySupported: true
+    batteryBuiltIn: false
     charging: true
     solarInput: true
-    batteryConnector: SH1.25-2
+    batteryConnector: SH1.25-2P
     # Source: https://mesh-sn.de/en/devices/details/heltec-mesh-node-t114-v2
     consumptionIdleMa: 11
     consumptionTxMa: 85
+  physical:
+    dimensionsMm:
+      width: 53
+      height: 29
+      depth: 8
+    # Source: https://mesh-sn.de/hardware/details/heltec-mesh-node-t114-v2
+    weightG: 10
   expansion:
     - type: header-2.54
       count: 2

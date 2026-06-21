@@ -490,10 +490,12 @@
 <!-- Detailed hardware spec cards -->
 <section class="mb-8">
   <h2 class="mb-3 border-b border-edge pb-1.5 text-[1.1rem] font-semibold">Hardware</h2>
-  <div class="grid gap-4 [grid-template-columns:repeat(auto-fill,minmax(260px,1fr))]">
+  <!-- Masonry flow: cards pack vertically per column, so a tall card (e.g. Power)
+       no longer leaves its row-mates with empty space. -->
+  <div class="gap-4 [columns:280px]">
     <!-- Radio card(s) -->
     {#each radios as radio}
-      <div class="rounded-xl border border-edge bg-elev p-5">
+      <div class="mb-4 break-inside-avoid rounded-xl border border-edge bg-elev p-5">
         <h3 class="mb-3 flex items-center gap-2 text-[0.95rem] font-semibold">
           <span aria-hidden="true">📻</span> Radio{radios.length > 1 ? ` · ${(radio.technology ?? '').toUpperCase()}` : ''}
         </h3>
@@ -513,7 +515,7 @@
     {/each}
 
     {#each specCards as card}
-      <div class="rounded-xl border border-edge bg-elev p-5">
+      <div class="mb-4 break-inside-avoid rounded-xl border border-edge bg-elev p-5">
         <h3 class="mb-3 flex items-center gap-2 text-[0.95rem] font-semibold">
           <span aria-hidden="true">{card.icon}</span> {card.title}
         </h3>

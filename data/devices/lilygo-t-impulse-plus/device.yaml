@@ -1,4 +1,5 @@
 # Source: meshcore-dev/MeshCore variants/lilygo_t_impulse_plus/platformio.ini + boards/lilygo_t_impulse_plus_nrf52840.json
+# Source: https://github.com/Xinyuan-LilyGO/T-Impulse-Plus
 name: LilyGo T-Impulse Plus
 vendorId: lilygo
 kind: product
@@ -6,20 +7,38 @@ lifecycle: active
 familyId: lilygo-t-impulse
 product_url: https://www.lilygo.cc/
 official: true
+description: >-
+  Low-power nRF52840 wristband with SX1262 LoRa, a 64x32 OLED, GPS, and a
+  touch-button wake flow. Built for wearable MeshCore companions with very low
+  deep-sleep current.
+transports:
+  - ble
+  - usb
 hardware:
   mcu:
     model: nrf52
+    # Source: https://github.com/Xinyuan-LILYGO/T-Impulse-Plus
+    ramKb: 256
   radios:
     - technology: lora
       chip: sx1262
   display:
-    status: unknown
+    status: present
+    technology: oled
+    controller: SSD1315
+    resolution:
+      width: 64
+      height: 32
+    colors: monochrome
   gnss:
     status: present
-    chip: unknown
+    chip: MIA-M10Q
+  leds:
+    status: present
+    description: Status LED
 interfaces:
   bluetooth:
     version: unknown
     ble: true
   wifi:
-    status: unknown
+    status: none

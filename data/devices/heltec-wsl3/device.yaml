@@ -27,6 +27,8 @@ hardware:
   mcu:
     model: esp32-s3
     flashMb: 8
+    # Source: https://resource.heltec.cn/download/Wireless_Shell_V3/HTIT-Wsh_V3%28Rev1.1%29.pdf
+    ramKb: 512
   radios:
     - technology: lora
       chip: sx1262
@@ -40,6 +42,15 @@ hardware:
     status: none
   gnss:
     status: none
+  leds:
+    status: unknown
+  power:
+    batterySupported: false
+    batteryBuiltIn: false
+    charging: false
+    solarInput: false
+    # Source: https://resource.heltec.cn/download/Wireless_Shell_V3/HTIT-Wsh_V3%28Rev1.1%29.pdf
+    consumptionIdleMa: 0.009
   physical:
     dimensionsMm:
       width: 38.4

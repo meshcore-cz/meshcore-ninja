@@ -11,8 +11,8 @@ roles:
   - standalone-ui
 description: >-
   4-inch SenseCAP Indicator touchscreen platform for firmware experiments and
-  mesh-network control panels. The product line pairs ESP32 and RP2040-class
-  logic with Wi-Fi, BLE, and optional LoRa support.
+  mesh-network control panels. The Meshtastic-capable version pairs ESP32-S3
+  and RP2040 MCUs with Wi-Fi, BLE, LoRa, and a capacitive RGB touch display.
 transports:
   - ble
   - usb
@@ -20,16 +20,35 @@ transports:
 hardware:
   mcu:
     model: esp32-s3
+    # Source: https://wiki.seeedstudio.com/sensecap_indicator_meshtastic/
+    flashMb: 8
+    ramKb: 512
+  radios:
+    - technology: lora
+      chip: sx1262
+      frequencyVariants:
+        - '862-930'
+      txPowerDbm: 27
   display:
     status: present
     technology: display
-    size: 4
+    controller: ST7701S
+    size: 3.95
+    resolution:
+      width: 480
+      height: 480
+    colors: color
     touch: true
   gnss:
     status: none
   input:
     - type: button
       description: power / wake / reset button
+  power:
+    batterySupported: false
+    batteryBuiltIn: false
+    charging: false
+    solarInput: false
 interfaces:
   usb:
     connector: USB-C

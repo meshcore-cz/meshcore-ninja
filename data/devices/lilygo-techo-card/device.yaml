@@ -11,7 +11,7 @@ product_url: https://github.com/Xinyuan-LilyGO/T-Echo-Card
 description: >-
   Low-power nRF52840 + SX1262 card-sized node with a 0.42-inch OLED, L76K GNSS,
   ICM20948 IMU, speaker, microphone, and WS2812 LED. Solar panel for continuous
-  power supply. Bluetooth 5 only — no Wi-Fi.
+  power supply. Bluetooth 5 only - no Wi-Fi.
 roles:
   - companion
   - repeater
@@ -24,6 +24,8 @@ hardware:
   mcu:
     model: nrf52840
     flashMb: 1
+    # Source: https://github.com/Xinyuan-LilyGO/T-Echo-Card
+    ramKb: 256
   radios:
     - technology: lora
       chip: sx1262
@@ -44,14 +46,19 @@ hardware:
   gnss:
     status: present
     chip: L76K
+  leds:
+    status: present
+    description: WS2812 status LED
   input:
     - type: microphone
     - type: speaker
   power:
-    batterySupported: true
-    charging: true
+    batterySupported: false
+    charging: false
     solarInput: true
     solarPanelBuiltIn: true
+    # Source: https://github.com/Xinyuan-LilyGO/T-Echo-Card
+    batteryConnector: none
 interfaces:
   usb:
     connector: USB-C

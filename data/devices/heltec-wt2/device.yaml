@@ -69,13 +69,14 @@ hardware:
       description: RST_SW
   power:
     batterySupported: true
-    batteryBuiltIn: false
-    batteryConnector: SH1.25-2
+    batteryBuiltIn: true
+    batteryCapacityMah: 600
+    batteryConnector: Built-in 600mAh LiPo
     charging: true
-    solarInput: true
+    solarInput: false
     # Source: https://mesh-sn.de/en/devices/details/heltec-wireless-tracker-v2
-    consumptionIdleMa: 30
-    consumptionTxMa: 130
+    consumptionIdleMa: 35
+    consumptionTxMa: 110
   physical:
     dimensionsMm:
       width: 53

@@ -22,16 +22,33 @@ hardware:
   radios:
     - technology: lora
       chip: sx1262
+      frequencyVariants:
+        - '868'
+        - '915'
   display:
     status: present
     technology: display
+    controller: SSD1306
+    size: 0.92
+    resolution:
+      width: 128
+      height: 64
+    colors: monochrome
   gnss:
     status: none
+  leds:
+    status: present
+    description: Indicator LED
   input:
     - type: button
       description: user button
     - type: button
       description: reset button
+  power:
+    batterySupported: false
+    batteryBuiltIn: false
+    charging: false
+    solarInput: false
 interfaces:
   bluetooth:
     version: '5.0'

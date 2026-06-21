@@ -68,6 +68,13 @@ hardware:
       count: 1
   enclosure:
     builtIn: false
+  physical:
+    dimensionsMm:
+      width: 50
+      height: 30
+      depth: 8
+    # Source: https://mesh-sn.de/hardware/details/lilygo-t-echo-lite
+    weightG: 8
 interfaces:
   usb:
     connector: USB-C

@@ -34,6 +34,8 @@ hardware:
     model: esp32-s3
     flashMb: 16
     psramMb: 8
+    # Source: https://mesh-sn.de/hardware/details/lilygo-t-lora-pager
+    ramKb: 512
   radios:
     - technology: lora
       chip: sx1262
@@ -65,10 +67,13 @@ hardware:
   power:
     batterySupported: true
     batteryBuiltIn: true
-    batteryCapacityMah: 1500
-    batteryConnector: JST1.25-2
+    batteryCapacityMah: 1200
+    batteryConnector: Built-in LiPo 1200mAh
     charging: true
     pmic: BQ25896
+    # Source: https://mesh-sn.de/hardware/details/lilygo-t-lora-pager
+    consumptionIdleMa: 45
+    consumptionTxMa: 115
   expansion:
     - type: microsd
       count: 1
@@ -76,10 +81,11 @@ hardware:
     builtIn: true
   physical:
     dimensionsMm:
-      width: 106
-      height: 89
-      depth: 23
-    weightG: 250
+      width: 110
+      height: 55
+      depth: 14
+    # Source: https://mesh-sn.de/hardware/details/lilygo-t-lora-pager
+    weightG: 75
 interfaces:
   usb:
     connector: USB-C

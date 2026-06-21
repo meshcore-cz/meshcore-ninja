@@ -7,6 +7,10 @@ lifecycle: active
 familyId: seeed-xiao
 official: true
 product_url: https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/
+description: >-
+  Thumb-sized ESP32-S3 XIAO board with Wi-Fi, BLE, USB flashing, and onboard
+  user/charge LEDs. A compact host board for wireless and sensor projects, with
+  battery charging support and the standard XIAO expansion footprint.
 roles:
   - companion
   - repeater
@@ -20,6 +24,8 @@ hardware:
     model: esp32-s3
     flashMb: 8
     psramMb: 8
+    # Source: https://wiki.seeedstudio.com/xiao_esp32s3_getting_started/
+    ramKb: 512
   radios:
     - technology: lora
       chip: sx1262
@@ -27,6 +33,9 @@ hardware:
     status: none
   gnss:
     status: none
+  leds:
+    status: present
+    description: User LED and charge LED
   input:
     - type: button
       description: Boot
@@ -36,6 +45,11 @@ hardware:
     dimensionsMm:
       width: 21
       height: 17.8
+  power:
+    batterySupported: true
+    batteryBuiltIn: false
+    charging: true
+    solarInput: false
 interfaces:
   usb:
     connector: USB-C

@@ -27,6 +27,8 @@ hardware:
   mcu:
     model: nrf52840
     flashMb: 1
+    # Source: /Users/tree/Projects/meshcore-firmware-atlas/data/devices/uart-solar-node-station/datasheet.pdf
+    ramKb: 256
   radios:
     - technology: lora
       chip: sx1262
@@ -42,10 +44,14 @@ hardware:
     batterySupported: true
     batteryBuiltIn: true
     batteryCapacityMah: 3000
+    batteryChemistry: other
     charging: true
     solarInput: true
     solarPanelBuiltIn: true
     solarPanelWatts: 10
+    # Source: /Users/tree/Projects/meshcore-firmware-atlas/data/devices/uart-solar-node-station/datasheet.pdf
+    consumptionIdleMa: 8
+    consumptionTxMa: 85
   expansion:
     - type: IP-rated connector
       count: 2
@@ -59,6 +65,7 @@ hardware:
       width: 120
       height: 80
       depth: 50
+    weightG: 21
 interfaces:
   usb:
     connector: USB-C

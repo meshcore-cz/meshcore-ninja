@@ -19,12 +19,15 @@ roles:
 transports:
   - ble
   - usb
+  - ethernet
   - wifi
 hardware:
   mcu:
     model: esp32-s3
     flashMb: 16
     psramMb: 8
+    # Source: https://lilygo.cc/en-us/products/t-eth-elite-1
+    ramKb: 512
   radios:
     - technology: lora
       chip: sx1262
@@ -36,6 +39,11 @@ hardware:
     dimensionsMm:
       width: 50
       height: 67
+  power:
+    batterySupported: false
+    batteryBuiltIn: false
+    charging: false
+    solarInput: false
 interfaces:
   usb:
     connector: USB-C

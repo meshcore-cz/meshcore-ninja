@@ -32,6 +32,8 @@ hardware:
     model: esp32-s3
     flashMb: 8
     psramMb: 8
+    # Source: https://mesh-sn.de/hardware/details/lilygo-t-beam-supreme-sx1262
+    ramKb: 512
   radios:
     - technology: lora
       chip: sx1262
@@ -52,6 +54,9 @@ hardware:
   gnss:
     status: present
     chip: L76K
+  leds:
+    status: present
+    description: Status LEDs
   input:
     - type: button
       description: PWR/PMU button (power on/off, customizable)
@@ -62,6 +67,15 @@ hardware:
     batteryBuiltIn: false
     charging: true
     pmic: AXP2101
+    batteryConnector: JST + 18650 Holder
+    solarInput: true
+  physical:
+    dimensionsMm:
+      width: 70
+      height: 30
+      depth: 15
+    # Source: https://mesh-sn.de/hardware/details/lilygo-t-beam-supreme-sx1262
+    weightG: 25
   expansion:
     - type: M.2
       count: 1
