@@ -47,6 +47,11 @@ hardware:
     batteryBuiltIn: false
     charging: false
     solarInput: false
+price:
+  # Source: https://www.seeedstudio.com/XIAO-RP2040-v1-0-p-5026.html
+  # Source: https://forum.seeedstudio.com/t/xiao-esp32s3-sx1262-lorawan-wiki-example/292535
+  amount: 9
+  asOf: 2026-06
 interfaces:
   usb:
     connector: USB-C

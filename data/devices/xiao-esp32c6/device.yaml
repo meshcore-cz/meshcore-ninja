@@ -56,6 +56,11 @@ hardware:
     batteryChemistry: other
     batteryConnector: solder pads
     # Source: https://wiki.seeedstudio.com/xiao_esp32c6_getting_started/
+price:
+  # Source: https://www.seeedstudio.com/Seeed-Studio-XIAO-ESP32C6-p-5884.html
+  # Source: https://forum.seeedstudio.com/t/xiao-esp32s3-sx1262-lorawan-wiki-example/292535
+  amount: 10
+  asOf: 2026-06
 interfaces:
   usb:
     connector: USB-C

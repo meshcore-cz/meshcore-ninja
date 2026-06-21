@@ -58,6 +58,11 @@ hardware:
       height: 21
       depth: 15
     weightG: 3
+price:
+  # Source: https://www.seeedstudio.com/Seeed-XIAO-ESP32C3-p-5431.html
+  # Source: https://forum.seeedstudio.com/t/xiao-esp32s3-sx1262-lorawan-wiki-example/292535
+  amount: 10
+  asOf: 2026-06
 interfaces:
   usb:
     connector: unknown

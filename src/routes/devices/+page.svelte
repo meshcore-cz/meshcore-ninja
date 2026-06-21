@@ -135,12 +135,33 @@
     if (bn) return -1;
     return cmp(a, b);
   }
+  // A `metric` carries the accessor + formatter for a numeric sort. When such a
+  // sort is active the card surfaces that value (see sortBadge) so the ordering
+  // is legible even for specs not normally shown on the card.
+  const numSort = (id, label, dir, metric) => ({
+    id,
+    label,
+    metric,
+    cmp: (dir === 'asc' ? numAsc : numDesc)(metric.get)
+  });
   const SORTS = [
     { id: 'name', label: 'Name (A–Z)', cmp: (a, b) => a.name.localeCompare(b.name) },
     { id: 'price-asc', label: 'Price (low → high)', cmp: numAsc((d) => d.price?.amount) },
     { id: 'price-desc', label: 'Price (high → low)', cmp: numDesc((d) => d.price?.amount) },
     { id: 'firmwares', label: 'Most firmwares', cmp: numDesc((d) => d.firmwareCount) },
-    { id: 'mcu', label: 'MCU', cmp: (a, b) => deviceMcuLabel(a).localeCompare(deviceMcuLabel(b)) || a.name.localeCompare(b.name) }
+    { id: 'mcu', label: 'MCU', cmp: (a, b) => deviceMcuLabel(a).localeCompare(deviceMcuLabel(b)) || a.name.localeCompare(b.name) },
+    numSort('battery', 'Battery (large → small)', 'desc', {
+      label: 'Battery', get: (d) => d.hardware?.power?.batteryCapacityMah, fmt: (v) => `${v} mAh`
+    }),
+    numSort('solar', 'Solar wattage (high → low)', 'desc', {
+      label: 'Solar', get: (d) => d.hardware?.power?.solarPanelWatts, fmt: (v) => `${v} W`
+    }),
+    numSort('idle', 'Power draw, idle (low → high)', 'asc', {
+      label: 'Idle', get: (d) => d.hardware?.power?.consumptionIdleMa, fmt: (v) => `${v} mA`
+    }),
+    numSort('tx', 'Power draw, TX (low → high)', 'asc', {
+      label: 'TX draw', get: (d) => d.hardware?.power?.consumptionTxMa, fmt: (v) => `${v} mA`
+    })
   ];
   let sel = $state(Object.fromEntries(FACETS.map((f) => [f.id, csv(f.id)])));
   let toggles = $state(
@@ -203,9 +224,16 @@
     })
   );
 
-  let sorted = $derived(
-    [...filtered].sort((SORTS.find((s) => s.id === sort) ?? SORTS[0]).cmp)
-  );
+  let activeSort = $derived(SORTS.find((s) => s.id === sort) ?? SORTS[0]);
+  let sorted = $derived([...filtered].sort(activeSort.cmp));
+
+  // When a metric sort is active, the value to surface on each card (or null).
+  function sortBadge(d) {
+    const m = activeSort.metric;
+    if (!m) return null;
+    const v = m.get(d);
+    return v == null ? null : `${m.label}: ${m.fmt(v)}`;
+  }
 
   const primaryFacets = FACETS.filter((f) => f.primary);
   const advancedFacets = FACETS.filter((f) => !f.primary);
@@ -415,8 +443,11 @@
         <!-- Pills + footer pinned to the card bottom; the gap above grows so
              cards in a row keep their footers aligned regardless of content. -->
         <div class="mt-auto">
-          {#if featurePills(d).length}
+          {#if sortBadge(d) || featurePills(d).length}
             <div class="flex flex-wrap gap-1 px-1 pt-2.5">
+              {#if sortBadge(d)}
+                <span class="rounded-full border border-accent bg-accent/20 px-2 py-0.5 text-[0.7rem] font-medium text-accent">{sortBadge(d)}</span>
+              {/if}
               {#each featurePills(d) as pill}
                 <span class="rounded-full border px-2 py-0.5 text-[0.7rem] {pill.accent ? 'border-accent/40 bg-accent/10 text-accent' : 'border-edge bg-elev2 text-dim'}">{pill.label}</span>
               {/each}

@@ -13,6 +13,9 @@ price:
 hardware:
   mcu:
     model: nrf54l15
+    # Source: https://www.nordicsemi.com/Products/nRF54L15
+    ramKb: 256
+    flashMb: 1.5
   display:
     status: unknown
   gnss:

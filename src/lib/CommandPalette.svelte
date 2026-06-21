@@ -109,13 +109,18 @@
                 <span class="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-md border border-edge bg-bg">
                   {#if item.image}
                     <img src={item.image} alt="" class="max-h-full max-w-full object-contain p-1" />
+                  {:else if item.type === 'Device'}
+                    <svg aria-hidden="true" viewBox="0 0 24 24" class="h-5 w-5 text-muted">
+                      <rect x="7" y="4" width="10" height="16" rx="1.8" fill="none" stroke="currentColor" stroke-width="1.8" />
+                      <path d="M10 2.8v2.4M14 2.8v2.4M10 18.8v2.4M14 18.8v2.4M5.2 8h2.4M5.2 12h2.4M5.2 16h2.4M16.4 8h2.4M16.4 12h2.4M16.4 16h2.4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.4" />
+                    </svg>
                   {:else}
                     <span class="text-[0.7rem] font-bold {TYPE_TW[item.type] ?? 'text-dim'}">{item.title.slice(0, 1).toUpperCase()}</span>
                   {/if}
                 </span>
                 <span class="min-w-0 flex-1">
                   <span class="block truncate text-[0.95rem] text-ink">{item.title}</span>
-                  {#if item.subtitle}<span class="block truncate text-[0.8rem] text-dim">{item.subtitle}</span>{/if}
+                  {#if item.subtitle}<span class="block truncate text-[0.8rem] text-dim opacity-60">{item.subtitle}</span>{/if}
                 </span>
                 <span class="shrink-0 text-[0.68rem] font-semibold tracking-wide uppercase {TYPE_TW[item.type] ?? 'text-dim'}">{item.type}</span>
               </button>

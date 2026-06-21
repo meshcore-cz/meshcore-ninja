@@ -55,6 +55,11 @@ hardware:
     solarInput: false
     # Source: https://wiki.seeedstudio.com/XIAO_BLE/
     batteryConnector: JST-PH 2-pin (external)
+price:
+  # Source: https://www.seeedstudio.com/Seeed-XIAO-BLE-nRF52840-p-5201.html
+  # Source: https://forum.seeedstudio.com/t/xiao-nrf52840-wio-sx1262-kit-for-meshtastic-no-sensor-passthru/292616
+  amount: 13
+  asOf: 2026-06
 interfaces:
   usb:
     connector: USB-C

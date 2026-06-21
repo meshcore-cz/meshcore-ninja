@@ -30,6 +30,7 @@
     "vite": "^8.0.0"
   },
   "dependencies": {
+    "@lucide/svelte": "^1.21.0",
     "fuse.js": "^7.4.2"
   }
 }

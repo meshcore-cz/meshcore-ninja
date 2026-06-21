@@ -23,18 +23,24 @@ price:
 hardware:
   mcu:
     model: nrf52
+    # Source: https://www.keepteen.com/GAT562-Pocket-Lora-Node-Radio-for-Meshtastic-Meshcore-Mesh-Tracker-with-SX1262-NRF53840-L76K-GPS-p6556031.html
+    ramKb: 256
   display:
-    status: unknown
+    status: present
+    size: 1.3
   gnss:
     status: present
-    chip: unknown
+    chip: L76K
   power:
     batterySupported: true
+    batteryBuiltIn: true
+    batteryCapacityMah: 2500
+    batteryChemistry: li-po
     charging: true
     solarInput: false
 interfaces:
   usb:
-    connector: unknown
+    connector: USB-C
     capabilities:
       - power
       - serial

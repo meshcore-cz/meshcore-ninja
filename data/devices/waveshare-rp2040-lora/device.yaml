@@ -13,6 +13,8 @@ price:
 hardware:
   mcu:
     model: rp2040
+    # Source: RP2040 family memory map
+    ramKb: 264
   radios:
     - technology: lora
       chip: sx1262

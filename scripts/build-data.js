@@ -9,6 +9,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { load } from 'js-yaml';
 import { latestReleaseSummary } from '../src/lib/releases.js';
+import { METRICS } from '../src/lib/metrics.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const defaultRoot = join(here, '..');
@@ -104,6 +105,7 @@ function buildSitemap(root, { devices, firmwares, vendors, generatedAt }) {
     '/matrix/',
     '/releases/',
     '/about/',
+    ...METRICS.map((m) => `/device-rank/${m.id}/`),
     ...devices.map((d) => `/device/${d.id}/`),
     ...firmwares.flatMap((f) => [`/firmware/${f.id}/`, `/firmware/${f.id}/releases/`]),
     ...vendors.map((v) => `/vendor/${v.id}/`)

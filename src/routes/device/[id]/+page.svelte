@@ -16,9 +16,24 @@
     stripVendorLabel,
     deviceShortName
   } from '$lib/data.js';
+  import { metricById } from '$lib/metrics.js';
   import { compareIds } from '$lib/compare.js';
   import { clampDescription, abs, absUrl } from '$lib/seo.js';
   import Seo from '$lib/Seo.svelte';
+  // Lucide icons for the hardware spec cards (per-icon imports tree-shake).
+  import Radio from '@lucide/svelte/icons/radio';
+  import Cpu from '@lucide/svelte/icons/cpu';
+  import Monitor from '@lucide/svelte/icons/monitor';
+  import Keyboard from '@lucide/svelte/icons/keyboard';
+  import SatelliteDish from '@lucide/svelte/icons/satellite-dish';
+  import BatteryFull from '@lucide/svelte/icons/battery-full';
+  import Zap from '@lucide/svelte/icons/zap';
+  import Sun from '@lucide/svelte/icons/sun';
+  import Puzzle from '@lucide/svelte/icons/puzzle';
+  import Ruler from '@lucide/svelte/icons/ruler';
+  import Cable from '@lucide/svelte/icons/cable';
+  import Info from '@lucide/svelte/icons/info';
+  import ChartNoAxesColumn from '@lucide/svelte/icons/chart-no-axes-column';
   let { data } = $props();
   let d = $derived(data.device);
 
@@ -92,6 +107,14 @@
     return `${dimensions.width} × ${dimensions.height} × ${dimensions.depth} mm`;
   }
 
+  function metricDisplay(metricId, device = d) {
+    const metric = metricById(metricId);
+    if (!metric) return undefined;
+    const value = metric.get({ ...device, firmwareSupportCount: data.firmwares.length });
+    if (value == null) return undefined;
+    return `${metric.fmt(value)}${metric.unit ? ` ${metric.unit}` : ''}`;
+  }
+
   function formatOperatingTemp(env) {
     const temp = env?.operatingTempC;
     if (temp?.min == null || temp?.max == null) return undefined;
@@ -162,9 +185,9 @@
         part: mcuInfo?.model
       },
       { label: 'Architecture', value: mcuInfo?.architecture?.name, part: mcuInfo?.architecture },
-      { label: 'Flash', value: d.hardware?.mcu?.flashMb && `${d.hardware.mcu.flashMb} MB` },
-      { label: 'RAM', value: d.hardware?.mcu?.ramKb && `${d.hardware.mcu.ramKb} KB` },
-      { label: 'PSRAM', value: d.hardware?.mcu?.psramMb && `${d.hardware.mcu.psramMb} MB` }
+      { label: 'Flash', value: d.hardware?.mcu?.flashMb && `${d.hardware.mcu.flashMb} MB`, metric: 'flash' },
+      { label: 'RAM', value: d.hardware?.mcu?.ramKb && `${d.hardware.mcu.ramKb} KB`, metric: 'ram' },
+      { label: 'PSRAM', value: d.hardware?.mcu?.psramMb && `${d.hardware.mcu.psramMb} MB`, metric: 'psram' }
     ])
   );
 
@@ -179,12 +202,17 @@
             part: displayPart
           },
           { label: 'Controller', value: d.hardware.display.controller },
-          { label: 'Size', value: d.hardware.display.size && `${d.hardware.display.size}″` },
+          {
+            label: 'Size',
+            value: d.hardware.display.size && `${d.hardware.display.size}″`,
+            metric: 'display-size'
+          },
           {
             label: 'Resolution',
             value:
               d.hardware.display.resolution?.width &&
-              `${d.hardware.display.resolution.width} × ${d.hardware.display.resolution.height}`
+              `${d.hardware.display.resolution.width} × ${d.hardware.display.resolution.height}`,
+            metric: 'display-pixels'
           },
           { label: 'Colors', value: d.hardware.display.colors && titleCase(d.hardware.display.colors) },
           {
@@ -202,7 +230,7 @@
       : []
   );
 
-  let powerRows = $derived(
+  let batteryRows = $derived(
     rows([
       {
         label: 'Battery',
@@ -217,7 +245,8 @@
       },
       {
         label: 'Built-in capacity',
-        value: d.hardware?.power?.batteryCapacityMah && `${d.hardware.power.batteryCapacityMah} mAh`
+        value: d.hardware?.power?.batteryCapacityMah && `${d.hardware.power.batteryCapacityMah} mAh`,
+        metric: 'battery'
       },
       { label: 'Chemistry', value: BATTERY_CHEMISTRY[d.hardware?.power?.batteryChemistry] },
       {
@@ -234,52 +263,54 @@
         value:
           d.hardware?.power?.charging === true ? 'Yes' : d.hardware?.power?.charging === false ? 'No' : undefined
       },
-      {
-        label: 'Solar panel',
-        value:
-          d.hardware?.power?.solarPanelBuiltIn === true
-            ? d.hardware?.power?.solarPanelWatts
-              ? `Built-in · ${d.hardware.power.solarPanelWatts} W`
-              : 'Built-in'
-            : undefined
-      },
-      {
-        label: 'Solar charging',
-        value:
-          d.hardware?.power?.solarInput === true
-            ? 'Supported'
-            : d.hardware?.power?.solarInput === false
-              ? 'No'
-              : undefined
-      },
+      { label: 'Connector', value: d.hardware?.power?.batteryConnector }
+    ])
+  );
+
+  let powerRows = $derived(
+    rows([
       {
         label: 'Power draw (idle)',
         value:
           d.hardware?.power?.consumptionIdleMa != null
             ? `${d.hardware.power.consumptionIdleMa} mA`
-            : undefined
+            : undefined,
+        metric: 'idle-draw'
+      },
+      {
+        label: 'Idle runtime',
+        value: metricDisplay('idle-runtime'),
+        metric: 'idle-runtime'
       },
       {
         label: 'Power draw (TX)',
         value:
           d.hardware?.power?.consumptionTxMa != null
             ? `${d.hardware.power.consumptionTxMa} mA`
-            : undefined
+            : undefined,
+        metric: 'tx-draw'
       },
-      { label: 'PMIC', value: d.hardware?.power?.pmic },
-      { label: 'Battery connector', value: d.hardware?.power?.batteryConnector },
+      { label: 'PMIC', value: d.hardware?.power?.pmic }
+    ])
+  );
+
+  // Solar card surfaces only positive capability — a built-in panel or the
+  // ability to attach one. Explicit `false` flags stay hidden so the card never
+  // shows up just to say "None".
+  let solarRows = $derived(
+    rows([
       {
-        label: 'IP rating',
-        value: d.hardware?.enclosure?.ipRating
+        label: 'Solar panel',
+        value: d.hardware?.power?.solarPanelBuiltIn === true ? 'Built-in' : undefined
       },
       {
-        label: 'Shell',
-        value:
-          d.hardware?.enclosure?.builtIn === true
-            ? 'Included'
-            : d.hardware?.enclosure?.builtIn === false
-              ? 'None'
-              : undefined
+        label: 'Panel power',
+        value: d.hardware?.power?.solarPanelWatts && `${d.hardware.power.solarPanelWatts} W`,
+        metric: 'solar'
+      },
+      {
+        label: 'Solar charging',
+        value: d.hardware?.power?.solarInput === true ? 'Supported' : undefined
       }
     ])
   );
@@ -312,7 +343,19 @@
               : undefined
       },
       { label: 'Dimensions', value: formatDimensions(d.hardware?.physical?.dimensionsMm) },
-      { label: 'Weight', value: d.hardware?.physical?.weightG && `${d.hardware.physical.weightG} g` },
+      { label: 'Board area', value: metricDisplay('area'), metric: 'area' },
+      { label: 'Board volume', value: metricDisplay('volume'), metric: 'volume' },
+      { label: 'Weight', value: d.hardware?.physical?.weightG && `${d.hardware.physical.weightG} g`, metric: 'weight' },
+      {
+        label: 'Shell',
+        value:
+          d.hardware?.enclosure?.builtIn === true
+            ? 'Included'
+            : d.hardware?.enclosure?.builtIn === false
+              ? 'None'
+              : undefined
+      },
+      { label: 'IP rating', value: d.hardware?.enclosure?.ipRating },
       { label: 'Operating temp', value: formatOperatingTemp(d.hardware?.environmental) },
       {
         label: 'Certifications',
@@ -356,6 +399,8 @@
       { label: 'Lifecycle', value: d.lifecycle && titleCase(d.lifecycle) },
       { label: 'Revision', value: d.revision },
       { label: 'Family', value: d.familyId },
+      { label: 'Firmware support', value: `${data.firmwares.length}`, metric: 'firmware-support' },
+      { label: 'Catalog completeness', value: metricDisplay('completeness'), metric: 'completeness' },
       { label: 'Also known as', value: d.aliases?.length ? d.aliases.join(', ') : undefined }
     ])
   );
@@ -366,15 +411,17 @@
   // Whole-card visibility — a card renders only when it has content.
   let specCards = $derived(
     [
-      { title: 'Processor', icon: '🧠', rows: mcuRows },
-      { title: 'Display', icon: '🖥️', rows: displayRows },
-      { title: 'Input', icon: '⌨️', rows: inputRows },
-      { title: 'GNSS', icon: '📡', rows: gnssRows },
-      { title: 'Power', icon: '🔋', rows: powerRows },
-      { title: 'Expansion', icon: '🧩', rows: expansionRows },
-      { title: 'Physical', icon: '📐', rows: physicalRows },
-      { title: 'Connectivity', icon: '🔌', rows: interfaceRows },
-      { title: 'Details', icon: 'ℹ️', rows: metaRows }
+      { title: 'Processor', icon: Cpu, rows: mcuRows },
+      { title: 'Display', icon: Monitor, rows: displayRows },
+      { title: 'Input', icon: Keyboard, rows: inputRows },
+      { title: 'GNSS', icon: SatelliteDish, rows: gnssRows },
+      { title: 'Battery', icon: BatteryFull, rows: batteryRows },
+      { title: 'Power', icon: Zap, rows: powerRows },
+      { title: 'Solar', icon: Sun, rows: solarRows },
+      { title: 'Expansion', icon: Puzzle, rows: expansionRows },
+      { title: 'Physical', icon: Ruler, rows: physicalRows },
+      { title: 'Connectivity', icon: Cable, rows: interfaceRows },
+      { title: 'Details', icon: Info, rows: metaRows }
     ].filter((c) => c.rows.length)
   );
 
@@ -408,16 +455,43 @@
   {/if}
 {/snippet}
 
+<!-- A spec value plus a "rank this spec" link → /device-rank, sorted by this metric
+     with this device highlighted. The icon sits left of the value so values
+     stay aligned at the right edge. Falls back to a plain value when the row
+     carries no comparable metric. -->
+{#snippet rankableValue(row)}
+  {#if row.metric}
+    <span class="inline-flex items-center justify-end gap-1.5">
+      <a
+        class="shrink-0 text-edge transition hover:text-accent"
+        href="{base}/device-rank/{row.metric}/?from={d.id}"
+        title="Compare this spec across all devices"
+        aria-label="Rank all devices by this spec"
+      >
+        <ChartNoAxesColumn class="h-[0.95em] w-[0.95em]" aria-hidden="true" />
+      </a>
+      {@render specValue(row.part, row.value)}
+    </span>
+  {:else}
+    {@render specValue(row.part, row.value)}
+  {/if}
+{/snippet}
+
 <Seo title={d.name} description={metaDescription} type="article" jsonLd={productJsonLd} />
 
 <a class="mb-4 inline-block text-[0.9rem] text-dim hover:underline" href="{base}/devices/">← All devices</a>
 
 <header class="mb-7 flex flex-wrap items-start gap-6">
-  {#if d.imageUrl}
-    <div class="flex h-44 w-44 shrink-0 items-center justify-center rounded-xl border border-edge bg-elev2 p-3">
+  <div class="flex h-44 w-44 shrink-0 items-center justify-center rounded-xl border border-edge bg-elev2 p-3 text-muted">
+    {#if d.imageUrl}
       <img src={d.imageUrl} alt={d.name} class="max-h-full max-w-full object-contain" />
-    </div>
-  {/if}
+    {:else}
+      <svg aria-hidden="true" viewBox="0 0 24 24" class="h-20 w-20">
+        <rect x="7" y="4" width="10" height="16" rx="1.8" fill="none" stroke="currentColor" stroke-width="1.8" />
+        <path d="M10 2.8v2.4M14 2.8v2.4M10 18.8v2.4M14 18.8v2.4M5.2 8h2.4M5.2 12h2.4M5.2 16h2.4M16.4 8h2.4M16.4 12h2.4M16.4 16h2.4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.4" />
+      </svg>
+    {/if}
+  </div>
   <div class="min-w-[240px] flex-1">
     <div class="flex flex-wrap items-center gap-2">
       <h1 class="text-[clamp(1.5rem,5vw,2rem)] font-bold">{d.name}</h1>
@@ -502,7 +576,7 @@
         Compare all {data.variants.length + 1} →
       </a>
     </div>
-    <div class="grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(200px,1fr))]">
+    <div class="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
       {#each data.variants as v (v.id)}
         <a
           class="group flex items-center gap-3 rounded-xl border border-edge bg-elev p-3 transition hover:-translate-y-0.5 hover:border-accent"
@@ -516,8 +590,8 @@
             {/if}
           </span>
           <span class="min-w-0">
-            <span class="block truncate text-[0.9rem] font-medium group-hover:text-accent">{deviceShortName(v)}</span>
-            <span class="block truncate font-mono text-[0.75rem] text-dim">{deviceMcuLabel(v)}{#if deviceRadioLabel(v) && deviceRadioLabel(v) !== 'Unknown'} · {deviceRadioLabel(v)}{/if}</span>
+            <span class="block text-[0.9rem] leading-tight font-medium group-hover:text-accent" title={v.name}>{deviceShortName(v)}</span>
+            <span class="mt-0.5 block truncate font-mono text-[0.75rem] text-dim">{deviceMcuLabel(v)}{#if deviceRadioLabel(v) && deviceRadioLabel(v) !== 'Unknown'} · {deviceRadioLabel(v)}{/if}</span>
           </span>
         </a>
       {/each}
@@ -535,7 +609,7 @@
     {#each radios as radio}
       <div class="mb-4 break-inside-avoid rounded-xl border border-edge bg-elev p-5">
         <h3 class="mb-3 flex items-center gap-2 text-[0.95rem] font-semibold">
-          <span aria-hidden="true">📻</span> Radio{radios.length > 1 ? ` · ${(radio.technology ?? '').toUpperCase()}` : ''}
+          <Radio class="h-[1.05em] w-[1.05em] text-accent2" aria-hidden="true" /> Radio{radios.length > 1 ? ` · ${(radio.technology ?? '').toUpperCase()}` : ''}
         </h3>
         <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-[0.9rem]">
           {#if known(radio.technology)}<dt class="text-dim">Technology</dt><dd class="text-right font-medium">{radio.technology.toUpperCase()}</dd>{/if}
@@ -546,7 +620,11 @@
               {#each radio.frequencyVariants as band, i}{@const fp = resolveFrequency(band)}{#if i > 0}, {/if}{#if fp}<span title={[fp.region, fp.range].filter(Boolean).join(' · ')} class="cursor-help underline decoration-dotted decoration-edge underline-offset-2">{fp.name}</span>{:else}{band}{/if}{/each}
             </dd>
           {/if}
-          {#if known(radio.txPowerDbm)}<dt class="text-dim">TX power</dt><dd class="text-right font-medium">{radio.txPowerDbm} dBm</dd>{/if}
+          {#if known(radio.txPowerDbm)}<dt class="text-dim">TX power</dt><dd class="text-right font-medium">{@render rankableValue({ value: `${radio.txPowerDbm} dBm`, metric: 'tx-power' })}</dd>{/if}
+          {#if known(radio.txPowerDbm) && known(d.hardware?.power?.consumptionTxMa)}
+            <dt class="text-dim">TX efficiency</dt>
+            <dd class="text-right font-medium">{@render rankableValue({ value: metricDisplay('tx-efficiency'), metric: 'tx-efficiency' })}</dd>
+          {/if}
           {#if known(radio.antenna)}<dt class="text-dim">Antenna</dt><dd class="text-right font-medium">{radio.antenna}</dd>{/if}
         </dl>
       </div>
@@ -555,12 +633,12 @@
     {#each specCards as card}
       <div class="mb-4 break-inside-avoid rounded-xl border border-edge bg-elev p-5">
         <h3 class="mb-3 flex items-center gap-2 text-[0.95rem] font-semibold">
-          <span aria-hidden="true">{card.icon}</span> {card.title}
+          <card.icon class="h-[1.05em] w-[1.05em] text-accent2" aria-hidden="true" /> {card.title}
         </h3>
         <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-[0.9rem]">
           {#each card.rows as row}
             <dt class="text-dim">{row.label}</dt>
-            <dd class="text-right font-medium">{@render specValue(row.part, row.value)}</dd>
+            <dd class="text-right font-medium">{@render rankableValue(row)}</dd>
           {/each}
         </dl>
       </div>
