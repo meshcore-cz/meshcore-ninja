@@ -1,6 +1,12 @@
 name: MeshCore (Official)
 type: official
 maintainer: meshcore-dev (community project, originated by Scott Powell / ripplebiz)
+maintainers:
+  - name: meshcore-dev
+    url: https://github.com/meshcore-dev
+  - name: Scott Powell
+  - name: ripplebiz
+    url: https://github.com/ripplebiz
 description: >
   The official MeshCore firmware — a lightweight C++ library and firmware for multi-hop packet
   routing over LoRa radios. It powers decentralized, self-healing mesh networks for off-grid,

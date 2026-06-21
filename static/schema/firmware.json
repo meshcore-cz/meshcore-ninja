@@ -29,6 +29,32 @@
       "type": "string",
       "minLength": 1
     },
+    "maintainerUrl": {
+      "type": "string",
+      "pattern": "^https?://",
+      "description": "Maintainer's homepage/profile. Defaults to the repository's GitHub owner."
+    },
+    "maintainers": {
+      "type": "array",
+      "description": "Individual maintainers/contributors, each optionally linked. Shown on the detail page in place of the single `maintainer` string.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^https?://"
+          }
+        }
+      }
+    },
     "description": {
       "type": "string",
       "minLength": 1

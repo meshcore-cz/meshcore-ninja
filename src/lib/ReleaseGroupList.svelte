@@ -1,8 +1,38 @@
 <script>
+  import { onMount } from 'svelte';
   import { displayVersion, fmtDateTime, relativeTime } from '$lib/format.js';
   // A list of grouped releases (variants collapsed), with rendered Markdown
   // notes. Shared by the firmware detail page and /firmware/<id>/releases.
   let { groups, openFirst = true, markFirstLatest = false } = $props();
+
+  // Per-release deep links: each card has id="release-<version>". Loading with
+  // (or navigating to) such a hash opens that release and scrolls it into view.
+  const releaseId = (version) => `release-${version}`;
+
+  function openFromHash() {
+    const id = decodeURIComponent(location.hash.slice(1));
+    if (!id.startsWith('release-')) return;
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.querySelector('details')?.setAttribute('open', '');
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // Clicking the permalink updates the URL (shareable) without letting the
+  // <summary> toggle the card; the hashchange listener does the open + scroll.
+  function linkRelease(version, e) {
+    e.preventDefault();
+    e.stopPropagation();
+    const id = releaseId(version);
+    if (location.hash.slice(1) === id) openFromHash();
+    else location.hash = id;
+  }
+
+  onMount(() => {
+    openFromHash();
+    addEventListener('hashchange', openFromHash);
+    return () => removeEventListener('hashchange', openFromHash);
+  });
 
   // Tailwind utilities applied to descendants of the rendered Markdown notes.
   const prose =
@@ -23,10 +53,17 @@
   {#each groups as g, i}
     {@const single = g.variants.length === 1}
     {@const latest = markFirstLatest && i === 0}
-    <li class="rounded-lg border bg-elev {latest ? 'border-accent/70 shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-accent)_35%,transparent)]' : 'border-edge'}">
+    <li id={releaseId(g.version)} class="scroll-mt-20 rounded-lg border bg-elev {latest ? 'border-accent/70 shadow-[0_0_0_1px_color-mix(in_srgb,var(--color-accent)_35%,transparent)]' : 'border-edge'}">
       <details open={openFirst && i === 0}>
-        <summary class="flex cursor-pointer flex-wrap items-center gap-x-3 gap-y-1 px-3.5 py-2.5 marker:content-none">
+        <summary class="group flex cursor-pointer flex-wrap items-center gap-x-3 gap-y-1 px-3.5 py-2.5 marker:content-none">
           <span class="font-mono text-[1rem] font-semibold">{displayVersion(g.version)}</span>
+          <a
+            href="#{releaseId(g.version)}"
+            onclick={(e) => linkRelease(g.version, e)}
+            class="-ml-1.5 text-[0.95rem] text-dim opacity-0 transition group-hover:opacity-100 hover:text-accent focus:opacity-100"
+            title="Permalink to this release"
+            aria-label="Permalink to {displayVersion(g.version)}"
+          >#</a>
           {#if latest}<span class="rounded bg-accent/15 px-1.5 py-0.5 text-[0.65rem] font-bold tracking-wide text-accent uppercase">Latest</span>{/if}
           {#if g.prerelease}<span class="rounded bg-warn/15 px-1.5 py-0.5 text-[0.65rem] font-bold tracking-wide text-warn uppercase">Pre-release</span>{/if}
           {#if !single}<span class="text-[0.78rem] text-dim">{g.variants.length} variants</span>{/if}
