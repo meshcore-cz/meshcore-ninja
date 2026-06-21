@@ -62,6 +62,8 @@ capabilities:
 devices:
   - id: rak-4631
     status: supported
+  - id: uart-solar-node-station
+    status: supported
   - id: lilygo-techo
     status: supported
   - id: wio-tracker-l1

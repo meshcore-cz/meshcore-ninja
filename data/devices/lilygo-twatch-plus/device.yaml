@@ -1,25 +1,78 @@
-# Source: meshcore-dev/flasher.meshcore.io config.json
+# Source: https://github.com/Xinyuan-LilyGO/LilyGoLib/blob/master/docs/hardware/lilygo-t-watch-s3-plus.md · https://lilygo.cc/products/t-watch-s3-plus
 name: LilyGo T-Watch S3 Plus
 vendorId: lilygo
 kind: product
 lifecycle: active
 familyId: lilygo-t-watch-s3
+aliases:
+  - T-Watch S3 Plus
+  - T-Watch-S3-Plus
 image: lilygo_twatch_plus.svg
+datasheet: datasheet.pdf
 official: true
+product_url: https://lilygo.cc/products/t-watch-s3-plus
+description: >-
+  ESP32-S3 smartwatch with SX1262 LoRa, 1.3-inch IPS touchscreen, and built-in
+  GNSS (u-blox MIA-M10Q or Quectel LS550G). AXP2101 power management, BMA423
+  accelerometer, haptic driver, microphone, speaker, and IR transmitter.
 roles:
+  - companion
+  - repeater
+  - room-server
   - standalone-ui
+transports:
+  - ble
+  - usb
+  - wifi
 hardware:
   mcu:
-    model: esp32
+    model: esp32-s3
+    flashMb: 16
+    psramMb: 8
+  radios:
+    - technology: lora
+      chip: sx1262
+      frequencyVariants:
+        - '868'
+        - '915'
+      txPowerDbm: 22
+      antenna: IPEX-1.0
   display:
     status: present
     technology: display
+    controller: ST7789
+    size: 1.3
+    resolution:
+      width: 240
+      height: 240
+    colors: color
+    touch: true
   gnss:
-    status: unknown
+    status: present
+    chip: MIA-M10Q
+  input:
+    - type: microphone
+    - type: speaker
   power:
     batterySupported: true
+    batteryBuiltIn: true
+    batteryCapacityMah: 1500
     charging: true
-    solarInput: false
+    pmic: AXP2101
+  environmental:
+    operatingTempC:
+      min: -20
+      max: 70
 interfaces:
+  usb:
+    connector: Micro-USB
+    capabilities:
+      - power
+      - serial
+      - flashing
+  bluetooth:
+    version: '5.0'
+    ble: true
   wifi:
     status: present
+    standard: 802.11 b/g/n

@@ -1,39 +1,85 @@
-# Source: meshcore-dev/flasher.meshcore.io config.json
+# Source: https://github.com/Xinyuan-LilyGO/LilyGo-LoRa-Series/blob/master/docs/en/t3_s3_sx1276/t3_s3_sx1276_hw.md · https://github.com/Xinyuan-LilyGO/LilyGo-LoRa-Series/blob/master/schematic/T3_S3_V1.3.pdf
 name: LilyGo T3 S3 (SX127x)
 vendorId: lilygo
-kind: product
+kind: dev-board
 lifecycle: active
 familyId: lilygo-t3-s3
 aliases:
   - T3 S3 SX127x
+  - T3-S3 SX1276
 image: lilygo_t3s3.svg
+datasheet: datasheet.pdf
 official: true
+product_url: https://github.com/Xinyuan-LilyGO/LilyGo-LoRa-Series
+description: >-
+  Compact ESP32-S3 + SX1276 LoRa development board with SSD1306 OLED, micro-SD
+  slot, and Qwiic expansion connector. USB-C with PH2.0 battery connector and
+  optional solar input (V1.3). No on-board BMS — use a protected Li-ion cell.
 roles:
   - companion
   - repeater
   - room-server
+  - standalone-ui
 transports:
   - ble
   - usb
+  - wifi
 hardware:
   mcu:
-    model: esp32
+    model: esp32-s3
+    flashMb: 4
+    psramMb: 2
   radios:
     - technology: lora
-      chip: sx127x
+      chip: sx1276
+      frequencyVariants:
+        - '868'
+        - '915'
+      txPowerDbm: 20
+      antenna: IPEX-1.0
   display:
-    status: unknown
+    status: present
+    technology: oled
+    controller: SSD1306
+    size: 0.96
+    resolution:
+      width: 128
+      height: 64
+    colors: monochrome
   gnss:
-    status: unknown
+    status: none
+  input:
+    - type: button
+      description: BOOT button (boot mode, customizable)
+  power:
+    batterySupported: true
+    batteryBuiltIn: false
+    batteryConnector: PH2.0
+    charging: true
+    solarInput: true
+  expansion:
+    - type: qwiic
+      count: 1
+      interfaces:
+        - I2C
+        - UART
+        - GPIO
+    - type: micro-SD
+      count: 1
+  environmental:
+    operatingTempC:
+      min: -40
+      max: 85
 interfaces:
   usb:
-    connector: unknown
+    connector: USB-C
     capabilities:
       - power
       - serial
       - flashing
   bluetooth:
-    version: unknown
+    version: '5.0'
     ble: true
   wifi:
     status: present
+    standard: 802.11 b/g/n

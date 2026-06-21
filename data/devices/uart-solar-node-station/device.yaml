@@ -1,0 +1,73 @@
+# Source: https://lectronz.com/products/fully-assembled-meshtastic-solar-node-station · https://pcb.uart.cz/
+name: μArt.cz Solar Node Station
+vendorId: uart-cz
+kind: product
+lifecycle: discontinued
+familyId: uart-cz-solar-node
+variantOf: rak-4631
+datasheet: datasheet.pdf
+official: false
+product_url: https://lectronz.com/products/fully-assembled-meshtastic-solar-node-station
+price:
+  amount: 183
+  currency: USD
+  asOf: 2026-06
+description: >-
+  Fully assembled outdoor solar Meshtastic/MeshCore node built on the μArt Solar
+  Mesh baseboard (RAK4630, RAK4631-compatible firmware). Ships with a 10 W
+  panel and bundled battery; MPPT solar input 7–30 V.
+roles:
+  - companion
+  - repeater
+  - room-server
+transports:
+  - ble
+  - usb
+hardware:
+  mcu:
+    model: nrf52840
+    flashMb: 1
+  radios:
+    - technology: lora
+      chip: sx1262
+      frequencyVariants:
+        - '868'
+      txPowerDbm: 22
+      antenna: RP-SMA
+  display:
+    status: none
+  gnss:
+    status: none
+  power:
+    batterySupported: true
+    batteryBuiltIn: true
+    batteryCapacityMah: 3000
+    charging: true
+    solarInput: true
+    solarPanelBuiltIn: true
+    solarPanelWatts: 10
+  expansion:
+    - type: IP-rated connector
+      count: 2
+      interfaces:
+        - I2C
+        - UART
+  enclosure:
+    builtIn: true
+  physical:
+    dimensionsMm:
+      width: 120
+      height: 80
+      depth: 50
+interfaces:
+  usb:
+    connector: USB-C
+    capabilities:
+      - power
+      - serial
+      - flashing
+  bluetooth:
+    version: '5.0'
+    ble: true
+  wifi:
+    status: none

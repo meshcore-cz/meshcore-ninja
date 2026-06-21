@@ -1,4 +1,4 @@
-# Source: meshcore-dev/flasher.meshcore.io config.json
+# Source: https://docs.rakwireless.com/Product-Categories/Meshtastic/WisMesh-Tap/Quickstart/ (RAKWireless/rakwireless-docs GitHub) · https://docs.rakwireless.com/Product-Categories/WisNode/RAK10701-L/Datasheet/
 name: RAK WisMesh Tag
 vendorId: rak
 kind: product
@@ -6,35 +6,76 @@ lifecycle: active
 familyId: rak-wismesh
 aliases:
   - WisMesh Tag
+  - WisMesh Tap
+  - RAK10701
 image: rak_wismesh_tag.svg
 official: true
+product_url: https://docs.rakwireless.com/Product-Categories/Meshtastic/WisMesh-Tap/Quickstart/
+description: >-
+  All-in-one Meshtastic node based on the RAK10701 Field Tester, with a
+  320×240 TFT touchscreen and on-screen keyboard for phone-free messaging.
+  nRF52840 + SX1262, integrated GNSS, 3200 mAh battery, and RP-SMA LoRa
+  antenna. Pre-flashed with Meshtastic firmware.
 roles:
   - companion
   - repeater
   - room-server
+  - standalone-ui
 transports:
   - ble
   - usb
 hardware:
   mcu:
-    model: nrf52
+    model: nrf52840
+    flashMb: 1
+  radios:
+    - technology: lora
+      chip: sx1262
+      frequencyVariants:
+        - '868'
+        - '915'
+      txPowerDbm: 22
+      antenna: RP-SMA
   display:
-    status: unknown
+    status: present
+    technology: display
+    size: 2.8
+    resolution:
+      width: 320
+      height: 240
+    colors: color
+    touch: true
   gnss:
-    status: unknown
+    status: present
+  input:
+    - type: button
+      description: power button (hold 5s on/off, double-click forced uplink, single-click sleep/wake)
   power:
     batterySupported: true
+    batteryBuiltIn: true
+    batteryCapacityMah: 3200
     charging: true
-    solarInput: false
+  enclosure:
+    builtIn: true
+  physical:
+    dimensionsMm:
+      width: 100
+      height: 75
+      depth: 38
+    weightG: 244
+  environmental:
+    operatingTempC:
+      min: -10
+      max: 60
 interfaces:
   usb:
-    connector: unknown
+    connector: USB-C
     capabilities:
       - power
       - serial
       - flashing
   bluetooth:
-    version: unknown
+    version: '5.0'
     ble: true
   wifi:
-    status: unknown
+    status: none

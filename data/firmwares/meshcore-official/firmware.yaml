@@ -337,6 +337,10 @@ devices:
     status: supported
     target: tiny_relay
     platformio_board: tiny_relay
+  - id: uart-solar-node-station
+    status: supported
+    target: rak4631
+    platformio_board: rak4631
   - id: waveshare-rp2040-lora
     status: supported
     target: waveshare_rp2040_lora

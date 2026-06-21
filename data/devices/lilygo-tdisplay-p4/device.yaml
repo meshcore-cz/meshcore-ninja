@@ -1,19 +1,72 @@
-# Source: meshcore-dev/flasher.meshcore.io config.json
+# Source: https://github.com/Xinyuan-LilyGO/T-Display-P4 (README.md) · https://github.com/Xinyuan-LilyGO/T-Display-P4/blob/main/docs/PROJECT_PLAN.md
 name: LilyGo T-Display P4
 vendorId: lilygo
 kind: product
 lifecycle: active
 familyId: lilygo-t-display-p4
+aliases:
+  - T-Display-P4
 image: lilygo_tdisplay_p4.svg
 official: true
+product_url: https://github.com/Xinyuan-LilyGO/T-Display-P4
+description: >-
+  ESP32-P4 development board with a 4.05″ MIPI TFT touchscreen (540×1168),
+  SX1262 LoRa, L76K GNSS, MIPI camera, speaker, microphone, and ICM20948 IMU.
+  Auxiliary ESP32-C6-MINI-1U provides WiFi 6 and BLE 5.0. Ships in AMOLED and
+  TFT display variants; optional keyboard expansion adds a physical QWERTY
+  keyboard with CC1101/NRF24L01/NFC radios.
+roles:
+  - standalone-ui
+transports:
+  - ble
+  - usb
+  - wifi
 hardware:
   mcu:
-    model: esp32
+    model: esp32-p4
+    flashMb: 16
+  radios:
+    - technology: lora
+      chip: sx1262
+      frequencyVariants:
+        - '868'
+        - '915'
+      antenna: IPEX-1.0
   display:
     status: present
     technology: display
+    controller: HI8561
+    size: 4.05
+    resolution:
+      width: 540
+      height: 1168
+    colors: color
+    touch: true
   gnss:
-    status: unknown
+    status: present
+    chip: L76K
+  input:
+    - type: microphone
+    - type: speaker
+  power:
+    batterySupported: true
+    batteryBuiltIn: false
+    charging: true
+    pmic: LGS4056H
+  environmental:
+    operatingTempC:
+      min: -20
+      max: 70
 interfaces:
+  usb:
+    connector: USB-C
+    capabilities:
+      - power
+      - serial
+      - flashing
+  bluetooth:
+    version: '5.0'
+    ble: true
   wifi:
     status: present
+    standard: 802.11 a/b/g/n/ac/ax

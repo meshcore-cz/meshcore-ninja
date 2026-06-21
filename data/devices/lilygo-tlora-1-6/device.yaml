@@ -1,35 +1,75 @@
-# Source: meshcore-dev/flasher.meshcore.io config.json
+# Source: https://github.com/Xinyuan-LilyGO/LilyGo-LoRa-Series/blob/master/docs/en/t3_v161_sx1276/t3_v161_sx1276_hw.md · https://github.com/Xinyuan-LilyGO/LilyGo-LoRa-Series/blob/master/schematic/T3_V1.6.1.pdf
 name: LilyGo LoRa32 V2.1_1.6
 vendorId: lilygo
-kind: product
+kind: dev-board
 lifecycle: active
 familyId: lilygo-lora32-1-1-6
 revision: '2'
+aliases:
+  - LoRa32 V1.6.1
+  - T3 V1.6.1
 image: lilygo_tlora_1.6.svg
+datasheet: datasheet.pdf
 official: true
+product_url: https://github.com/Xinyuan-LilyGO/LilyGo-LoRa-Series
+description: >-
+  ESP32-PICO-D4 + SX1276 LoRa development board with SSD1306 OLED and micro-SD
+  slot. USB-C with CH9102 bridge and PH2.0 battery connector. No on-board BMS
+  — use a protected Li-ion cell.
 roles:
   - companion
   - repeater
   - room-server
+  - standalone-ui
 transports:
   - ble
   - usb
+  - wifi
 hardware:
   mcu:
     model: esp32
+    flashMb: 4
+  radios:
+    - technology: lora
+      chip: sx1276
+      frequencyVariants:
+        - '868'
+        - '915'
+      txPowerDbm: 20
+      antenna: IPEX-1.0
   display:
-    status: unknown
+    status: present
+    technology: oled
+    controller: SSD1306
+    size: 0.96
+    resolution:
+      width: 128
+      height: 64
+    colors: monochrome
   gnss:
-    status: unknown
+    status: none
+  power:
+    batterySupported: true
+    batteryBuiltIn: false
+    charging: true
+  expansion:
+    - type: micro-SD
+      count: 1
+  environmental:
+    operatingTempC:
+      min: -40
+      max: 85
 interfaces:
   usb:
-    connector: unknown
+    connector: USB-C
+    bridge: CH9102
     capabilities:
       - power
       - serial
       - flashing
   bluetooth:
-    version: unknown
+    version: '4.2'
     ble: true
   wifi:
     status: present
+    standard: 802.11 b/g/n

@@ -45,8 +45,9 @@ having a device record.
 3. Add `# Source:` with the product page URL; add a second `# Source:` line for a
    datasheet or docs URL when helpful.
 4. Fill **all applicable structured fields** — not just `description` prose.
-5. Add catalog keys to `data/globals.yaml` only when a new MCU model, radio chip,
-   or GNSS part appears (additive — unknown keys render as raw text).
+5. If the device's MCU, radio chip, GNSS module, or display technology isn't in
+   `data/globals.yaml` yet, **add a catalog entry** in the same change — don't
+   leave a bare string or substitute the wrong closest match.
 6. If the vendor publishes a spec PDF, **commit it locally and link it in YAML**
    (see Datasheets) — don't leave the URL in a comment.
 
@@ -163,12 +164,31 @@ Use the **datasheet**, not just the shop blurb.
 Skip redundant fields: don't set `display.touch: false`, don't duplicate
 datasheet URLs in comments.
 
-### MCU catalog
+### Catalog (`data/globals.yaml`)
 
-Devices store only `hardware.mcu.model` (e.g. `esp32-s3`, `esp32`, `nrf52840`).
-Family and architecture are derived from `data/globals.yaml`. The original
-**ESP32** chip is model `esp32` under family `esp32` — both are registered in
-globals; lookup prefers the **model** entry over the family.
+Devices store bare part keys (e.g. `hardware.mcu.model: esp32-s3`); the site
+resolves friendly names, vendor links, and derived fields (MCU family,
+architecture) from **`data/globals.yaml`**. Unmatched keys still render, but as
+raw text with no link — **fix that when you notice it**.
+
+**When enriching a device, if a part isn't catalogued yet, add it** — same PR as
+the device YAML. Copy an existing entry's shape; use the vendor's official name
+and product-page URL from the datasheet.
+
+| Device field | Globals section | Example key |
+|--------------|-----------------|-------------|
+| `hardware.mcu.model` | `family.<id>.models` (or new family) | `esp32-s3`, `nrf52840` |
+| `hardware.radios[].chip` | `radio` | `sx1262`, `lr1110` |
+| `hardware.gnss.chip` | `gnss` | `L76K`, `AG3335` |
+| `hardware.display.technology` | `display` | `oled`, `e-paper` |
+
+**MCU specifics:** devices specify only `model`; family and CPU architecture are
+derived from globals. When a family id also names a specific chip (e.g. `esp32`
+is both the series and the original ESP32), register it under `models` too —
+lookup prefers the **model** entry over the family fallback.
+
+Adding entries is **additive** — don't rename or remove existing keys. Run
+`npm test` after editing globals (schema-validated like device YAML).
 
 ### Battery & card badges
 
@@ -194,6 +214,8 @@ globals; lookup prefers the **model** entry over the family.
 - Keep diffs focused; don't bulk-edit every device unless asked.
 - **Don't "correct" display to `unknown`** on boards the catalog treats as having a screen without checking intent.
 - **Don't revert or strip** existing enrichment without reviewing against the datasheet first.
+- **Don't skip `globals.yaml`** when a device uses a new MCU, radio, GNSS, or display
+  technology — add the catalog entry so the site can link and resolve it.
 
 ## Contributor checklist
 
@@ -204,6 +226,7 @@ globals; lookup prefers the **model** entry over the family.
 - [ ] Datasheet PDF downloaded + `datasheet: datasheet.pdf` (when a vendor PDF exists)
 - [ ] No `# Datasheet:` URL comments
 - [ ] MCU flash/PSRAM, radio bands, display specs, USB connector, physical dims filled from datasheet
+- [ ] New MCU/radio/GNSS/display keys added to `data/globals.yaml` when missing
 - [ ] `image:` only if the SVG file exists in the device directory
 - [ ] Display/GNSS reflect built-in vs add-on correctly
 - [ ] Price rounded to whole USD, or omitted if the shop has no fixed price

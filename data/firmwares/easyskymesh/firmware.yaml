@@ -57,6 +57,8 @@ devices:
     status: supported
   - id: rak-4631
     status: supported
+  - id: uart-solar-node-station
+    status: supported
   - id: xiao-esp32s3
     status: partial
     notes: Power-saving figures vary by board revision.

@@ -1,0 +1,39 @@
+status: supported
+support:
+  availability: unavailable
+  level: vendor
+  verification: verified
+roles:
+  companion:
+    status: verified
+    transports:
+      ble: verified
+      usb: verified
+  repeater:
+    status: verified
+  room-server:
+    status: verified
+builds:
+  - target: rak4631
+    platformio_board: rak4631
+    role: companion
+    transports:
+      - ble
+      - usb
+    artifactSource: github-release
+  - target: rak4631
+    platformio_board: rak4631
+    role: repeater
+    artifactSource: github-release
+  - target: rak4631
+    platformio_board: rak4631
+    role: room-server
+    artifactSource: github-release
+verification:
+  firmwareVersion: 1.16.0
+  evidenceUrl: https://lectronz.com/products/fully-assembled-meshtastic-solar-node-station
+  confidence: manufacturer
+notes: >-
+  Vendor states the Meshtastic Motherboard is electrically compatible with
+  RAK4631 — use the official RAK4631 MeshCore build. Product retired on
+  Lectronz; baseboard docs remain at pcb.uart.cz.

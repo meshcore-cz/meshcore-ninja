@@ -56,6 +56,10 @@ family:
         name: Espressif ESP32-C6
         url: https://www.espressif.com/en/products/socs/esp32-c6
         architecture: risc-v
+      esp32-p4:
+        name: Espressif ESP32-P4
+        url: https://www.espressif.com/en/products/socs/esp32-p4
+        architecture: risc-v
   rp2040:
     name: Raspberry Pi RP2040
     vendor: Raspberry Pi
@@ -177,3 +181,7 @@ gnss:
     name: MediaTek AG3335
     vendor: MediaTek
     url: https://www.mediatek.com/products/iot-mt3335
+  NEO-6:
+    name: u-blox NEO-6
+    vendor: u-blox
+    url: https://www.u-blox.com/en/product/neo-6-series

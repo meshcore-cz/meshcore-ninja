@@ -1,27 +1,66 @@
-# Source: meshcore-dev/MeshCore variants/lilygo_techo_card/platformio.ini
+# Source: https://github.com/Xinyuan-LilyGO/T-Echo-Card (README.md)
 name: LilyGo T-Echo Card
 vendorId: lilygo
 kind: product
 lifecycle: active
 familyId: lilygo-t-echo-card
+aliases:
+  - T-Echo Card
 official: true
+product_url: https://github.com/Xinyuan-LilyGO/T-Echo-Card
+description: >-
+  Low-power nRF52840 + SX1262 card-sized node with a 0.42-inch OLED, L76K GNSS,
+  ICM20948 IMU, speaker, microphone, and WS2812 LED. Solar panel for continuous
+  power supply. Bluetooth 5 only — no Wi-Fi.
+roles:
+  - companion
+  - repeater
+  - room-server
+  - standalone-ui
+transports:
+  - ble
+  - usb
 hardware:
   mcu:
-    model: nrf52
+    model: nrf52840
+    flashMb: 1
   radios:
     - technology: lora
       chip: sx1262
+      frequencyVariants:
+        - '868'
+        - '915'
+      txPowerDbm: 22
+      antenna: IPEX-1.0
   display:
-    status: unknown
+    status: present
+    technology: oled
+    controller: SSD1306
+    size: 0.42
+    resolution:
+      width: 72
+      height: 40
+    colors: monochrome
   gnss:
-    status: unknown
+    status: present
+    chip: L76K
+  input:
+    - type: microphone
+    - type: speaker
   power:
     batterySupported: true
     charging: true
-    solarInput: false
+    solarInput: true
+    solarPanelBuiltIn: true
 interfaces:
+  usb:
+    connector: USB-C
+    capabilities:
+      - power
+      - serial
+      - flashing
   bluetooth:
-    version: unknown
+    version: '5.0'
     ble: true
   wifi:
-    status: unknown
+    status: none
