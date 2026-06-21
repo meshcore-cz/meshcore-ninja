@@ -11,6 +11,11 @@ product_url: https://www.cdebyte.com/products/EoRa-S3-900TB
 official: true
 refs:
   mesh-sh-device: ebyte-eora-s3-900tb
+description: >-
+  Compact ESP32-S3 + SX1262 development board with a 0.96-inch OLED, SD card
+  slot, USB-C, and LiPo charging circuit. Suited to small MeshCore/Meshtastic
+  builds where a low-cost board with display and rechargeable battery support is
+  enough.
 roles:
   - companion
   - repeater
@@ -22,18 +27,29 @@ transports:
 hardware:
   mcu:
     model: esp32-s3
+    flashMb: 4
+    psramMb: 2
+    # Source: https://mesh-sn.de/en/devices/details/ebyte-eora-s3-900tb
+    ramKb: 2048
   radios:
     - technology: lora
       chip: sx1262
       frequencyVariants:
         - '900'
       txPowerDbm: 22
+      antenna: U.FL/IPEX
   display:
     status: present
     technology: oled
     controller: SSD1306
     size: 0.96
+    resolution:
+      width: 128
+      height: 64
     colors: monochrome
+  leds:
+    status: present
+    description: Status LEDs
   gnss:
     status: none
   environmental:
@@ -43,11 +59,18 @@ hardware:
   power:
     batterySupported: true
     batteryBuiltIn: false
+    batteryChemistry: li-po
     charging: true
+    batteryConnector: JST LiPo charging circuit (external)
+    # Source: https://mesh-sn.de/en/devices/details/ebyte-eora-s3-900tb
+    consumptionIdleMa: 30
+    consumptionTxMa: 110
   physical:
     dimensionsMm:
       width: 27
       height: 64
+      depth: 12
+    weightG: 12
 interfaces:
   usb:
     connector: USB-C

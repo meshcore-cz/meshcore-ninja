@@ -26,6 +26,8 @@ hardware:
   mcu:
     model: nrf52840
     flashMb: 1
+    # Source: https://files.seeedstudio.com/products/SenseCAP/Wio-WM1110/Wio-WM1110_Module_Datasheet_V1.3.pdf
+    ramKb: 256
   radios:
     - technology: lora
       chip: lr1110
@@ -40,6 +42,16 @@ hardware:
     status: none
   gnss:
     status: none
+  leds:
+    status: none
+  power:
+    batterySupported: false
+    batteryBuiltIn: false
+    charging: false
+    solarInput: false
+    # Source: https://files.seeedstudio.com/products/SenseCAP/Wio-WM1110/Wio-WM1110_Module_Datasheet_V1.3.pdf
+    consumptionIdleMa: 10
+    consumptionTxMa: 125
   physical:
     dimensionsMm:
       width: 20

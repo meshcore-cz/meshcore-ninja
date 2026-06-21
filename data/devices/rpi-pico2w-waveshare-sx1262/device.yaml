@@ -8,6 +8,10 @@ familyId: raspberry-pi-pico2-w-waveshare-sx1262
 official: true
 refs:
   mesh-sh-device: raspberry-pi-pico2-w-waveshare-sx1262
+description: >-
+  Raspberry Pi Pico2 W paired with a Waveshare SX1262 LoRa HAT for compact
+  MeshCore/Meshtastic builds. RP2350 + Wi-Fi/BLE on the Pico2 W, external
+  antenna on the HAT, and a simple USB-powered kit format for low-cost testing.
 roles:
   - companion
   - repeater
@@ -25,6 +29,10 @@ hardware:
   radios:
     - technology: lora
       chip: sx1262
+      frequencyVariants:
+        - '868'
+        - '915'
+      antenna: SMA
   display:
     status: none
   gnss:
@@ -32,6 +40,19 @@ hardware:
   leds:
     status: present
     description: On-board status LED
+  power:
+    batterySupported: false
+    batteryBuiltIn: false
+    charging: false
+    solarInput: false
+    # Source: https://mesh-sn.de/en/devices/details/raspberry-pi-pico2-w-waveshare-sx1262
+    consumptionIdleMa: 20
+    consumptionTxMa: 100
+  physical:
+    dimensionsMm:
+      width: 51
+      height: 21
+    weightG: 15
 interfaces:
   usb:
     connector: Micro-USB

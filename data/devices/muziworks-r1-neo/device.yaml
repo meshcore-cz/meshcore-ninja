@@ -15,10 +15,15 @@ hardware:
   radios:
     - technology: lora
       chip: sx1262
+      frequencyVariants:
+        - '868'
+        - '915'
+      txPowerDbm: 22
+      antenna: SMA
   display:
     status: unknown
   gnss:
-    status: unknown
+    status: present
   leds:
     status: present
     description: Status LEDs
@@ -28,9 +33,28 @@ hardware:
     batteryCapacityMah: 1500
     batteryChemistry: li-po
     charging: true
+    batteryConnector: Built-in LiPo 1500mAh
     # Source: https://mesh-sn.de/en/devices/details/muzi-works-r1-neo
     consumptionIdleMa: 8
     consumptionTxMa: 85
+  enclosure:
+    builtIn: true
+    ipRating: IP68
+  physical:
+    dimensionsMm:
+      width: 58
+      height: 63
+      depth: 18
+    weightG: 84
 interfaces:
+  usb:
+    connector: USB-C
+    capabilities:
+      - power
+      - serial
+      - flashing
+  bluetooth:
+    version: '5.0'
+    ble: true
   wifi:
-    status: unknown
+    status: none

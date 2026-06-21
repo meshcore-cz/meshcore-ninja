@@ -26,6 +26,8 @@ hardware:
   mcu:
     model: nrf52840
     flashMb: 1
+    # Source: https://mesh-sn.de/en/devices/details/seeed-wio-tracker-l1-pro
+    ramKb: 256
   radios:
     - technology: lora
       chip: sx1262
@@ -43,6 +45,9 @@ hardware:
   gnss:
     status: present
     chip: L76K
+  leds:
+    status: present
+    description: Status LEDs
   input:
     - type: joystick
       description: 4-way
@@ -51,6 +56,11 @@ hardware:
     batteryBuiltIn: false
     charging: true
     solarInput: true
+    batteryConnector: JST 1.0mm Li-ion
+    batteryChemistry: li-ion
+    # Source: https://mesh-sn.de/en/devices/details/seeed-wio-tracker-l1-pro
+    consumptionIdleMa: 5
+    consumptionTxMa: 85
   enclosure:
     builtIn: false
 interfaces:

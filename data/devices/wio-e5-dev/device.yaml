@@ -8,21 +8,34 @@ familyId: seeed-wio-e5-dev-board
 official: true
 product_url: https://wiki.seeedstudio.com/LoRa_E5_Dev_Board/
 description: >-
-  Compact Wio-E5 development board for STM32WLE5JC / LoRaWAN prototyping,
-  typically bundled with an antenna, USB-C cable, and 2xAA battery holder.
-  Intended for quick bring-up and radio testing rather than a finished enclosure.
+  Compact Wio-E5 development board for STM32WLE5JC / LoRaWAN prototyping with
+  external antenna and GPIO breakouts. Intended for quick bring-up and radio
+  testing rather than a finished enclosure.
 transports:
   - usb
 hardware:
   mcu:
     model: stm32wl
+    flashMb: 0.25
+    # Source: https://files.seeedstudio.com/products/317990687/res/STM32WLE5JC%20Datasheet.pdf
+    ramKb: 64
   radios:
-    - technology: other
+    - technology: lora
       chip: stm32wl
+      frequencyVariants:
+        - '868'
+        - '915'
+        - '923'
+      txPowerDbm: 22
   display:
-    status: unknown
+    status: none
   gnss:
-    status: unknown
+    status: none
+  input:
+    - type: button
+      description: Boot
+    - type: button
+      description: Reset
 interfaces:
   usb:
     connector: USB-C
@@ -31,4 +44,4 @@ interfaces:
       - serial
       - flashing
   wifi:
-    status: unknown
+    status: none

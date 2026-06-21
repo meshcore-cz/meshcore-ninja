@@ -12,6 +12,11 @@ aliases:
   - Ikoka Handheld Meshtastic Device
   - Ikoka Handheld
 product_url: https://github.com/ndoo/ikoka-handheld-meshtastic-device
+description: >-
+  Long-range handheld mesh board based on XIAO nRF52840 plus an EBYTE E22 LoRa
+  module, with a 0.96-inch OLED and optional lithium battery charging. The
+  feature set varies with part selection, but the design targets compact
+  companion and repeater builds.
 roles:
   - companion
   - repeater
@@ -24,6 +29,8 @@ hardware:
   mcu:
     model: nrf52
     flashMb: 1
+    # Source: https://github.com/ndoo/ikoka-handheld-meshtastic-device
+    ramKb: 256
   radios:
     - technology: lora
       chip: sx1262
@@ -39,6 +46,9 @@ hardware:
     technology: oled
     controller: SSD1306
     size: 0.96
+    resolution:
+      width: 128
+      height: 64
     colors: monochrome
   gnss:
     status: none
@@ -47,6 +57,7 @@ hardware:
       description: user button
   power:
     batterySupported: true
+    batteryBuiltIn: false
     charging: true
     solarInput: false
 interfaces:

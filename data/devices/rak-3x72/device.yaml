@@ -7,6 +7,10 @@ lifecycle: active
 familyId: rak-3x72
 product_url: https://store.rakwireless.com/products/wisduo-lpwan-module-rak3172
 official: true
+description: >-
+  WisDuo LPWAN module based on STM32WL with an integrated LoRa transceiver for
+  compact mesh builds and embedded devices. The MeshCore profile targets bare
+  module integration rather than a finished handheld or display device.
 hardware:
   mcu:
     model: stm32wl
@@ -23,6 +27,7 @@ hardware:
         - '920'
         - '923'
       txPowerDbm: 22
+      antenna: U.FL/IPEX
   display:
     status: none
   gnss:

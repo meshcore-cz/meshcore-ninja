@@ -29,12 +29,35 @@ hardware:
     # Source: https://mesh-sn.de/en/devices/details/seeed-xiao-c3-wio-sx1262
     ramKb: 400
   display:
-    status: unknown
+    status: none
   gnss:
-    status: unknown
+    status: none
   leds:
     status: present
     description: User LED
+  radios:
+    - technology: lora
+      chip: sx1262
+      frequencyVariants:
+        - '868'
+        - '915'
+      txPowerDbm: 22
+      antenna: PCB
+  power:
+    batterySupported: true
+    batteryBuiltIn: false
+    charging: false
+    solarInput: false
+    batteryConnector: JST 1.25mm (extern)
+    # Source: https://mesh-sn.de/en/devices/details/seeed-xiao-c3-wio-sx1262
+    consumptionIdleMa: 10
+    consumptionTxMa: 85
+  physical:
+    dimensionsMm:
+      width: 22
+      height: 21
+      depth: 15
+    weightG: 3
 interfaces:
   usb:
     connector: unknown

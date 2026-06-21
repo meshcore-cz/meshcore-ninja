@@ -8,21 +8,34 @@ familyId: seeed-wio-e5-mini
 official: true
 product_url: https://wiki.seeedstudio.com/LoRa_E5_mini/
 description: >-
-  Compact Wio-E5 LoRaWAN development board with factory AT firmware support,
-  USB Type-C programming, and full GPIO breakouts for small prototypes. The
-  board targets rapid radio bring-up in a tiny 50 × 23 mm form factor.
+  Compact Wio-E5 LoRaWAN development board with factory AT firmware support
+  and a tiny 50 × 23 mm form factor. Intended for quick LoRa bring-up and
+  GPIO-level prototyping rather than a finished enclosure.
 transports:
   - usb
 hardware:
   mcu:
     model: stm32wl
+    flashMb: 0.25
+    # Source: https://files.seeedstudio.com/products/317990687/res/STM32WLE5JC%20Datasheet.pdf
+    ramKb: 64
   radios:
-    - technology: other
+    - technology: lora
       chip: stm32wl
+      frequencyVariants:
+        - '868'
+        - '915'
+        - '923'
+      txPowerDbm: 22
   display:
-    status: unknown
+    status: none
   gnss:
-    status: unknown
+    status: none
+  input:
+    - type: button
+      description: Boot
+    - type: button
+      description: Reset
   physical:
     dimensionsMm:
       width: 50
@@ -35,4 +48,4 @@ interfaces:
       - serial
       - flashing
   wifi:
-    status: unknown
+    status: none

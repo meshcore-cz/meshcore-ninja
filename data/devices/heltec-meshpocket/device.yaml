@@ -36,6 +36,8 @@ hardware:
   mcu:
     model: nrf52840
     flashMb: 1
+    # Source: https://mesh-sn.de/en/devices/details/meshpocket-qi2-magnetic-charging-power-bank
+    ramKb: 256
   radios:
     - technology: lora
       chip: sx1262
@@ -53,6 +55,9 @@ hardware:
       width: 122
       height: 250
     colors: monochrome
+  leds:
+    status: present
+    description: Status LEDs
   gnss:
     status: none
   power:
@@ -61,12 +66,15 @@ hardware:
     batteryCapacityMah: 5000
     charging: true
     pmic: BQ25970
+    # Source: https://mesh-sn.de/en/devices/details/meshpocket-qi2-magnetic-charging-power-bank
+    consumptionIdleMa: 8
+    consumptionTxMa: 164
   physical:
     dimensionsMm:
       width: 102
       height: 74.1
-      depth: 11.5
-    weightG: 140
+      depth: 17
+    weightG: 220
   expansion:
     - type: header-2.54
       count: 1

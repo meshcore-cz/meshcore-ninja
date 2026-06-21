@@ -8,6 +8,10 @@ lifecycle: active
 familyId: mtools-meshtiny
 product_url: https://meshtiny.com/product/meshtiny/
 official: true
+price:
+  amount: 60
+  currency: USD
+  asOf: 2026-06
 roles:
   - companion
   - repeater
@@ -20,6 +24,8 @@ hardware:
   mcu:
     model: nrf52
     flashMb: 1
+    # Source: https://meshtiny.com/product/meshtiny/
+    ramKb: 256
   radios:
     - technology: lora
       chip: sx1262
@@ -37,6 +43,9 @@ hardware:
     colors: monochrome
   gnss:
     status: none
+  leds:
+    status: present
+    description: Status LEDs
   input:
     - type: encoder
       description: up/down encoder
@@ -46,6 +55,7 @@ hardware:
     batterySupported: true
     batteryBuiltIn: true
     batteryCapacityMah: 250
+    batteryChemistry: li-po
     charging: true
     solarInput: false
   physical:

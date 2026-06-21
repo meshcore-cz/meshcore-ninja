@@ -39,6 +39,8 @@ hardware:
     model: esp32-s3
     flashMb: 16
     psramMb: 2
+    # Source: https://mesh-sn.de/en/devices/details/heltec-wifi-lora-32-v4
+    ramKb: 2048
   radios:
     - technology: lora
       chip: sx1262
@@ -60,10 +62,16 @@ hardware:
     colors: color
   gnss:
     status: none
+  leds:
+    status: present
+    description: Status LEDs
   power:
     batterySupported: true
     batteryBuiltIn: false
     charging: true
+    # Source: https://mesh-sn.de/en/devices/details/heltec-wifi-lora-32-v4
+    consumptionIdleMa: 20
+    consumptionTxMa: 120
   expansion:
     - type: b2b-female
       count: 1

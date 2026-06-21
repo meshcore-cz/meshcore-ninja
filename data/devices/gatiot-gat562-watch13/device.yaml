@@ -25,12 +25,16 @@ hardware:
   mcu:
     model: nrf52
     flashMb: 1
+    # Source: https://mesh-sn.de/en/devices/details/gat562-mesh-watch
+    ramKb: 256
   radios:
     - technology: lora
       chip: sx1262
       frequencyVariants:
         - '868'
         - '915'
+      txPowerDbm: 22
+      antenna: internal
   display:
     status: present
     technology: display
@@ -46,11 +50,21 @@ hardware:
     batterySupported: true
     batteryBuiltIn: true
     batteryCapacityMah: 800
+    batteryChemistry: li-po
     charging: true
     solarInput: false
+    # Source: https://mesh-sn.de/en/devices/details/gat562-mesh-watch
+    consumptionIdleMa: 8
+    consumptionTxMa: 85
   enclosure:
     builtIn: true
     ipRating: IP65
+  physical:
+    dimensionsMm:
+      width: 46
+      height: 46
+      depth: 14
+    weightG: 60
 interfaces:
   usb:
     connector: USB-C

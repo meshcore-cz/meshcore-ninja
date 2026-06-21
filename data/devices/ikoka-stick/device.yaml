@@ -10,6 +10,10 @@ official: true
 aliases:
   - Ikoka Stick Meshtastic Device
 product_url: https://github.com/ndoo/ikoka-stick-meshtastic-device
+description: >-
+  Compact mesh stick built around XIAO and EBYTE E22 options, with a 0.96-inch
+  OLED and lithium battery charging support. The design supports both nRF52840
+  and ESP32-S3 variants, with LoRa power and frequency selected per build.
 roles:
   - companion
   - repeater
@@ -22,6 +26,8 @@ hardware:
   mcu:
     model: nrf52
     flashMb: 1
+    # Source: https://github.com/ndoo/ikoka-stick-meshtastic-device
+    ramKb: 256
   radios:
     - technology: lora
       chip: sx1262
@@ -37,6 +43,9 @@ hardware:
     technology: oled
     controller: SSD1306
     size: 0.96
+    resolution:
+      width: 128
+      height: 64
     colors: monochrome
   gnss:
     status: none
@@ -45,6 +54,7 @@ hardware:
       description: D0 button
   power:
     batterySupported: true
+    batteryBuiltIn: false
     charging: true
     solarInput: false
 interfaces:

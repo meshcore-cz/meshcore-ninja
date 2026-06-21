@@ -3,7 +3,7 @@
   import { page } from '$app/stores';
   import { browser } from '$app/environment';
   import { goto } from '$app/navigation';
-  import { deviceRadioLabel, devicePriceLabel, resolveMcuInfo, resolveGnss } from '$lib/data.js';
+  import { deviceRadioLabel, devicePriceLabel, resolveMcuInfo, resolveRadio, resolveGnss, stripVendorLabel } from '$lib/data.js';
   import { compareIds } from '$lib/compare.js';
   import Seo from '$lib/Seo.svelte';
 
@@ -30,10 +30,39 @@
   }
   const remove = (id) => setIds(ids.filter((x) => x !== id));
 
+  // --- Column reordering (drag a header) -------------------------------------
+  // The first column is the reference all differences are measured against, so
+  // dragging a board to the front re-bases the comparison.
+  let dragIndex = $state(null);
+  function reorder(from, to) {
+    if (from == null || from === to) return;
+    const next = [...ids];
+    const [moved] = next.splice(from, 1);
+    next.splice(to, 0, moved);
+    setIds(next);
+  }
+
   // --- Value helpers ---------------------------------------------------------
   const DASH = '—';
   const txt = (v) => (v === undefined || v === null || v === '' || v === 'unknown' ? DASH : String(v));
   const yn = (v) => (v === true ? 'Yes' : v === false ? 'No' : DASH);
+
+  const BATTERY_CHEMISTRY = {
+    'li-po': 'LiPo',
+    'li-ion': 'Li-ion',
+    lifepo4: 'LiFePO₄',
+    lto: 'LTO',
+    nimh: 'NiMH',
+    alkaline: 'Alkaline',
+    other: 'Other'
+  };
+
+  function ledsText(d) {
+    const l = d.hardware?.leds;
+    if (l?.status === 'present') return l.description || 'Yes';
+    if (l?.status === 'none') return 'No';
+    return DASH;
+  }
 
   function displayText(d) {
     const dp = d.hardware?.display;
@@ -62,17 +91,58 @@
   const ROWS = [
     { label: 'Price', get: (d) => devicePriceLabel(d) ?? DASH },
     { label: 'Vendor', get: (d) => txt(d.vendorName) },
-    { label: 'MCU family', get: (d) => txt(resolveMcuInfo(d)?.family?.name) },
-    { label: 'MCU model', get: (d) => txt(resolveMcuInfo(d)?.model?.name ?? d.hardware?.mcu?.model) },
-    { label: 'Architecture', get: (d) => txt(resolveMcuInfo(d)?.architecture?.name) },
-    { label: 'Flash', get: (d) => (d.hardware?.mcu?.flashMb ? `${d.hardware.mcu.flashMb} MB` : DASH) },
-    { label: 'PSRAM', get: (d) => (d.hardware?.mcu?.psramMb ? `${d.hardware.mcu.psramMb} MB` : DASH) },
-    { label: 'Radio', get: (d) => txt(deviceRadioLabel(d)) },
+    {
+      label: 'MCU family',
+      get: (d) => txt(resolveMcuInfo(d)?.family?.name),
+      href: (d) => resolveMcuInfo(d)?.family?.url ?? null
+    },
+    {
+      label: 'MCU model',
+      get: (d) => {
+        const m = resolveMcuInfo(d)?.model;
+        return txt(m ? stripVendorLabel(m, m.name) : d.hardware?.mcu?.model);
+      },
+      href: (d) => resolveMcuInfo(d)?.model?.url ?? null
+    },
+    {
+      label: 'Architecture',
+      get: (d) => txt(resolveMcuInfo(d)?.architecture?.name),
+      href: (d) => resolveMcuInfo(d)?.architecture?.url ?? null
+    },
+    {
+      label: 'Flash',
+      get: (d) => (d.hardware?.mcu?.flashMb ? `${d.hardware.mcu.flashMb} MB` : DASH),
+      num: (d) => d.hardware?.mcu?.flashMb ?? null,
+      unit: ' MB'
+    },
+    {
+      label: 'RAM',
+      get: (d) => (d.hardware?.mcu?.ramKb ? `${d.hardware.mcu.ramKb} KB` : DASH),
+      num: (d) => d.hardware?.mcu?.ramKb ?? null,
+      unit: ' KB'
+    },
+    {
+      label: 'PSRAM',
+      get: (d) => (d.hardware?.mcu?.psramMb ? `${d.hardware.mcu.psramMb} MB` : DASH),
+      num: (d) => d.hardware?.mcu?.psramMb ?? null,
+      unit: ' MB'
+    },
+    {
+      label: 'Radio',
+      get: (d) => txt(deviceRadioLabel(d)),
+      href: (d) => resolveRadio(d.hardware?.radios?.[0]?.chip)?.url ?? null
+    },
     {
       label: 'Frequency',
       get: (d) => (d.hardware?.radios ?? []).flatMap((r) => r.frequencyVariants ?? []).join(', ') || DASH
     },
-    { label: 'Display', get: displayText },
+    {
+      label: 'Display',
+      get: displayText,
+      num: (d) => (d.hardware?.display?.status === 'present' ? d.hardware.display.size ?? null : null),
+      unit: '″'
+    },
+    { label: 'LEDs', get: ledsText },
     {
       label: 'GPS',
       get: (d) =>
@@ -80,13 +150,33 @@
           ? resolveGnss(d.hardware.gnss.chip)?.name ?? d.hardware.gnss.chip ?? 'Yes'
           : d.hardware?.gnss?.status === 'none'
             ? 'No'
-            : DASH
+            : DASH,
+      href: (d) =>
+        d.hardware?.gnss?.status === 'present' ? resolveGnss(d.hardware.gnss.chip)?.url ?? null : null
     },
-    { label: 'Battery', get: batteryText },
+    {
+      label: 'Battery',
+      get: batteryText,
+      num: (d) => d.hardware?.power?.batteryCapacityMah ?? null,
+      unit: ' mAh'
+    },
+    { label: 'Chemistry', get: (d) => BATTERY_CHEMISTRY[d.hardware?.power?.batteryChemistry] ?? DASH },
     { label: 'Built-in battery', get: (d) => yn(d.hardware?.power?.batteryBuiltIn) },
     { label: 'Charging', get: (d) => yn(d.hardware?.power?.charging) },
     { label: 'Solar panel', get: solarPanelText },
     { label: 'Solar input', get: (d) => yn(d.hardware?.power?.solarInput) },
+    {
+      label: 'Power draw (idle)',
+      get: (d) => (d.hardware?.power?.consumptionIdleMa != null ? `${d.hardware.power.consumptionIdleMa} mA` : DASH),
+      num: (d) => d.hardware?.power?.consumptionIdleMa ?? null,
+      unit: ' mA'
+    },
+    {
+      label: 'Power draw (TX)',
+      get: (d) => (d.hardware?.power?.consumptionTxMa != null ? `${d.hardware.power.consumptionTxMa} mA` : DASH),
+      num: (d) => d.hardware?.power?.consumptionTxMa ?? null,
+      unit: ' mA'
+    },
     { label: 'USB', get: (d) => txt(d.interfaces?.usb?.connector) },
     {
       label: 'Bluetooth',
@@ -106,11 +196,30 @@
   ];
 
   // Precompute each row's values + whether they differ across the selection.
+  // Numeric rows (those with `num`) also carry a per-cell delta vs the smallest
+  // value, so bigger specs read as "+N" against the baseline.
   let rows = $derived(
     ROWS.map((r) => {
       const values = selected.map((d) => r.get(d));
       const differs = new Set(values).size > 1;
-      return { label: r.label, values, differs };
+      // Outbound catalog links (globals.yaml urls), per cell, when the row's
+      // value resolves to a part with a datasheet/vendor page.
+      const hrefs = r.href ? selected.map((d) => r.href(d)) : null;
+      // Differences are shown as a percentage relative to the first column
+      // (the reference).
+      let deltas = null;
+      if (r.num) {
+        const nums = selected.map((d) => r.num(d));
+        const ref = nums[0];
+        if (typeof ref === 'number' && ref !== 0) {
+          deltas = nums.map((n, i) =>
+            i > 0 && typeof n === 'number' && n !== ref
+              ? { pct: Math.round(((n - ref) / ref) * 100) }
+              : null
+          );
+        }
+      }
+      return { label: r.label, values, differs, deltas, unit: r.unit, hrefs };
     }).filter((r) => !onlyDiff || r.differs)
   );
 </script>
@@ -141,19 +250,28 @@
   </label>
 
   <div class="overflow-x-auto rounded-xl border border-edge">
-    <table class="w-full border-collapse text-[0.88rem]">
+    <table class="w-full table-fixed border-collapse text-[0.88rem]" style="min-width: {160 + selected.length * 200}px">
       <thead>
         <tr>
           <th class="sticky left-0 z-10 w-40 min-w-40 border-b border-edge bg-elev p-3 text-left align-bottom"></th>
-          {#each selected as d (d.id)}
-            <th class="min-w-[180px] border-b border-l border-edge bg-elev p-3 text-left align-top">
+          {#each selected as d, i (d.id)}
+            <th
+              class="border-b border-l border-edge bg-elev p-3 text-left align-top transition-opacity {dragIndex === i ? 'opacity-40' : ''}"
+              draggable="true"
+              ondragstart={() => (dragIndex = i)}
+              ondragend={() => (dragIndex = null)}
+              ondragover={(e) => e.preventDefault()}
+              ondrop={(e) => { e.preventDefault(); reorder(dragIndex, i); dragIndex = null; }}
+            >
               <div class="flex items-start justify-between gap-2">
-                <a href="{base}/device/{d.id}/" class="group block">
+                <span class="mt-0.5 shrink-0 cursor-grab text-dim active:cursor-grabbing" title="Drag to reorder" aria-hidden="true">⠿</span>
+                <a href="{base}/device/{d.id}/" draggable="false" class="group block min-w-0 flex-1">
                   <span class="mb-2 flex h-16 w-16 items-center justify-center overflow-hidden rounded-lg bg-elev2">
-                    {#if d.imageUrl}<img src={d.imageUrl} alt={d.name} class="max-h-full max-w-full object-contain p-1" />{/if}
+                    {#if d.imageUrl}<img src={d.imageUrl} alt={d.name} draggable="false" class="max-h-full max-w-full object-contain p-1" />{/if}
                   </span>
                   <span class="block text-[0.95rem] font-semibold group-hover:text-accent">{d.name}</span>
                   {#if d.vendorName}<span class="block text-[0.78rem] font-normal text-dim">{d.vendorName}</span>{/if}
+                  {#if i === 0}<span class="mt-1 inline-block rounded bg-accent/15 px-1.5 py-0.5 text-[0.6rem] font-bold tracking-wide text-accent uppercase">Reference</span>{/if}
                 </a>
                 <button
                   class="shrink-0 rounded p-1 text-dim hover:bg-elev2 hover:text-bad"
@@ -170,8 +288,26 @@
             <th class="sticky left-0 z-10 border-b border-edge bg-elev p-3 text-left text-[0.78rem] font-medium tracking-wide text-dim uppercase">
               {row.label}
             </th>
-            {#each row.values as v}
-              <td class="border-b border-l border-edge p-3 align-top {v === DASH ? 'text-dim' : ''}">{v}</td>
+            {#each row.values as v, i}
+              <td class="border-b border-l border-edge p-3 align-top transition-opacity {v === DASH ? 'text-dim' : ''} {dragIndex === i ? 'opacity-40' : ''}">
+                {#if v === 'Yes'}
+                  <span class="inline-flex items-center gap-1.5 text-ok">
+                    <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                      <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>Yes
+                  </span>
+                {:else if v === 'No'}
+                  <span class="inline-flex items-center gap-1.5 text-bad">
+                    <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                      <path d="M6 6l12 12M18 6 6 18" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>No
+                  </span>
+                {:else if row.hrefs?.[i] && v !== DASH}
+                  <a href={row.hrefs[i]} target="_blank" rel="noreferrer" class="underline decoration-dotted decoration-edge underline-offset-2 hover:decoration-dim">{v}<span class="ml-0.5 no-underline opacity-50">↗</span></a>
+                {:else}
+                  {v}{#if row.deltas?.[i] && row.deltas[i].pct !== 0}<span class="ml-1.5 text-[0.78rem] opacity-60">({row.deltas[i].pct > 0 ? '+' : '−'}{Math.abs(row.deltas[i].pct)}%)</span>{/if}
+                {/if}
+              </td>
             {/each}
           </tr>
         {/each}

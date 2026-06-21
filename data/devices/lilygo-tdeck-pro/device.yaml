@@ -24,6 +24,11 @@ hardware:
     model: esp32-s3
     flashMb: 16
     psramMb: 8
+    # Source: https://mesh-sn.de/en/devices/details/lilygo-t-deck-pro
+    ramKb: 2048
+  leds:
+    status: present
+    description: Status LEDs
   display:
     status: present
     technology: e-paper
@@ -32,19 +37,30 @@ hardware:
     resolution:
       width: 320
       height: 240
+    touch: true
     colors: grayscale
   gnss:
     status: present
-    chip: unknown
+    chip: L76K
   power:
     batterySupported: true
     batteryBuiltIn: true
     batteryCapacityMah: 1400
+    batteryChemistry: li-po
     charging: true
     solarInput: false
+    # Source: https://mesh-sn.de/en/devices/details/lilygo-t-deck-pro
+    consumptionIdleMa: 50
+    consumptionTxMa: 120
+  physical:
+    dimensionsMm:
+      width: 140
+      height: 72
+      depth: 12
+    weightG: 135
 interfaces:
   usb:
-    connector: unknown
+    connector: USB-C
     capabilities:
       - power
       - serial

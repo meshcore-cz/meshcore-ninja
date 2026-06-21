@@ -57,6 +57,12 @@ hardware:
   leds:
     status: present
     description: Status LEDs
+  physical:
+    dimensionsMm:
+      width: 46
+      height: 46
+      depth: 12
+    weightG: 60
   input:
     - type: microphone
     - type: speaker

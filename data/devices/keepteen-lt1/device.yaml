@@ -10,6 +10,10 @@ product_url: https://www.keepteen.com/GAT562-Pocket-Lora-Node-Radio-for-Meshtast
 official: true
 refs:
   mesh-sh-device: keepteen-lt1
+price:
+  amount: 49
+  currency: USD
+  asOf: 2026-06
 roles:
   - companion
   - repeater

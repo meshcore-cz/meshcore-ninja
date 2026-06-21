@@ -26,6 +26,8 @@ hardware:
   mcu:
     model: nrf52
     flashMb: 1
+    # Source: https://mesh-sn.de/en/devices/details/gat562-mesh-evb-pro
+    ramKb: 256
   radios:
     - technology: lora
       chip: sx1262
@@ -38,11 +40,21 @@ hardware:
     status: none
   gnss:
     status: none
+  leds:
+    status: present
+    description: Status LEDs
+  input:
+    - type: button
+      description: power button
   power:
     batterySupported: true
     batteryBuiltIn: false
     charging: false
     solarInput: false
+    # Source: https://mesh-sn.de/en/devices/details/gat562-mesh-evb-pro
+    batteryConnector: extern (JST)
+    consumptionIdleMa: 8
+    consumptionTxMa: 85
   physical:
     dimensionsMm:
       width: 60

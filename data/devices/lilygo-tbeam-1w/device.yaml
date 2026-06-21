@@ -7,10 +7,14 @@ lifecycle: active
 familyId: lilygo-t-beam
 aliases:
   - T-Beam 1W
-product_url: http://www.lilygo.cn/
+product_url: https://lilygo.cc/en-us/products/t-beam-1w
 official: true
 refs:
   mesh-sh-device: lilygo-t-beam-1w
+description: >-
+  ESP32-S3 T-Beam variant with higher-power LoRa front end, GNSS, OLED, and an
+  18650 battery bay. Designed for long-range mesh nodes where a 1 W class radio
+  and the standard T-Beam layout are desired.
 transports:
   - ble
   - usb
@@ -20,6 +24,8 @@ hardware:
     model: esp32-s3
     flashMb: 16
     psramMb: 8
+    # Source: https://linuxgizmos.com/lilygo-expands-t-beam-series-with-new-1w-lora-gps-board/
+    ramKb: 512
   radios:
     - technology: lora
       chip: sx1262
@@ -27,16 +33,30 @@ hardware:
         - '433'
         - '868'
         - '915'
+      txPowerDbm: 32
+      antenna: SMA
   display:
-    status: unknown
+    status: present
+    technology: oled
+    controller: SH1106
+    size: 1.3
+    resolution:
+      width: 128
+      height: 64
+    colors: monochrome
   gnss:
     status: present
-    chip: unknown
+    chip: L76K
+  leds:
+    status: present
+    description: Status LEDs
   power:
     batterySupported: true
+    batteryBuiltIn: false
     charging: true
     solarInput: false
     pmic: AXP2101
+    batteryConnector: 18650 Holder
   input:
     - type: button
       description: boot

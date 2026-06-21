@@ -32,6 +32,8 @@ hardware:
     model: esp32-s3
     flashMb: 4
     psramMb: 2
+    # Source: https://mesh-sn.de/en/devices/details/lilygo-t3-s3-sx1276
+    ramKb: 512
   radios:
     - technology: lora
       chip: sx1276
@@ -51,6 +53,9 @@ hardware:
     colors: monochrome
   gnss:
     status: none
+  leds:
+    status: present
+    description: Status LEDs
   input:
     - type: button
       description: BOOT button (boot mode, customizable)
@@ -60,6 +65,9 @@ hardware:
     batteryConnector: PH2.0
     charging: true
     solarInput: true
+    # Source: https://mesh-sn.de/en/devices/details/lilygo-t3-s3-sx1276
+    consumptionIdleMa: 25
+    consumptionTxMa: 105
   expansion:
     - type: qwiic
       count: 1
@@ -69,6 +77,12 @@ hardware:
         - GPIO
     - type: micro-SD
       count: 1
+  physical:
+    dimensionsMm:
+      width: 75
+      height: 36
+      depth: 8
+    weightG: 15
   environmental:
     operatingTempC:
       min: -40

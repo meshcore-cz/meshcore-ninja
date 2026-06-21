@@ -10,6 +10,10 @@ aliases:
 official: true
 refs:
   mesh-sh-device: rak11310-wisblock-core
+description: >-
+  WisBlock core module with RP2040 and SX1262 LoRa for compact mesh builds on
+  WisBlock base boards. No Wi-Fi or BLE on board; designed to be combined with
+  WisBlock communication modules and external antennas.
 roles:
   - companion
   - repeater
@@ -19,6 +23,9 @@ transports:
 hardware:
   mcu:
     model: rp2040
+    # Source: https://docs.rakwireless.com/product-categories/wisblock/rak11310/datasheet/
+    ramKb: 264
+    flashMb: 2
   radios:
     - technology: lora
       chip: sx1262
@@ -40,7 +47,7 @@ hardware:
     status: none
 interfaces:
   usb:
-    connector: unknown
+    connector: none
     capabilities:
       - power
       - serial

@@ -38,11 +38,24 @@ hardware:
   display:
     status: present
     technology: display
+    controller: ST7789
+    size: 1.54
+    resolution:
+      width: 240
+      height: 240
+    colors: color
+    touch: true
   gnss:
     status: none
   leds:
     status: present
     description: Status LEDs
+  physical:
+    dimensionsMm:
+      width: 46
+      height: 46
+      depth: 12
+    weightG: 55
   power:
     batterySupported: true
     batteryBuiltIn: true
@@ -50,6 +63,7 @@ hardware:
     batteryChemistry: li-po
     charging: true
     solarInput: false
+    batteryConnector: Built-in LiPo 580mAh
     # Source: https://mesh-sn.de/en/devices/details/lilygo-t-watch-s3
     consumptionIdleMa: 40
     consumptionTxMa: 110

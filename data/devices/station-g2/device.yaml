@@ -27,19 +27,52 @@ transports:
 hardware:
   mcu:
     model: esp32-s3
+    # Source: https://mesh-sn.de/en/devices/details/station-g2
+    ramKb: 512
+    flashMb: 16
   radios:
     - technology: lora
       chip: sx1262
+      frequencyVariants:
+        - '868'
+        - '915'
       txPowerDbm: 35
+      antenna: SMA
   display:
-    status: unknown
+    status: present
+    technology: oled
+    size: 1.3
+    resolution:
+      width: 128
+      height: 64
+    colors: monochrome
   gnss:
-    status: unknown
+    status: none
+  leds:
+    status: present
+    description: Status LEDs
+  input:
+    - type: button
+      description: power button
+  power:
+    batterySupported: false
+    batteryBuiltIn: false
+    charging: false
+    solarInput: false
+    batteryConnector: extern (Netzteil)
+    # Source: https://mesh-sn.de/en/devices/details/station-g2
+    consumptionIdleMa: 250
+    consumptionTxMa: 3550
+  physical:
+    dimensionsMm:
+      width: 85
+      height: 50
+      depth: 25
+    weightG: 150
 interfaces:
   usb:
-    connector: USB-C
+    connector: none
     capabilities:
-      - power
       - serial
       - flashing
   bluetooth:

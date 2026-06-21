@@ -24,12 +24,16 @@ hardware:
   mcu:
     model: rp2040
     flashMb: 2
+    # Source: https://www.raspberrypi.com/documentation/microcontrollers/pico-series.html
+    ramKb: 264
   radios:
     - technology: lora
       chip: sx1262
   display:
     status: none
   gnss:
+    status: none
+  leds:
     status: none
 interfaces:
   usb:
