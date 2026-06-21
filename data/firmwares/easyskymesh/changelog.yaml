@@ -1,6 +1,6 @@
 source: github
 repo: IoTThinks/EasySkyMesh
-updatedAt: '2026-06-20T20:17:27.271Z'
+updatedAt: '2026-06-21T04:22:37.789Z'
 releases:
   - version: PowerSaving16
     name: 'Power Saving 16: Poweroff at 16uA, T096 at 8.7mA and auto reboot'

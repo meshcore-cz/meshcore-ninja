@@ -1,0 +1,104 @@
+source: github
+repo: MichTronics/MeshCoreNG
+updatedAt: '2026-06-21T04:22:40.371Z'
+releases:
+  - version: bridge-tcp-ble-v1.1.2
+    name: TCP+BLE Bridge Firmware v1.1.2
+    datetime: '2026-06-21T01:55:30Z'
+    url: https://github.com/MichTronics/MeshCoreNG/releases/tag/bridge-tcp-ble-v1.1.2
+    prerelease: false
+  - version: bridge-tcp-v1.1.1
+    name: TCP Bridge Firmware v1.1.1
+    datetime: '2026-06-20T10:40:03Z'
+    url: https://github.com/MichTronics/MeshCoreNG/releases/tag/bridge-tcp-v1.1.1
+    prerelease: false
+  - version: bridge-tcp-ble-v1.1.1
+    name: TCP+BLE Bridge Firmware v1.1.1
+    datetime: '2026-06-20T10:41:44Z'
+    url: https://github.com/MichTronics/MeshCoreNG/releases/tag/bridge-tcp-ble-v1.1.1
+    prerelease: false
+  - version: room-server-v1.1.0
+    name: Room Server Firmware v1.1.0
+    datetime: '2026-06-18T23:53:33Z'
+    url: https://github.com/MichTronics/MeshCoreNG/releases/tag/room-server-v1.1.0
+    prerelease: false
+  - version: repeater-v1.1.0
+    name: Repeater Firmware v1.1.0
+    datetime: '2026-06-19T00:35:18Z'
+    url: https://github.com/MichTronics/MeshCoreNG/releases/tag/repeater-v1.1.0
+    prerelease: false
+  - version: bridge-tcp-v1.1.0
+    name: TCP Bridge Firmware v1.1.0
+    datetime: '2026-06-18T23:59:09Z'
+    url: https://github.com/MichTronics/MeshCoreNG/releases/tag/bridge-tcp-v1.1.0
+    prerelease: false
+  - version: bridge-tcp-ble-v1.1.0
+    name: TCP+BLE Bridge Firmware v1.1.0
+    datetime: '2026-06-19T00:01:38Z'
+    url: https://github.com/MichTronics/MeshCoreNG/releases/tag/bridge-tcp-ble-v1.1.0
+    prerelease: false
+  - version: bridge-rs232-v1.1.0
+    name: RS232 Bridge Firmware v1.1.0
+    datetime: '2026-06-19T00:07:03Z'
+    url: https://github.com/MichTronics/MeshCoreNG/releases/tag/bridge-rs232-v1.1.0
+    prerelease: false
+  - version: bridge-espnow-v1.1.0
+    name: ESPNow Bridge Firmware v1.1.0
+    datetime: '2026-06-18T23:46:55Z'
+    url: https://github.com/MichTronics/MeshCoreNG/releases/tag/bridge-espnow-v1.1.0
+    prerelease: false
+  - version: bridge-ble-v1.1.0
+    name: BLE Bridge Firmware v1.1.0
+    datetime: '2026-06-19T00:31:24Z'
+    url: https://github.com/MichTronics/MeshCoreNG/releases/tag/bridge-ble-v1.1.0
+    prerelease: false
+  - version: bridge-tcp-v1.0.13
+    name: TCP Bridge Firmware v1.0.13
+    datetime: '2026-06-16T02:23:44Z'
+    url: https://github.com/MichTronics/MeshCoreNG/releases/tag/bridge-tcp-v1.0.13
+    prerelease: false
+  - version: bridge-tcp-ble-v1.0.4
+    name: TCP+BLE Bridge Firmware v1.0.4
+    datetime: '2026-06-16T02:26:33Z'
+    url: https://github.com/MichTronics/MeshCoreNG/releases/tag/bridge-tcp-ble-v1.0.4
+    prerelease: false
+  - version: bridge-tcp-v1.0.12
+    name: TCP Bridge Firmware v1.0.12
+    datetime: '2026-06-15T22:05:20Z'
+    url: https://github.com/MichTronics/MeshCoreNG/releases/tag/bridge-tcp-v1.0.12
+    prerelease: false
+  - version: bridge-tcp-ble-v1.0.3
+    name: TCP+BLE Bridge Firmware v1.0.3
+    datetime: '2026-06-15T22:05:23Z'
+    url: https://github.com/MichTronics/MeshCoreNG/releases/tag/bridge-tcp-ble-v1.0.3
+    prerelease: false
+  - version: room-server-v1.0.3
+    name: Room Server Firmware v1.0.3
+    datetime: '2026-06-08T18:32:37Z'
+    url: https://github.com/MichTronics/MeshCoreNG/releases/tag/room-server-v1.0.3
+    prerelease: false
+  - version: repeater-v1.0.3
+    name: Repeater Firmware v1.0.3
+    datetime: '2026-06-08T18:52:22Z'
+    url: https://github.com/MichTronics/MeshCoreNG/releases/tag/repeater-v1.0.3
+    prerelease: false
+  - version: companion-v1.0.3
+    name: Companion Firmware v1.0.3
+    datetime: '2026-06-08T20:00:13Z'
+    url: https://github.com/MichTronics/MeshCoreNG/releases/tag/companion-v1.0.3
+    prerelease: false
+  - version: bridge-tcp-v1.0.11
+    name: TCP Bridge Firmware v1.0.11
+    datetime: '2026-06-09T00:11:22Z'
+    url: https://github.com/MichTronics/MeshCoreNG/releases/tag/bridge-tcp-v1.0.11
+    prerelease: false
+  - version: bridge-tcp-v1.0.10
+    name: TCP Bridge Firmware v1.0.10
+    datetime: '2026-06-08T17:59:47Z'
+    url: https://github.com/MichTronics/MeshCoreNG/releases/tag/bridge-tcp-v1.0.10
+    prerelease: false
+  - version: bridge-tcp-ble-v1.0.2
+    name: TCP+BLE Bridge Firmware v1.0.2
+    datetime: '2026-06-09T00:11:51Z'
+    url: https://github.com/MichTronics/MeshCoreNG/releases/tag/bridge-tcp-ble-v1.0.2
+    prerelease: false
