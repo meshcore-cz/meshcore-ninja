@@ -23,14 +23,28 @@
 </div>
 
 <div class="overflow-x-auto rounded-xl border border-edge">
-  <table class="w-full border-collapse">
+  <!-- Fixed layout so every firmware column is the same width regardless of name
+       length. Firmware names are rotated vertical so columns stay tight; an
+       instant CSS tooltip (no native-title delay) shows the full name + type on
+       hover, so you don't have to tilt your head. Fills the container when it
+       fits; grows past it (scrolling) only when there are enough firmwares. -->
+  <table class="table-fixed border-collapse" style="width: max(100%, {180 + data.firmwares.length * 46}px);">
     <thead>
       <tr>
-        <th class="border-b border-edge px-3.5 py-2.5 text-left align-bottom text-[0.8rem] text-dim">Device</th>
+        <th class="w-[180px] border-b border-edge px-3.5 py-2.5 text-left align-bottom text-[0.8rem] text-dim">Device</th>
         {#each data.firmwares as fw}
-          <th class="border-b border-l border-edge px-3 py-2.5 text-center align-bottom whitespace-nowrap">
-            <a class="block text-[0.9rem] font-semibold text-accent2 hover:underline" href="{base}/firmware/{fw.id}/">{fw.name}</a>
-            <span class="mt-0.5 block text-[0.66rem] font-medium tracking-wide text-dim uppercase">{TYPE_META[fw.type]?.label ?? fw.type}</span>
+          <th class="group relative h-[150px] w-[46px] border-b border-l border-edge p-0 text-center align-bottom">
+            <a
+              class="mx-auto inline-block rotate-180 pb-2.5 text-[0.78rem] leading-[1.05] font-semibold text-accent2 [writing-mode:vertical-rl] hover:underline"
+              href="{base}/firmware/{fw.id}/"
+            >{fw.name}</a>
+            <!-- Instant tooltip, anchored below the header so it isn't clipped
+                 by the table's horizontal scroll container. -->
+            <span
+              class="pointer-events-none absolute top-full left-1/2 z-30 hidden -translate-x-1/2 translate-y-1 rounded-md border border-edge bg-elev2 px-2 py-1 text-[0.72rem] font-medium whitespace-nowrap text-ink shadow-lg group-hover:block"
+            >
+              {fw.name} · <span class="text-dim">{TYPE_META[fw.type]?.label ?? fw.type}</span>
+            </span>
           </th>
         {/each}
       </tr>
@@ -57,7 +71,7 @@
             {@const cell = row.cells[fw.id]}
             {@const meta = cell ? STATUS_META[cell.status] : null}
             <td
-              class="w-[110px] min-w-[90px] cursor-default border-b border-l border-edge text-center text-base {meta
+              class="cursor-default border-b border-l border-edge text-center text-base {meta
                 ? meta.cell
                 : 'text-edge'}"
               title={cell ? `${meta?.label}${cell.target ? ' · ' + cell.target : ''}${cell.notes ? ' — ' + cell.notes : ''}` : 'No data'}

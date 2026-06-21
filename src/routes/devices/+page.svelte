@@ -122,6 +122,26 @@
 
   let query = $state(initParams.get('q') ?? '');
   let advanced = $state(initParams.get('adv') === '1');
+  let sort = $state(initParams.get('sort') ?? 'name');
+
+  // Sort options. `cmp` orders two devices; null-valued devices always sink to
+  // the bottom regardless of direction.
+  const numAsc = (get) => (a, b) => nullLast(get(a), get(b), (x, y) => x - y);
+  const numDesc = (get) => (a, b) => nullLast(get(a), get(b), (x, y) => y - x);
+  function nullLast(a, b, cmp) {
+    const an = a == null, bn = b == null;
+    if (an && bn) return 0;
+    if (an) return 1;
+    if (bn) return -1;
+    return cmp(a, b);
+  }
+  const SORTS = [
+    { id: 'name', label: 'Name (A–Z)', cmp: (a, b) => a.name.localeCompare(b.name) },
+    { id: 'price-asc', label: 'Price (low → high)', cmp: numAsc((d) => d.price?.amount) },
+    { id: 'price-desc', label: 'Price (high → low)', cmp: numDesc((d) => d.price?.amount) },
+    { id: 'firmwares', label: 'Most firmwares', cmp: numDesc((d) => d.firmwareCount) },
+    { id: 'mcu', label: 'MCU', cmp: (a, b) => deviceMcuLabel(a).localeCompare(deviceMcuLabel(b)) || a.name.localeCompare(b.name) }
+  ];
   let sel = $state(Object.fromEntries(FACETS.map((f) => [f.id, csv(f.id)])));
   let toggles = $state(
     Object.fromEntries(TOGGLES.map((t) => [t.id, csv('has').includes(t.id)]))
@@ -183,6 +203,10 @@
     })
   );
 
+  let sorted = $derived(
+    [...filtered].sort((SORTS.find((s) => s.id === sort) ?? SORTS[0]).cmp)
+  );
+
   const primaryFacets = FACETS.filter((f) => f.primary);
   const advancedFacets = FACETS.filter((f) => !f.primary);
   const primaryToggles = TOGGLES.filter((t) => t.primary);
@@ -207,6 +231,7 @@
     for (const r of RANGES)
       if (rangeActive(r)) p.set(r.id, `${ranges[r.id].min},${ranges[r.id].max}`);
     if (advanced) p.set('adv', '1');
+    if (sort !== 'name') p.set('sort', sort);
     const qs = p.toString();
     history.replaceState(history.state, '', qs ? `${location.pathname}?${qs}` : location.pathname);
   });
@@ -329,11 +354,22 @@
   {#if activeCount}
     <button class="text-accent2 hover:underline" onclick={clearAll}>Clear filters ({activeCount})</button>
   {/if}
+  <label class="ml-auto flex items-center gap-1.5">
+    <span class="text-dim">Sort</span>
+    <select
+      bind:value={sort}
+      class="rounded-lg border border-edge bg-elev px-2 py-1 text-ink outline-none focus:border-accent"
+    >
+      {#each SORTS as s (s.id)}
+        <option value={s.id}>{s.label}</option>
+      {/each}
+    </select>
+  </label>
 </div>
 
 {#if filtered.length}
   <div class="grid gap-4 [grid-template-columns:repeat(auto-fill,minmax(240px,1fr))]">
-    {#each filtered as d (d.id)}
+    {#each sorted as d (d.id)}
       <a
         class="group flex flex-col rounded-xl border border-edge bg-elev p-3 transition hover:-translate-y-0.5 hover:border-accent"
         href="{base}/device/{d.id}/"
@@ -374,23 +410,27 @@
             <span class="text-ink">{deviceMcuLabel(d)}</span>
             {#if radioShort(d)}<span class="text-edge">·</span><span>{radioShort(d)}</span>{/if}
           </div>
+        </div>
 
+        <!-- Pills + footer pinned to the card bottom; the gap above grows so
+             cards in a row keep their footers aligned regardless of content. -->
+        <div class="mt-auto">
           {#if featurePills(d).length}
-            <div class="mt-2.5 flex flex-wrap gap-1">
+            <div class="flex flex-wrap gap-1 px-1 pt-2.5">
               {#each featurePills(d) as pill}
                 <span class="rounded-full border px-2 py-0.5 text-[0.7rem] {pill.accent ? 'border-accent/40 bg-accent/10 text-accent' : 'border-edge bg-elev2 text-dim'}">{pill.label}</span>
               {/each}
             </div>
           {/if}
-        </div>
 
-        <div class="mt-3 flex items-center justify-between border-t border-edge px-1 pt-2.5 text-[0.78rem] text-dim">
+          <div class="mt-2.5 flex items-center justify-between border-t border-edge px-1 pt-2.5 text-[0.78rem] text-dim">
           <span>{d.firmwareCount} firmware{d.firmwareCount === 1 ? '' : 's'}</span>
           {#if devicePriceLabel(d)}
             <span class="font-semibold text-ink">{devicePriceLabel(d)}</span>
           {:else}
             <span class="text-accent opacity-0 transition group-hover:opacity-100">View →</span>
           {/if}
+          </div>
         </div>
       </a>
     {/each}

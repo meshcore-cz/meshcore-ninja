@@ -13,8 +13,10 @@
     resolveRefs,
     deviceDisplayLabel,
     devicePriceLabel,
-    stripVendorLabel
+    stripVendorLabel,
+    deviceShortName
   } from '$lib/data.js';
+  import { compareIds } from '$lib/compare.js';
   import { clampDescription, abs, absUrl } from '$lib/seo.js';
   import Seo from '$lib/Seo.svelte';
   let { data } = $props();
@@ -485,6 +487,42 @@
       </div>
     {/if}
   </div>
+{/if}
+
+<!-- Other variants in the same family (e.g. Wio Tracker L1 / L1 Pro / L1 e-ink) -->
+{#if data.variants?.length}
+  <section class="mb-8">
+    <div class="mb-3 flex flex-wrap items-baseline gap-x-3 gap-y-1 border-b border-edge pb-1.5">
+      <h2 class="text-[1.1rem] font-semibold">Other variants</h2>
+      <a
+        class="text-[0.8rem] text-dim transition hover:text-accent hover:underline"
+        href="{base}/compare/?ids={[d.id, ...data.variants.map((v) => v.id)].join(',')}"
+        onclick={() => compareIds.set([d.id, ...data.variants.map((v) => v.id)])}
+      >
+        Compare all {data.variants.length + 1} →
+      </a>
+    </div>
+    <div class="grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(200px,1fr))]">
+      {#each data.variants as v (v.id)}
+        <a
+          class="group flex items-center gap-3 rounded-xl border border-edge bg-elev p-3 transition hover:-translate-y-0.5 hover:border-accent"
+          href="{base}/device/{v.id}/"
+        >
+          <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-elev2 p-1 text-muted">
+            {#if v.imageUrl}
+              <img src={v.imageUrl} alt="" loading="lazy" class="max-h-full max-w-full object-contain" />
+            {:else}
+              <span class="font-mono text-[0.6rem] text-dim">{deviceMcuLabel(v)}</span>
+            {/if}
+          </span>
+          <span class="min-w-0">
+            <span class="block truncate text-[0.9rem] font-medium group-hover:text-accent">{deviceShortName(v)}</span>
+            <span class="block truncate font-mono text-[0.75rem] text-dim">{deviceMcuLabel(v)}{#if deviceRadioLabel(v) && deviceRadioLabel(v) !== 'Unknown'} · {deviceRadioLabel(v)}{/if}</span>
+          </span>
+        </a>
+      {/each}
+    </div>
+  </section>
 {/if}
 
 <!-- Detailed hardware spec cards -->

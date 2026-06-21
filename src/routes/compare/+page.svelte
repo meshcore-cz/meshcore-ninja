@@ -266,8 +266,15 @@
               <div class="flex items-start justify-between gap-2">
                 <span class="mt-0.5 shrink-0 cursor-grab text-dim active:cursor-grabbing" title="Drag to reorder" aria-hidden="true">⠿</span>
                 <a href="{base}/device/{d.id}/" draggable="false" class="group block min-w-0 flex-1">
-                  <span class="mb-2 flex h-16 w-16 items-center justify-center overflow-hidden rounded-lg bg-elev2">
-                    {#if d.imageUrl}<img src={d.imageUrl} alt={d.name} draggable="false" class="max-h-full max-w-full object-contain p-1" />{/if}
+                  <span class="mb-2 flex h-16 w-16 items-center justify-center overflow-hidden rounded-lg bg-elev2 text-muted">
+                    {#if d.imageUrl}
+                      <img src={d.imageUrl} alt={d.name} draggable="false" class="max-h-full max-w-full object-contain p-1" />
+                    {:else}
+                      <svg aria-hidden="true" viewBox="0 0 24 24" class="h-7 w-7">
+                        <rect x="7" y="4" width="10" height="16" rx="1.8" fill="none" stroke="currentColor" stroke-width="1.8" />
+                        <path d="M10 2.8v2.4M14 2.8v2.4M10 18.8v2.4M14 18.8v2.4M5.2 8h2.4M5.2 12h2.4M5.2 16h2.4M16.4 8h2.4M16.4 12h2.4M16.4 16h2.4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.4" />
+                      </svg>
+                    {/if}
                   </span>
                   <span class="block text-[0.95rem] font-semibold group-hover:text-accent">{d.name}</span>
                   {#if d.vendorName}<span class="block text-[0.78rem] font-normal text-dim">{d.vendorName}</span>{/if}

@@ -10,10 +10,14 @@
 
 <h1 class="mb-2 text-[clamp(1.5rem,5vw,2rem)] font-bold">About</h1>
 <p class="max-w-[70ch]">
-  The <strong>MeshCore Ninja</strong> is a community-maintained catalog
-  of <a class="text-accent2 hover:underline" href="https://meshcore.io" target="_blank" rel="noreferrer">MeshCore</a>
-  firmwares — the official build plus community forks and custom variants — with
-  their details and a hardware compatibility matrix.
+  <strong>MeshCore Ninja</strong> is a community-maintained catalogue for the
+  <a class="text-accent2 hover:underline" href="https://meshcore.io" target="_blank" rel="noreferrer">MeshCore</a>
+  ecosystem — its <a class="text-accent2 hover:underline" href="{base}/devices/">devices</a>,
+  the <a class="text-accent2 hover:underline" href="{base}/">firmwares</a> that run
+  on them (the official build plus community forks and custom variants), and
+  potentially other things over time. Each entry carries detailed specs, and a
+  <a class="text-accent2 hover:underline" href="{base}/matrix/">compatibility matrix</a>
+  shows which firmware supports which hardware at a glance.
 </p>
 
 <h2 class="mt-7 text-[1.15rem] font-semibold">How it works</h2>

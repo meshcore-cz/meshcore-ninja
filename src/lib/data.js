@@ -76,6 +76,35 @@ export function devicesForVendor(vendorId) {
   return devices.filter((d) => d.vendorId === vendorId);
 }
 
+/**
+ * Other devices sharing a device's `familyId` (e.g. Wio Tracker L1 / L1 Pro /
+ * L1 e-ink). Excludes the device itself. Empty when the device has no family or
+ * is the only member. Sorted by name.
+ */
+export function familyVariants(device) {
+  if (!device?.familyId) return [];
+  return devices
+    .filter((d) => d.id !== device.id && d.familyId === device.familyId)
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
+
+/**
+ * Device name with its vendor prefix dropped for compact display (e.g.
+ * "Seeed Studio Wio Tracker L1 Pro" → "Wio Tracker L1 Pro"). Falls back to the
+ * full name when the name doesn't lead with the vendor. Matches on the full
+ * vendor name or just its first word ("Seeed").
+ */
+export function deviceShortName(device) {
+  const name = device?.name;
+  const vendor = device?.vendor?.name ?? device?.vendorName;
+  if (!name || !vendor) return name ?? '';
+  for (const prefix of [vendor, vendor.split(/\s+/)[0]]) {
+    const lead = `${prefix} `;
+    if (name.toLowerCase().startsWith(lead.toLowerCase())) return name.slice(lead.length).trim();
+  }
+  return name;
+}
+
 /** Shared parts catalog (data/globals.yaml), keyed by category then part id. */
 export const globals = dataset.globals ?? {};
 
