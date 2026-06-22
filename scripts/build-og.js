@@ -1,5 +1,5 @@
-// Generates per-item Open Graph (social) card PNGs for every device, firmware
-// and vendor, written to static/og/<kind>/<id>.png (1200×630).
+// Generates per-item Open Graph (social) card PNGs for every device, firmware,
+// vendor and network, written to static/og/<kind>/<id>.png (1200×630).
 //
 // Pipeline: a Satori VNode tree (plain objects, no JSX) -> SVG -> @resvg/resvg-js
 // -> PNG. Device art and SVG vendor logos are pre-rasterized to PNG and embedded
@@ -322,6 +322,51 @@ function vendorCard(v, img) {
   );
 }
 
+const NETWORK_SCOPE_LABEL = {
+  general: 'General',
+  national: 'National',
+  regional: 'Regional',
+  local: 'Local',
+  experimental: 'Experimental'
+};
+
+function networkBandLabel(n) {
+  const radios = Array.isArray(n.radios) && n.radios.length ? n.radios : [n.radio].filter(Boolean);
+  const seen = new Set();
+  const labels = [];
+  for (const radio of radios) {
+    const label = radio?.frequency_mhz
+      ? `${radio.frequency_mhz} MHz`
+      : radio?.frequency
+        ? `${radio.frequency} MHz`
+        : null;
+    if (!label || seen.has(label)) continue;
+    seen.add(label);
+    labels.push(label);
+  }
+  return labels.join(', ');
+}
+
+function networkCard(n, deviceCount) {
+  const band = networkBandLabel(n);
+  const meta = [];
+  if (band) meta.push(chip(band));
+  if (n.coverage?.countries?.length) meta.push(chip(n.coverage.countries.join(', ')));
+  if (deviceCount) meta.push(chip(`${deviceCount} device${deviceCount === 1 ? '' : 's'}`));
+
+  return frame(
+    [
+      h('div', { display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', gap: '26px' }, [
+        kicker(`${NETWORK_SCOPE_LABEL[n.scope] ?? 'MeshCore'} network`, C.accent),
+        text(n.name, { fontSize: titleSize(n.name, 72, 46), fontWeight: 700, color: C.ink, lineHeight: 1.05 }),
+        n.description ? text(clamp(n.description, 140), { fontSize: 28, color: C.dim, lineHeight: 1.35 }) : null,
+        meta.length ? h('div', { display: 'flex', flexWrap: 'wrap', gap: '12px', marginTop: '4px' }, meta) : null
+      ].filter(Boolean))
+    ],
+    C.accent
+  );
+}
+
 function clamp(s, max) {
   const t = String(s).replace(/\s+/g, ' ').trim();
   return t.length <= max ? t : t.slice(0, t.lastIndexOf(' ', max - 1)).trimEnd() + '…';
@@ -345,12 +390,12 @@ async function main() {
   const outRoot = join(root, 'static', 'og');
   const cacheDir = join(root, '.cache', 'og');
   mkdirSync(cacheDir, { recursive: true });
-  for (const kind of ['device', 'firmware', 'vendor']) mkdirSync(join(outRoot, kind), { recursive: true });
+  for (const kind of ['device', 'firmware', 'vendor', 'network']) mkdirSync(join(outRoot, kind), { recursive: true });
 
   const manifestPath = join(cacheDir, 'manifest.json');
   const manifest = existsSync(manifestPath) ? JSON.parse(readFileSync(manifestPath, 'utf8')) : {};
   const next = {};
-  const valid = { device: new Set(), firmware: new Set(), vendor: new Set() };
+  const valid = { device: new Set(), firmware: new Set(), vendor: new Set(), network: new Set() };
   let generated = 0;
   let cached = 0;
 
@@ -367,6 +412,18 @@ async function main() {
     const img = loadVendorImage(v.id);
     jobs.push(['vendor', v, img, sha(TEMPLATE_VERSION, v, img?.bytes ?? '')]);
   }
+  // Compatible-device count per network, derived from the radio band (mirrors
+  // devicesForBand in src/lib/data.js) so the card metadata matches the page.
+  const deviceCountForBand = (band) =>
+    band == null || band === ''
+      ? 0
+      : data.devices.filter((d) =>
+          (d.hardware?.radios ?? []).some((r) => (r.frequencyVariants ?? []).map(String).includes(String(band)))
+        ).length;
+  for (const nw of data.networks ?? []) {
+    const count = deviceCountForBand(nw.radio?.frequency);
+    jobs.push(['network', { ...nw, _deviceCount: count }, null, sha(TEMPLATE_VERSION, nw, count)]);
+  }
 
   for (const [kind, item, img, hash] of jobs) {
     const key = `${kind}/${item.id}`;
@@ -378,14 +435,20 @@ async function main() {
       continue;
     }
     const tree =
-      kind === 'device' ? deviceCard(item, img) : kind === 'firmware' ? firmwareCard(item) : vendorCard(item, img);
+      kind === 'device'
+        ? deviceCard(item, img)
+        : kind === 'firmware'
+          ? firmwareCard(item)
+          : kind === 'network'
+            ? networkCard(item, item._deviceCount)
+            : vendorCard(item, img);
     writeFileSync(outPath, await render(tree));
     generated++;
   }
 
   // Prune PNGs whose id no longer exists.
   let removed = 0;
-  for (const kind of ['device', 'firmware', 'vendor']) {
+  for (const kind of ['device', 'firmware', 'vendor', 'network']) {
     const dir = join(outRoot, kind);
     for (const f of readdirSync(dir)) {
       if (f.endsWith('.png') && !valid[kind].has(f)) {

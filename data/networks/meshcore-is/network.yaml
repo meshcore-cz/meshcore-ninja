@@ -1,0 +1,30 @@
+name: Iceland
+also_known_as:
+  - MeshCore Iceland
+  - Meshtastic Iceland
+short_name: MeshCore IS
+description: >-
+  Icelandic MeshCore community building off-grid mesh communication across Iceland.
+scope: national
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - IS
+
+radio:
+  frequency: '868'
+  frequency_mhz: 869.6179809
+  bandwidth_khz: 62.5
+  spreading_factor: 8
+  coding_rate: 4/8
+  public_channel: Public
+
+community:
+  facebook: https://www.facebook.com/groups/meshtasticiceland/
+
+analyzers:
+  - name: mc.flatuslifir.is
+    url: https://mc.flatuslifir.is

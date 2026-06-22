@@ -1,0 +1,63 @@
+name: CascadiaMesh
+also_known_as:
+  - Cascadia Mesh
+  - CascadiaMesh Network
+short_name: CascadiaMesh
+description: >-
+  Pacific Northwest MeshCore network spanning British Columbia, Washington,
+  Oregon and Northern California, focused on solar-powered repeaters, public
+  channels and an Interstate 5 corridor between regional clusters.
+scope: regional
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - CA
+    - US
+
+radio:
+  frequency: '915'
+  frequency_mhz: 910.525
+  bandwidth_khz: 62.5
+  spreading_factor: 7
+  coding_rate: 4/5
+  tx_power_dbm: 22
+  path_hash_mode: 3-Byte
+  public_channel: Public
+
+community:
+  website: https://cascadiamesh.org/
+  discord: https://discord.com/invite/m9yarB3p2E
+  contact: https://cascadiamesh.org/contact/
+
+maps:
+  - name: CascadiaMesh map
+    url: https://cascadiamesh.org/map/
+
+analyzers:
+  - name: analyzer.cascadiamesh.org
+    url: https://analyzer.cascadiamesh.org
+
+resources:
+  getting_started: https://cascadiamesh.org/getting-on-the-mesh/
+  links:
+    - name: About CascadiaMesh
+      url: https://cascadiamesh.org/about/
+    - name: Channels
+      url: https://cascadiamesh.org/channels/
+    - name: I-5 Project
+      url: https://cascadiamesh.org/i-5-project/
+    - name: Repeater builds
+      url: https://cascadiamesh.org/repeater-builds/
+    - name: Fully assembled repeaters
+      url: https://cascadiamesh.org/repeaters-fully-assembled/
+    - name: Device setup
+      url: https://cascadiamesh.org/device-set-up/
+    - name: MeshCore firmware
+      url: https://cascadiamesh.org/meshcore-firmware/
+    - name: MeshCore resources
+      url: https://cascadiamesh.org/meshcore-resources-list/
+    - name: Regions
+      url: https://cascadiamesh.org/regions/

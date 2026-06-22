@@ -32,12 +32,29 @@ data/devices/<id>/datasheet.pdf  # vendor spec PDF (optional, immutable copy)
 data/firmwares/<id>/firmware.yaml
 data/firmwares/<id>/data.json    # generated overlay, e.g. GitHub popularity (optional)
 data/vendors/<id>/vendor.yaml
+data/networks/<id>/network.yaml  # a regional/national MeshCore mesh
+data/networks/<id>/area.geojson  # optional Leaflet area shape for the network map
 data/globals.yaml                # MCU/radio/display/GNSS/frequency catalog
 ```
 
 A device counts as supported by a firmware only when it's listed in that
 firmware's `devices[]` (`data/firmwares/<id>/firmware.yaml`) — not merely by
 having a device record.
+
+A **network** lists no devices: its compatible-hardware list is derived from
+`radio.frequency` or the union of `radios[].frequency` band keys (each key must
+exist in `data/globals.yaml` `frequency`, e.g. `"868"`). Keep networks to
+organized meshes (national/regional/local/experimental) — not individual repeaters. See the Network table in
+[`SCHEMA.md`](SCHEMA.md#adding-a-network).
+
+If a network has a published coverage/coordination footprint, put it in a
+separate GeoJSON file (usually `area.geojson`) beside `network.yaml` and set
+`area: area.geojson`. Keep the YAML human-readable; detailed coordinates belong
+in the GeoJSON.
+
+Keep `analyzers` for CoreScope analyzer instances only, with the bare root
+domain (no path/query/hash). Put dashboards, health checks, observer status
+pages, docs and other tools under `resources.links`.
 
 ## Enriching a device
 

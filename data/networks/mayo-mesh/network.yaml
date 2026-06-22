@@ -1,0 +1,70 @@
+name: Mayo Mesh
+also_known_as:
+  - Mayo MeshCore
+short_name: Mayo Mesh
+description: >-
+  Volunteer-run mesh radio user group in County Mayo, Ireland, experimenting
+  with MeshCore and Meshtastic. Its MeshCore network uses the EU/UK Narrow
+  preset, operates repeaters across Mayo/Connacht and links into the broader
+  Irish mesh.
+scope: regional
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - IE
+
+regions:
+  - code: ie
+    name: Ireland
+  - code: connacht
+    name: Connacht
+    parent: ie
+  - code: mayo
+    name: County Mayo
+    parent: connacht
+
+radio:
+  frequency: '868'
+  frequency_mhz: 869.618
+  bandwidth_khz: 62.5
+  spreading_factor: 8
+  coding_rate: 4/8
+  tx_power_dbm: 14
+  duty_cycle_pct: 10
+  region_code: mayo
+  public_channel: Public
+
+community:
+  website: https://mayomesh.net/#/
+  discord: https://discord.gg/uQRUHbWTAy
+
+maps:
+  - name: MeshCore live map
+    url: https://meshcore.mayomesh.net/
+
+# not public :(
+#analyzers:
+#  - name: CoreScope
+#    url: https://corescope.mayomesh.net/
+
+resources:
+  status_page: https://healthcheck.mayomesh.net/
+  getting_started: https://mayomesh.net/#/getting-started
+  links:
+    - name: MeshCore overview
+      url: https://mayomesh.net/#/meshcore
+    - name: MeshCore coverage area
+      url: https://mayomesh.net/#/mc-coverage
+    - name: MeshCore official site
+      url: https://meshcore.io/
+    - name: MeshCore GitHub
+      url: https://github.com/ripplebiz/MeshCore
+    - name: MeshCore web flasher
+      url: https://flasher.meshcore.io/
+    - name: MeshCore configurator
+      url: https://config.meshcore.io/
+    - name: MQTT feed notes
+      url: https://mayomesh.net/#/getting-started

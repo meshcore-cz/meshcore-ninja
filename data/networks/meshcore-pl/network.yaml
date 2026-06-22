@@ -1,0 +1,43 @@
+name: Poland
+also_known_as:
+  - MeshCore Poland
+short_name: MeshCore PL
+description: >-
+  Polish LoRa MeshCore community building a nationwide emergency/off-grid mesh
+  network on the EU/UK Narrow preset, coordinated through lorameshcore.pl with
+  setup guides, repeater guidance, analyzer documentation and community links.
+scope: national
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - PL
+
+radio:
+  frequency: '868'
+  frequency_mhz: 869.618
+  bandwidth_khz: 62.5
+  spreading_factor: 8
+  coding_rate: 4/8
+  public_channel: Public
+
+community:
+  website: https://lorameshcore.pl/
+  contact: kontakt[at]lorameshcore.pl
+  facebook: https://www.facebook.com/groups/meshcorepolska
+
+maps:
+  - name: MeshCore map
+    url: https://meshcore.co.uk/map.html
+
+resources:
+  getting_started: https://lorameshcore.pl/jakZaczac/wyborUrzadzenia/
+  links:
+    - name: Current Poland presets
+      url: https://lorameshcore.pl/aktualnePresetyPolska/
+    - name: Useful links
+      url: https://lorameshcore.pl/przydatneLinki/
+    - name: Contact
+      url: https://lorameshcore.pl/kontakt/

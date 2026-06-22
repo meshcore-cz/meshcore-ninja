@@ -1,0 +1,51 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Ipswich area",
+        "source": "Approximate local Ipswich/Suffolk coordination footprint"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0.75,
+              51.86
+            ],
+            [
+              1.08,
+              51.82
+            ],
+            [
+              1.43,
+              51.96
+            ],
+            [
+              1.52,
+              52.18
+            ],
+            [
+              1.3,
+              52.36
+            ],
+            [
+              0.92,
+              52.34
+            ],
+            [
+              0.62,
+              52.18
+            ],
+            [
+              0.75,
+              51.86
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

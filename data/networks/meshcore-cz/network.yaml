@@ -1,0 +1,99 @@
+name: Czech Republic
+also_known_as:
+  - MeshCore Czech Republic
+short_name: MeshCore CZ
+description: >-
+  Nationwide community MeshCore mesh covering the Czech Republic on the 869.432
+  MHz band — the only EU frequency with a 10% duty cycle and up to 27 dBm EIRP.
+  Coordinated by the meshcore_cz community with per-kraj region routing, a shared
+  live map and coverage analyzer.
+scope: national
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - CZ
+
+regions:
+  - code: cz
+    name: Czech Republic (Public)
+  - code: cz-pha
+    name: Praha
+    parent: cz
+  - code: cz-stc
+    name: Středočeský
+    parent: cz
+  - code: cz-jhc
+    name: Jihočeský
+    parent: cz
+  - code: cz-plz
+    name: Plzeňský
+    parent: cz
+  - code: cz-kvk
+    name: Karlovarský
+    parent: cz
+  - code: cz-ulk
+    name: Ústecký
+    parent: cz
+  - code: cz-lbk
+    name: Liberecký
+    parent: cz
+  - code: cz-hkk
+    name: Královéhradecký
+    parent: cz
+  - code: cz-pak
+    name: Pardubický
+    parent: cz
+  - code: cz-vys
+    name: Vysočina
+    parent: cz
+  - code: cz-jmk
+    name: Jihomoravský
+    parent: cz
+  - code: cz-olk
+    name: Olomoucký
+    parent: cz
+  - code: cz-zlk
+    name: Zlínský
+    parent: cz
+  - code: cz-msk
+    name: Moravskoslezský
+    parent: cz
+
+radio:
+  frequency: '868'
+  frequency_mhz: 869.432
+  bandwidth_khz: 62.5
+  spreading_factor: 7
+  coding_rate: 4/5
+  tx_power_dbm: 22
+  duty_cycle_pct: 10
+  region_code: cz
+  public_channel: Public
+
+community:
+  website: https://meshcore.cz
+  telegram: https://t.me/meshcore_cz
+  forum: https://forum.meshcore.website
+  reddit: https://www.reddit.com/r/meshcore_cz/
+  youtube: https://www.youtube.com/channel/UCx9WF6WSyDZKzw4qiWyvWyw
+  peertube: https://vhsky.cz/c/meshcore_cz/videos
+
+maps:
+  - name: Live node map
+    url: https://mapa.meshcore.cz
+  - name: MeshCore Coverage Planner
+    url: https://pokryti.meshcore.cz
+
+analyzers:
+  - name: analyzer.meshcore.cz
+    url: https://analyzer.meshcore.cz
+  - name: analyzer.meshcore.website
+    url: https://analyzer.meshcore.website
+  - name: mc.pp0.co
+    url: https://mc.pp0.co
+
+resources:
+  getting_started: https://meshcore.cz/zapojit_do_meshcore

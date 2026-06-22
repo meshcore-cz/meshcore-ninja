@@ -1,0 +1,44 @@
+name: Norway
+also_known_as:
+  - MeshCore Norway
+  - MeshWiki.no
+short_name: MeshCore NO
+description: >-
+  Norwegian MeshCore community documentation hub on MeshWiki.no, sharing the
+  EU/UK Narrow preset for Norway on 869.618 MHz along with local 869 MHz band
+  guidance, repeater setup notes, component build guides and public map links.
+scope: national
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - NO
+
+radio:
+  frequency: '868'
+  frequency_mhz: 869.618
+  bandwidth_khz: 62.5
+  spreading_factor: 8
+  coding_rate: 4/8
+  tx_power_dbm: 22
+  duty_cycle_pct: 10
+  public_channel: Public
+
+community:
+  website: https://meshwiki.no/
+  forum: http://meshwiki.no/forum/
+  contact: '@vinceneil6666 on Discord'
+
+resources:
+  getting_started: https://meshwiki.no/meshcore/start
+  links:
+    - name: Norway LoRa parameters
+      url: https://meshwiki.no/meshcore/lora
+    - name: Norway 869 MHz rules and antennas
+      url: https://meshwiki.no/meshcore/meshcore-regler-og-antenner
+    - name: Recommended repeater setup
+      url: https://meshwiki.no/meshcore/repeater-oppsett
+    - name: Repeater placement suggestions
+      url: https://meshwiki.no/meshcore/forslag_plassering

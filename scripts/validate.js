@@ -85,6 +85,7 @@ function validateAll(records, validate) {
 const deviceSchema = loadSchema('device');
 const firmwareSchema = loadSchema('firmware');
 const vendorSchema = loadSchema('vendor');
+const networkSchema = loadSchema('network');
 const changelogSchema = loadSchema('changelog');
 const compatibilitySchema = loadSchema('compatibility');
 const globalsSchema = loadSchema('globals');
@@ -92,11 +93,13 @@ const globalsSchema = loadSchema('globals');
 const vendors = readCollection('vendors', 'vendor.yaml');
 const devices = readCollection('devices', 'device.yaml');
 const firmwares = readCollection('firmwares', 'firmware.yaml');
+const networks = readCollection('networks', 'network.yaml');
 const compatibility = [];
 
 validateAll(vendors, vendorSchema);
 validateAll(devices, deviceSchema);
 validateAll(firmwares, firmwareSchema);
+validateAll(networks, networkSchema);
 
 const compatibilityBase = join(root, 'data', 'compatibility');
 if (existsSync(compatibilityBase)) {
@@ -181,10 +184,49 @@ for (const f of firmwares) {
 }
 
 // Every `refs` key must name a ref database registered in globals.refs.
-for (const r of [...vendors, ...devices, ...firmwares]) {
+for (const r of [...vendors, ...devices, ...firmwares, ...networks]) {
   for (const key of Object.keys(r.data.refs ?? {})) {
     if (!refIds.has(key)) {
       err(r.where, `refs key "${key}" is not defined in data/globals.yaml refs`);
+    }
+  }
+}
+
+// A network's radio.frequency / radios[].frequency must be a band key registered
+// in globals.frequency (it's how compatible devices are matched).
+const frequencyKeys = new Set(Object.keys(globalsData?.frequency ?? {}));
+for (const n of networks) {
+  const radios = Array.isArray(n.data.radios) && n.data.radios.length ? n.data.radios : [n.data.radio].filter(Boolean);
+  for (const [index, radio] of radios.entries()) {
+    const band = radio?.frequency;
+    if (band != null && !frequencyKeys.has(String(band))) {
+      const path = Array.isArray(n.data.radios) && n.data.radios.length ? `radios[${index}].frequency` : 'radio.frequency';
+      err(n.where, `${path} "${band}" is not a band key in data/globals.yaml frequency`);
+    }
+  }
+  for (const analyzer of n.data.analyzers ?? []) {
+    try {
+      const url = new URL(analyzer.url);
+      if (url.pathname !== '/' || url.search || url.hash) {
+        err(n.where, `analyzer "${analyzer.name}" url must be a bare CoreScope domain without path/query/hash`);
+      }
+    } catch {
+      // Schema reports malformed URLs.
+    }
+  }
+  if (n.data.area) {
+    const areaPath = join(root, 'data', 'networks', n.id, n.data.area);
+    if (!existsSync(areaPath)) {
+      err(n.where, `area "${n.data.area}" file not found`);
+    } else {
+      try {
+        const area = JSON.parse(readFileSync(areaPath, 'utf8'));
+        if (!['Feature', 'FeatureCollection', 'Polygon', 'MultiPolygon'].includes(area?.type)) {
+          err(n.where, `area "${n.data.area}" must be GeoJSON Feature, FeatureCollection, Polygon, or MultiPolygon`);
+        }
+      } catch (e) {
+        err(n.where, `area "${n.data.area}" JSON parse error: ${e.message}`);
+      }
     }
   }
 }
@@ -245,5 +287,5 @@ if (errors.length) {
   process.exit(1);
 }
 console.log(
-  `✓ valid — ${firmwares.length} firmware(s), ${devices.length} device(s), ${vendors.length} vendor(s), ${compatibility.length} compatibility report(s).`
+  `✓ valid — ${firmwares.length} firmware(s), ${devices.length} device(s), ${vendors.length} vendor(s), ${networks.length} network(s), ${compatibility.length} compatibility report(s).`
 );

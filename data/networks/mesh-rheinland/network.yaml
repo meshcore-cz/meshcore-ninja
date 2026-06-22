@@ -1,0 +1,91 @@
+name: Mesh Rheinland
+also_known_as:
+  - MeshCore Rheinland
+short_name: Rheinland
+description: >-
+  German LoRa mesh community for the Rheinland and surrounding western Germany,
+  covering Meshtastic and MeshCore with local MeshCore documentation, EU/UK
+  Narrow settings, Rheinland region scopes, CoreScope live map and traffic
+  analyzer, and WhatsApp coordination.
+scope: regional
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - DE
+
+regions:
+  - code: europe
+    name: Europe
+  - code: eu
+    name: European Union
+  - code: de
+    name: Germany
+  - code: de-west
+    name: Western Germany
+    parent: de
+  - code: de-nw
+    name: North Rhine-Westphalia
+    parent: de-west
+  - code: rheinland
+    name: Rheinland
+    parent: de-nw
+  - code: bonn
+    name: Bonn
+    parent: rheinland
+  - code: koeln
+    name: Koeln
+    parent: rheinland
+  - code: leverkusen
+    name: Leverkusen
+    parent: rheinland
+  - code: niederrhein
+    name: Niederrhein
+    parent: rheinland
+  - code: ruhrgebiet
+    name: Ruhrgebiet
+    parent: de-nw
+  - code: eifel
+    name: Eifel
+    parent: de-west
+  - code: drielande
+    name: Dreilaendereck NL/BE/DE
+    parent: rheinland
+
+radio:
+  frequency: '868'
+  frequency_mhz: 869.618
+  bandwidth_khz: 62.5
+  spreading_factor: 8
+  coding_rate: 4/8
+  tx_power_dbm: 22
+  duty_cycle_pct: 10
+  region_code: de
+  public_channel: Public
+
+community:
+  website: https://www.meshrheinland.de/
+
+analyzers:
+  - name: corescope.meshrheinland.de
+    url: https://corescope.meshrheinland.de
+
+resources:
+  getting_started: https://www.meshrheinland.de/meshcore/intro
+  links:
+    - name: MeshCore regions
+      url: https://www.meshrheinland.de/meshcore/regionen
+    - name: MeshCore channels
+      url: https://www.meshrheinland.de/meshcore/channels
+    - name: Companion setup
+      url: https://www.meshrheinland.de/meshcore/companion-setup
+    - name: Repeater setup
+      url: https://www.meshrheinland.de/meshcore/repeater-setup
+    - name: Firmware flashing
+      url: https://www.meshrheinland.de/meshcore/firmware-flashen
+    - name: WhatsApp community
+      url: https://chat.whatsapp.com/JyNcTcgwlJf6Mhhf7vgYWD
+    - name: Website source
+      url: https://github.com/meshrheinland/website/

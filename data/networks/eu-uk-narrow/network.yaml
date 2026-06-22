@@ -1,0 +1,25 @@
+name: EU/UK (Narrow)
+description: >-
+  The standard MeshCore narrow-band preset for Europe and the United Kingdom on
+  the 869.618 MHz band (62.5 kHz / SF8 / CR4/8). A general default — not a single
+  community — that nodes across the EU and UK share so they can hear each other.
+scope: general
+status: active
+visibility: public
+
+coverage:
+  countries:
+    - EU
+    - GB
+
+area: area.geojson
+
+radio:
+  frequency: '868'
+  frequency_mhz: 869.618
+  bandwidth_khz: 62.5
+  spreading_factor: 8
+  coding_rate: 4/8
+  tx_power_dbm: 22
+  duty_cycle_pct: 10
+  public_channel: Public

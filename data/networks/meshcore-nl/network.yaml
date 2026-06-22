@@ -1,0 +1,87 @@
+name: Netherlands
+also_known_as:
+  - MeshCore Netherlands
+short_name: MeshCore NL
+description: >-
+  Dutch LocalMesh emergency radio network for MeshCore users in the Netherlands,
+  using the Netherlands preset on the 868 MHz EU band with public-channel access,
+  regional repeater scopes and an active citizen-led community.
+scope: national
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - NL
+
+regions:
+  - code: nl
+    name: All of Netherlands
+  - code: nl-dr
+    name: Drenthe
+    parent: nl
+  - code: nl-fl
+    name: Flevoland
+    parent: nl
+  - code: nl-fr
+    name: Friesland
+    parent: nl
+  - code: nl-ge
+    name: Gelderland
+    parent: nl
+  - code: nl-gr
+    name: Groningen
+    parent: nl
+  - code: nl-li
+    name: Limburg
+    parent: nl
+  - code: nl-nb
+    name: Noord-Brabant
+    parent: nl
+  - code: nl-nh
+    name: Noord-Holland
+    parent: nl
+  - code: nl-ov
+    name: Overijssel
+    parent: nl
+  - code: nl-ut
+    name: Utrecht
+    parent: nl
+  - code: nl-ze
+    name: Zeeland
+    parent: nl
+  - code: nl-zh
+    name: Zuid-Holland
+    parent: nl
+
+radio:
+  frequency: '868'
+  frequency_mhz: 868
+  bandwidth_khz: 62.5
+  spreading_factor: 7
+  coding_rate: 4/5
+  region_code: nl
+  public_channel: Public
+
+community:
+  website: https://www.localmesh.nl/en/
+  contact: https://www.localmesh.nl/en/contact/
+
+maps:
+  - name: MeshCore map
+    url: https://map.meshcore.io
+
+analyzers:
+  - name: cornmeister.nl
+    url: https://cornmeister.nl
+
+resources:
+  getting_started: https://www.localmesh.nl/en/meshcore-setup/
+  links:
+    - name: LocalMesh map and coverage
+      url: https://www.localmesh.nl/en/map/
+    - name: Region configuration
+      url: https://www.localmesh.nl/en/meshcore-region-configuration/
+    - name: Community hub
+      url: https://www.localmesh.nl/en/community/

@@ -1,0 +1,59 @@
+name: Portugal
+also_known_as:
+  - MeshCore Portugal
+short_name: MeshCore PT
+description: >-
+  Portuguese MeshCore community coordinating national off-grid LoRa mesh
+  messaging through meshcore.pt, with published 433.375 MHz and 869.618 MHz
+  radio settings, local hardware guides, map tools and LusoApp resources.
+scope: national
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - PT
+
+radios:
+  - name: Popular 433 MHz network
+    description: Most-used Portugal mesh; the site recommends 433 MHz hardware for broader existing compatibility.
+    frequency: '433'
+    frequency_mhz: 433.375
+    bandwidth_khz: 250
+    spreading_factor: 9
+    coding_rate: 4/5
+    public_channel: Public
+  - name: Growing 868 MHz network
+    description: Secondary/growing Portugal mesh using the EU/UK Narrow preset.
+    frequency: '868'
+    frequency_mhz: 869.618
+    bandwidth_khz: 62.5
+    spreading_factor: 8
+    coding_rate: 4/8
+    public_channel: Public
+
+community:
+  website: https://www.meshcore.pt/en/home
+  telegram: https://t.me/+z4dJQa_YI4M3ZTVk
+  facebook: https://www.facebook.com/groups/1393610475082383/
+  youtube: https://www.youtube.com/playlist?list=PLkxRrxBLBVAW3s5Iy0EjCyQQIyNbThlnb
+  contact: meshcorept@gmail.com
+
+maps:
+  - name: MeshCore Portugal map
+    url: https://www.meshcore.pt/en/map
+
+resources:
+  getting_started: https://www.meshcore.pt/en/home
+  links:
+    - name: MeshCore Portugal docs
+      url: https://www.meshcore.pt/en/docs/list
+    - name: Client hardware
+      url: https://www.meshcore.pt/en/hardware/client
+    - name: Repeater hardware
+      url: https://www.meshcore.pt/en/hardware/repeater
+    - name: Firmware flasher
+      url: https://www.meshcore.pt/en/tools/flasher
+    - name: LusoApp Android app
+      url: https://play.google.com/store/apps/details?id=pt.meshcore.lusoapp

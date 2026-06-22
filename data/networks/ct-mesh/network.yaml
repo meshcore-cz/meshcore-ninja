@@ -1,0 +1,73 @@
+name: CT Mesh
+also_known_as:
+  - CTMesh
+  - Connecticut Mesh
+short_name: CT Mesh
+description: >-
+  Volunteer-run Connecticut mesh technologies user group for MeshCore and
+  Meshtastic operators, with a live MeshCore map, Discord community, MeshMapper
+  coverage tools and local MQTT/observer resources for the BDL region.
+scope: regional
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - US
+
+regions:
+  - code: us
+    name: United States
+  - code: newengland
+    name: New England
+    parent: us
+  - code: ct
+    name: Connecticut
+    parent: newengland
+  - code: BDL
+    name: Bradley / Connecticut
+    parent: ct
+
+radio:
+  frequency: '915'
+  frequency_mhz: 910.525
+  bandwidth_khz: 62.5
+  spreading_factor: 7
+  coding_rate: 4/5
+  path_hash_mode: 3-Byte
+  region_code: BDL
+  public_channel: Public
+
+community:
+  website: https://ctmesh.org/
+  discord: https://discord.com/invite/m4F328as3K
+  contact: contact@ctmesh.org
+
+maps:
+  - name: MeshCore node map
+    url: https://meshcore-map.ctmesh.org/
+  - name: MeshMapper BDL
+    url: https://bdl.meshmapper.net/
+
+analyzers:
+  - name: analyzer.ctmesh.org
+    url: https://analyzer.ctmesh.org/
+
+resources:
+  getting_started: https://ctmesh.org/why-run-a-node.html
+  links:
+    - name: MeshCore resources
+      url: https://ctmesh.org/meshcore-resources.html
+    - name: LetsMesh BDL packet analyzer
+      url: https://analyzer.letsmesh.net/packets?region=BDL
+    - name: MeshCore official site
+      url: https://meshcore.io/
+    - name: MeshCore flasher
+      url: https://flasher.meshcore.io/
+    - name: MeshCore MQTT bridge
+      url: https://github.com/Cisien/meshcoretomqtt
+    - name: MeshMapper iOS app
+      url: https://apps.apple.com/us/app/meshmapper/id6758073991
+    - name: MeshMapper Android app
+      url: https://play.google.com/store/apps/details?id=net.meshmapper.app

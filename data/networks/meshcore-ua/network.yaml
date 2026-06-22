@@ -1,0 +1,42 @@
+name: Ukraine
+also_known_as:
+  - MeshCore Ukraine
+short_name: MeshCore UA
+description: >-
+  Ukrainian volunteer-run public MeshCore mesh for resilient decentralized LoRa
+  communication across Ukraine, coordinated through meshcore-ua.net with
+  repeaters, bots, channels, firmware downloads and Telegram community support.
+scope: national
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - UA
+
+radio:
+  frequency: '433'
+  frequency_mhz: 433.65
+  bandwidth_khz: 62.5
+  spreading_factor: 8
+  coding_rate: 4/8
+  tx_power_dbm: 20
+  public_channel: Public
+
+community:
+  website: https://meshcore-ua.net/
+  telegram: https://t.me/meshcoreua/1
+
+resources:
+  getting_started: https://meshcore-ua.net/#users
+  repeater_list: https://meshcore-ua.net/#repeaters
+  links:
+    - name: Firmware downloads
+      url: https://meshcore-ua.net/firmware
+    - name: Channels
+      url: https://meshcore-ua.net/#channels
+    - name: Resources
+      url: https://meshcore-ua.net/#resources
+    - name: Official MeshCore flasher
+      url: https://flasher.meshcore.co.uk/

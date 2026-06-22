@@ -1,0 +1,57 @@
+name: West Coast Mesh
+short_name: WCMesh
+description: >-
+  Community hub building the West Coast's largest decentralized mesh network
+  using MeshCore. User-supplied network spanning California, Oregon and
+  Washington for off-grid communications, emergency response, outdoor
+  activities and IoT sensor networks on the US 915 MHz band.
+scope: regional
+status: active
+visibility: public
+
+coverage:
+  countries:
+    - US
+area: area.geojson
+
+regions:
+  - code: us
+    name: United States
+  - code: us-west
+    name: West Coast
+  - code: ca
+    name: California
+    parent: us-west
+  - code: or
+    name: Oregon
+    parent: us-west
+  - code: wa
+    name: Washington
+    parent: us-west
+
+radio:
+  frequency: '915'
+  bandwidth_khz: 62.5
+  spreading_factor: 7
+  coding_rate: 4/5
+  region_code: us-west
+  public_channel: Public
+
+community:
+  website: https://www.wcmesh.com/
+  discord: https://discord.com/invite/wcmesh
+  contact: https://discord.com/invite/wcmesh
+
+maps:
+  - name: WCMesh live map
+    url: https://map.wcmesh.com/
+
+resources:
+  getting_started: https://www.wcmesh.com/#getting-started
+  links:
+    - name: GitHub WCMesh
+      url: https://github.com/k7cfo/wcmesh
+    - name: Link Budget Calculator
+      url: https://westcoastmesh-linkbudget.vercel.app/
+    - name: Web Flasher
+      url: https://flasher.meshcore.co.uk/

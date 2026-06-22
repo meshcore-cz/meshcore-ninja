@@ -1,0 +1,85 @@
+name: NSW Mesh
+also_known_as:
+  - New South Wales Mesh
+short_name: NSW Mesh
+description: >-
+  Community-maintained mesh network and knowledge base for Sydney and New South
+  Wales, with MeshCore now recommended for most participants, published
+  Australia radio profiles, maps, observers, repeaters and Discord coordination.
+scope: regional
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - AU
+
+regions:
+  - code: au
+    name: Australia
+  - code: au-nsw
+    name: New South Wales
+    parent: au
+  - code: au-nsw-syd
+    name: Sydney
+    parent: au-nsw
+
+radios:
+  - name: Australia Mid
+    description: Majority NSW Mesh profile from April/May 2026 onward.
+    frequency: '915'
+    frequency_mhz: 915.075
+    bandwidth_khz: 125
+    spreading_factor: 9
+    coding_rate: 4/5
+    region_code: au-nsw
+    public_channel: Public
+  - name: Australia Narrow
+    description: Still used in some NSW areas and by many Victorian nodes.
+    frequency: '915'
+    frequency_mhz: 916.575
+    bandwidth_khz: 62.5
+    spreading_factor: 7
+    coding_rate: 4/8
+    region_code: au-nsw
+    public_channel: Public
+  - name: Australia Wide
+    description: Older NSW profile used before the Narrow and Mid profiles.
+    frequency: '915'
+    frequency_mhz: 915.8
+    bandwidth_khz: 250
+    spreading_factor: 11
+    coding_rate: 4/5
+    region_code: au-nsw
+    public_channel: Public
+
+community:
+  website: https://nswmesh.au/
+  discord: https://discord.gg/Du437Usj3K
+
+maps:
+  - name: NSWMesh MQTT live map
+    url: https://map.nswmesh.au/
+  - name: MeshSydney CoreSense map
+    url: https://meshsydney.com/coresense-map
+
+analyzers:
+  - name: corescope.nswmesh.au
+    url: https://corescope.nswmesh.au
+
+resources:
+  getting_started: https://nswmesh.au/getting-started
+  links:
+    - name: MeshCore overview
+      url: https://nswmesh.au/meshcore/overview
+    - name: MeshCore frequency profiles
+      url: https://nswmesh.au/meshcore/frequency
+    - name: Channels and regions
+      url: https://nswmesh.au/meshcore/channels
+    - name: MeshCore maps
+      url: https://nswmesh.au/meshcore/maps
+    - name: Repeaters
+      url: https://nswmesh.au/meshcore/repeaters
+    - name: GitHub
+      url: https://github.com/nswmesh/nswmesh.au

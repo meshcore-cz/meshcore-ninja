@@ -1,0 +1,61 @@
+name: TennMesh
+also_known_as:
+  - Tennessee Mesh
+  - Tennessee MeshCore
+short_name: TennMesh
+description: >-
+  Community-built Tennessee MeshCore network for off-grid text messaging across
+  the state, with recommended settings, setup guidance, public channels,
+  reports and a live CoreScope map.
+scope: regional
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - US
+
+regions:
+  - code: us
+    name: United States
+  - code: tennessee
+    name: Tennessee
+    parent: us
+
+radio:
+  frequency: '915'
+  frequency_mhz: 910.525
+  bandwidth_khz: 62.5
+  spreading_factor: 7
+  coding_rate: 4/8
+  path_hash_mode: 2-Byte
+  public_channel: Public
+
+community:
+  website: https://tennmesh.com/
+  discord: https://discord.gg/XGhftQw9Mt
+  telegram: https://t.me/+ny3SblBJ8rVjMWIx
+  facebook: https://www.facebook.com/groups/877766108102231
+
+maps:
+  - name: Live map
+    url: https://live.tennmesh.com/#/live
+
+analyzers:
+  - name: live.tennmesh.com
+    url: https://live.tennmesh.com
+
+resources:
+  getting_started: https://tennmesh.com/connect/
+  links:
+    - name: Settings
+      url: https://tennmesh.com/settings/
+    - name: Channels
+      url: https://tennmesh.com/channels/
+    - name: Devices
+      url: https://tennmesh.com/devices/
+    - name: Reports
+      url: https://tennmesh.com/reports/
+    - name: GitHub
+      url: https://github.com/tennmesh

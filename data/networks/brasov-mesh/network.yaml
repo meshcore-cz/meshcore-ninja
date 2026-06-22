@@ -1,0 +1,43 @@
+name: Brașov Mesh
+short_name: Brașov Mesh
+description: >-
+  Community MeshCore network for Brașov, Romania, running on the EU/UK narrow
+  preset at 869.618 MHz. Beginner-friendly group sharing hardware guides,
+  coverage maps and support for Romanians getting started with MeshCore.
+scope: local
+status: active
+visibility: public
+
+coverage:
+  countries:
+    - RO
+area: area.geojson
+
+regions:
+  - code: ro
+    name: Romania
+  - code: ro-bv
+    name: Brașov
+
+radio:
+  frequency: '868'
+  frequency_mhz: 869.618
+  bandwidth_khz: 62.5
+  spreading_factor: 8
+  coding_rate: 4/5
+  region_code: ro-bv
+  public_channel: Public
+
+community:
+  website: https://brasovmesh.com/
+  discord: https://meshcore.gg/
+  contact: mailto:hello@brasovmesh.com
+
+resources:
+  getting_started: https://brasovmesh.com/getting-started
+  repeater_list: https://brasovmesh.com/nodes
+  links:
+    - name: Hardware guides
+      url: https://brasovmesh.com/resources
+    - name: Coverage map
+      url: https://brasovmesh.com/#map

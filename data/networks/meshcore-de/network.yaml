@@ -1,0 +1,48 @@
+name: Germany
+also_known_as:
+  - MeshCore Germany
+short_name: MeshCore DE
+description: >-
+  German-speaking MeshCore community and wiki hub for Germany, collecting setup
+  guides, regional groups, recommended configuration, hardware notes and online
+  coordination spaces for MeshCore users.
+scope: national
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - DE
+
+radio:
+  frequency: '868'
+  frequency_mhz: 869.618
+  bandwidth_khz: 62.5
+  spreading_factor: 8
+  coding_rate: 4/8
+  tx_power_dbm: 22
+  duty_cycle_pct: 10
+  public_channel: Public
+
+community:
+  website: https://meshcore-de.fyi/
+  forum: https://talk.meshcore-de.fyi/
+  matrix: https://matrix.to/#/#meshcore-netzwerk-de:matrix.org
+  telegram: https://t.me/meshcorede
+
+maps:
+  - name: Regions map
+    url: https://meshcore-de.fyi/region_karte
+
+resources:
+  getting_started: https://meshcore-de.fyi/
+  links:
+    - name: Recommended configuration
+      url: https://meshcore-de.fyi/meshcore:allgemeines:empfohlene-konfiguration
+    - name: Germany-wide base regions
+      url: https://meshcore-de.fyi/meshcore:allgemeines:regions:basis
+    - name: Regional groups
+      url: https://meshcore-de.fyi/#es_gibt_aber_auch_einige_regionale_gruppen_die_auch_hilfestellung_vor_ort_anbieten
+    - name: German discussion forum
+      url: https://talk.meshcore-de.fyi/

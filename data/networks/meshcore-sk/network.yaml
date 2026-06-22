@@ -1,0 +1,44 @@
+# Source: https://mesh.om3kff.sk/
+name: Slovakia
+also_known_as:
+  - MeshCore Slovakia
+short_name: MeshCore SK
+description: >-
+  Slovak national MeshCore mesh, coordinated through mesh.om3kff.sk and a
+  community Discord. It runs the EU/UK (Narrow) preset on the 869.618 MHz band
+  (62.5 kHz / SF8) — with the coding rate set to 4/5 — sharing an international
+  Public channel that is interconnected with the Hungarian and Austrian meshes,
+  plus a national #slovakia channel.
+scope: national
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - SK
+
+regions:
+  - code: sk
+    name: Slovakia
+
+radio:
+  frequency: '868'
+  frequency_mhz: 869.618
+  bandwidth_khz: 62.5
+  spreading_factor: 8
+  coding_rate: 4/5
+  tx_power_dbm: 22
+  duty_cycle_pct: 10
+  path_hash_mode: 2-Byte
+  public_channel: Public
+
+community:
+  website: https://mesh.om3kff.sk/
+  discord: https://discord.gg/Zx5JuhszUb
+
+resources:
+  getting_started: https://mesh.om3kff.sk/
+  links:
+    - name: LoRa mesh siete na Slovensku (ARES OM)
+      url: https://aresom.wordpress.com/lora-mesh-siete-pre-tiesnovu-komunikaciu-siete-meshtastic-a-meshcore-na-slovensku/

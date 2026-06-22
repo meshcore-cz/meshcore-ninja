@@ -3,7 +3,15 @@
 //  - src/lib/generated/data.json : imported by the web app (Vite can't import
 //    from the static/ public dir, so the importable copy lives under src/).
 //  - static/data.json            : published verbatim and served at /data.json.
-import { readFileSync, readdirSync, existsSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
+import {
+  copyFileSync,
+  readFileSync,
+  readdirSync,
+  existsSync,
+  writeFileSync,
+  mkdirSync,
+  rmSync
+} from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { load } from 'js-yaml';
@@ -98,8 +106,8 @@ function cleanGeneratedDir(root, dir) {
   rmSync(join(root, 'static', dir), { recursive: true, force: true });
 }
 
-function buildRecordJson(root, { devices, firmwares, vendors, compatibility }) {
-  for (const dir of ['device', 'firmware', 'vendor', 'compatibility']) {
+function buildRecordJson(root, { devices, firmwares, vendors, networks, compatibility }) {
+  for (const dir of ['device', 'firmware', 'vendor', 'network', 'compatibility']) {
     cleanGeneratedDir(root, dir);
   }
 
@@ -114,6 +122,10 @@ function buildRecordJson(root, { devices, firmwares, vendors, compatibility }) {
   }
   for (const vendor of vendors) {
     writeJsonRecord(join(root, 'static', 'vendor', `${vendor.id}.json`), vendor);
+    count += 1;
+  }
+  for (const network of networks) {
+    writeJsonRecord(join(root, 'static', 'network', `${network.id}.json`), network);
     count += 1;
   }
   for (const report of compatibility) {
@@ -134,6 +146,80 @@ function buildRecordJson(root, { devices, firmwares, vendors, compatibility }) {
   return count;
 }
 
+// Geodesic area of a GeoJSON geometry in square metres, via the standard
+// spherical ring-area formula (Chamberlain & Duquette, as used by
+// mapbox/geojson-area). Exterior rings add, interior rings (holes) subtract.
+const WGS84_RADIUS = 6378137; // metres
+const toRad = (deg) => (deg * Math.PI) / 180;
+
+function ringArea(ring) {
+  const len = ring.length;
+  if (len < 3) return 0;
+  let total = 0;
+  for (let i = 0; i < len; i++) {
+    let lowerIndex, middleIndex, upperIndex;
+    if (i === len - 2) {
+      lowerIndex = len - 2;
+      middleIndex = len - 1;
+      upperIndex = 0;
+    } else if (i === len - 1) {
+      lowerIndex = len - 1;
+      middleIndex = 0;
+      upperIndex = 1;
+    } else {
+      lowerIndex = i;
+      middleIndex = i + 1;
+      upperIndex = i + 2;
+    }
+    const p1 = ring[lowerIndex];
+    const p2 = ring[middleIndex];
+    const p3 = ring[upperIndex];
+    total += (toRad(p3[0]) - toRad(p1[0])) * Math.sin(toRad(p2[1]));
+  }
+  return Math.abs((total * WGS84_RADIUS * WGS84_RADIUS) / 2);
+}
+
+function polygonArea(rings) {
+  if (!rings?.length) return 0;
+  return rings.reduce((sum, ring, i) => sum + (i === 0 ? ringArea(ring) : -ringArea(ring)), 0);
+}
+
+function geometryAreaM2(geometry) {
+  if (!geometry) return 0;
+  if (geometry.type === 'Polygon') return polygonArea(geometry.coordinates);
+  if (geometry.type === 'MultiPolygon') {
+    return geometry.coordinates.reduce((sum, poly) => sum + polygonArea(poly), 0);
+  }
+  return 0;
+}
+
+function geojsonAreaKm2(geojson) {
+  const features = geojson?.features ?? (geojson?.geometry ? [geojson] : []);
+  const m2 = features.reduce((sum, f) => sum + geometryAreaM2(f.geometry), 0);
+  return m2 / 1e6;
+}
+
+function publishNetworkAreas(root, networks) {
+  const outDir = join(root, 'static', 'network-area');
+  rmSync(outDir, { recursive: true, force: true });
+  mkdirSync(outDir, { recursive: true });
+
+  let count = 0;
+  for (const network of networks) {
+    if (!network.area) continue;
+    const raw = readFileSync(join(root, 'data', 'networks', network.id, network.area), 'utf8');
+    writeFileSync(join(outDir, `${network.id}.geojson`), raw);
+    network.areaUrl = `/network-area/${network.id}.geojson`;
+    try {
+      network.areaKm2 = Math.round(geojsonAreaKm2(JSON.parse(raw)));
+    } catch {
+      // Leave areaKm2 unset if the geojson can't be parsed.
+    }
+    count += 1;
+  }
+  return count;
+}
+
 // Production origin; BASE_PATH is supplied by the GitHub Pages workflow when needed.
 const SITE_ORIGIN = (process.env.SITE_ORIGIN ?? 'https://meshcore.ninja').replace(
   /\/+$/,
@@ -142,7 +228,7 @@ const SITE_ORIGIN = (process.env.SITE_ORIGIN ?? 'https://meshcore.ninja').replac
 const BASE_PATH = (process.env.BASE_PATH ?? '').replace(/\/+$/, '');
 
 /** Write sitemap.xml + robots.txt from the compiled dataset. */
-function buildSitemap(root, { devices, firmwares, vendors, generatedAt }) {
+function buildSitemap(root, { devices, firmwares, vendors, networks, generatedAt }) {
   const lastmod = (generatedAt ?? new Date().toISOString()).slice(0, 10);
   const prefix = `${SITE_ORIGIN}${BASE_PATH}`;
 
@@ -150,13 +236,15 @@ function buildSitemap(root, { devices, firmwares, vendors, generatedAt }) {
     '/',
     '/devices/',
     '/vendors/',
+    '/networks/',
     '/matrix/',
     '/releases/',
     '/about/',
     ...METRICS.map((m) => `/device-rank/${m.id}/`),
     ...devices.map((d) => `/device/${d.id}/`),
     ...firmwares.flatMap((f) => [`/firmware/${f.id}/`, `/firmware/${f.id}/releases/`]),
-    ...vendors.map((v) => `/vendor/${v.id}/`)
+    ...vendors.map((v) => `/vendor/${v.id}/`),
+    ...networks.map((n) => `/network/${n.id}/`)
   ];
 
   const urls = paths
@@ -185,6 +273,11 @@ export async function buildData(root = defaultRoot) {
     a.name.localeCompare(b.name)
   );
   const vendorById = new Map(vendors.map((v) => [v.id, v]));
+
+  const networks = readDir(root, 'networks', 'network.yaml').sort((a, b) =>
+    a.name.localeCompare(b.name)
+  );
+  const networkAreas = publishNetworkAreas(root, networks);
 
   const devices = readDir(root, 'devices', 'device.yaml')
     .map((d) => ({ ...d, vendorName: vendorById.get(d.vendorId)?.name ?? null }))
@@ -239,11 +332,14 @@ export async function buildData(root = defaultRoot) {
       firmwares: firmwares.length,
       devices: devices.length,
       vendors: vendors.length,
+      networks: networks.length,
+      networkAreas,
       compatibility: compatibility.length
     },
     firmwares,
     devices,
     vendors,
+    networks,
     compatibility,
     globals
   };
@@ -261,20 +357,30 @@ export async function buildData(root = defaultRoot) {
     devices,
     firmwares,
     vendors,
+    networks,
     generatedAt: dataset.generatedAt
   });
 
   return {
     ...dataset.counts,
-    recordsJson: buildRecordJson(root, { devices, firmwares, vendors, compatibility }),
+    recordsJson: buildRecordJson(root, { devices, firmwares, vendors, networks, compatibility }),
     sitemapUrls
   };
 }
 
 // Run as a CLI when invoked directly (npm run build:data / pre-hooks).
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
-  const { firmwares, devices, vendors, compatibility, recordsJson, sitemapUrls } = await buildData();
+  const {
+    firmwares,
+    devices,
+    vendors,
+    networks,
+    compatibility,
+    networkAreas,
+    recordsJson,
+    sitemapUrls
+  } = await buildData();
   console.log(
-    `✓ Wrote data.json — ${firmwares} firmware(s), ${devices} device(s), ${vendors} vendor(s), ${compatibility} compatibility report(s); ${recordsJson} record JSON file(s); ${sitemapUrls} sitemap URL(s).`
+    `✓ Wrote data.json — ${firmwares} firmware(s), ${devices} device(s), ${vendors} vendor(s), ${networks} network(s), ${networkAreas} network area(s), ${compatibility} compatibility report(s); ${recordsJson} record JSON file(s); ${sitemapUrls} sitemap URL(s).`
   );
 }

@@ -1,0 +1,43 @@
+name: Paris
+also_known_as:
+  - MeshCore Paris
+short_name: MeshCore Paris
+description: >-
+  MeshCore community for Paris and the Greater Paris (Grand Paris) region,
+  building a long-range offline LoRa mesh across the metropolitan area.
+scope: regional
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - FR
+
+regions:
+  - code: fr
+    name: France
+  - code: ile-de-france
+    name: Île-de-France
+    parent: fr
+  - code: paris
+    name: Paris
+    parent: ile-de-france
+
+radio:
+  frequency: '868'
+  frequency_mhz: 869.618
+  bandwidth_khz: 62.5
+  spreading_factor: 8
+  coding_rate: 4/8
+  tx_power_dbm: 22
+  duty_cycle_pct: 10
+  path_hash_mode: 2-Byte
+  public_channel: Public
+
+community:
+  website: https://meshcore.paris/
+
+analyzers:
+  - name: analyzer.meshcore.paris
+    url: https://analyzer.meshcore.paris

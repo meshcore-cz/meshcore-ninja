@@ -2,6 +2,7 @@
 // from the YAML sources. The same content is also published at /data.json.
 import dataset from '$lib/generated/data.json';
 import Fuse from 'fuse.js';
+import * as countryFlags from 'country-flag-icons/string/3x2';
 import { groupReleases } from '$lib/releases.js';
 
 export { groupReleases } from '$lib/releases.js';
@@ -59,6 +60,11 @@ const deviceById = new Map(devices.map((d) => [d.id, d]));
 /** All firmwares, ordered by build-data.js (active first, then by type, then by name). */
 export const firmwares = dataset.firmwares;
 
+/** All networks (from data.json), ordered by name in build-data.js. */
+export const networks = dataset.networks ?? [];
+
+const networkById = new Map(networks.map((n) => [n.id, n]));
+
 export function getFirmware(id) {
   return firmwares.find((f) => f.id === id);
 }
@@ -69,6 +75,84 @@ export function getDevice(id) {
 
 export function getVendor(id) {
   return vendorById.get(id);
+}
+
+export function getNetwork(id) {
+  return networkById.get(id);
+}
+
+/**
+ * Devices whose radios support a LoRa frequency band key (e.g. "868"). This is
+ * how networks resolve their compatible hardware — they store a band, not a
+ * device list. Returns [] for an unknown/empty band. Sorted by name (devices
+ * are already name-sorted).
+ */
+export function devicesForBand(band) {
+  if (band == null || band === '') return [];
+  const key = String(band);
+  return devices.filter((d) =>
+    (d.hardware?.radios ?? []).some((r) => (r.frequencyVariants ?? []).map(String).includes(key))
+  );
+}
+
+/** Radio settings published by a network, supporting both legacy `radio` and `radios[]`. */
+export function networkRadioSettings(network) {
+  const radios = Array.isArray(network?.radios) ? network.radios : [];
+  if (radios.length) return radios;
+  return network?.radio ? [network.radio] : [];
+}
+
+/** Frequency band keys published by a network, de-duplicated in display order. */
+export function networkBands(network) {
+  const seen = new Set();
+  const out = [];
+  for (const radio of networkRadioSettings(network)) {
+    const band = radio?.frequency;
+    if (band == null || band === '') continue;
+    const key = String(band);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(key);
+  }
+  return out;
+}
+
+/** Devices compatible with a network, derived from its radio frequency bands. */
+export function devicesForNetwork(network) {
+  const bands = networkBands(network);
+  if (!bands.length) return [];
+  return devices.filter((d) =>
+    (d.hardware?.radios ?? []).some((r) => {
+      const variants = (r.frequencyVariants ?? []).map(String);
+      return bands.some((band) => variants.includes(band));
+    })
+  );
+}
+
+/**
+ * Devices that explicitly cannot run on a band: those whose radios declare
+ * frequency variants, none of which include the band. Devices with no declared
+ * variants are treated as unknown (not incompatible) and excluded. Returns []
+ * for an unknown/empty band.
+ */
+export function devicesIncompatibleWithBand(band) {
+  if (band == null || band === '') return [];
+  const key = String(band);
+  return devices.filter((d) => {
+    const radios = d.hardware?.radios ?? [];
+    const variants = radios.flatMap((r) => (r.frequencyVariants ?? []).map(String));
+    return variants.length > 0 && !variants.includes(key);
+  });
+}
+
+/** Devices incompatible with all of a network's radio frequency bands. */
+export function devicesIncompatibleWithNetwork(network) {
+  const bands = networkBands(network);
+  if (!bands.length) return [];
+  return devices.filter((d) => {
+    const variants = (d.hardware?.radios ?? []).flatMap((r) => (r.frequencyVariants ?? []).map(String));
+    return variants.length > 0 && !bands.some((band) => variants.includes(band));
+  });
 }
 
 /** Devices belonging to a vendor, sorted by name. */
@@ -223,6 +307,18 @@ export function resolveRadio(chip) {
 /** Catalog entry for a LoRa frequency band key (e.g. "868"). */
 export function resolveFrequency(band) {
   return lookupPart('frequency', band);
+}
+
+/**
+ * A network's own `coverage.regions` ({ code, name, parent? }) sorted so that
+ * national roots (no parent) come before their subdivisions, then by name.
+ * @returns {{ code, name, parent? }[]}
+ */
+export function networkRegions(network) {
+  return [...(network?.regions ?? [])].sort(
+    (a, b) =>
+      Number(Boolean(a.parent)) - Number(Boolean(b.parent)) || a.name.localeCompare(b.name)
+  );
 }
 
 /** Catalog entry for a display technology string. */
@@ -402,6 +498,56 @@ export const FW_STATUS_TW = {
   inactive: 'text-bad'
 };
 
+/** Network scope → label + badge utility classes. */
+export const NETWORK_SCOPE_META = {
+  general: { label: 'General', tw: 'bg-dim/15 text-dim' },
+  national: { label: 'National', tw: 'bg-accent/15 text-accent' },
+  regional: { label: 'Regional', tw: 'bg-accent2/15 text-accent2' },
+  local: { label: 'Local', tw: 'bg-ok/15 text-ok' },
+  experimental: { label: 'Experimental', tw: 'bg-warn/15 text-warn' }
+};
+
+/** Network status → label + text colour utility. */
+export const NETWORK_STATUS_META = {
+  active: { label: 'Active', tw: 'text-ok' },
+  planned: { label: 'Planned', tw: 'text-warn' },
+  dormant: { label: 'Dormant', tw: 'text-dim' },
+  inactive: { label: 'Inactive', tw: 'text-bad' }
+};
+
+/** Compact band label for a network, e.g. "868 MHz" or "433 MHz, 868 MHz". */
+export function networkBandLabel(network) {
+  const labels = networkBands(network).map((band) => resolveFrequency(band)?.name ?? `${band} MHz`);
+  return labels.length ? labels.join(', ') : null;
+}
+
+/** Display label for one network radio preset. */
+export function networkRadioLabel(radio) {
+  if (!radio) return null;
+  if (radio.frequency_mhz != null) return `${radio.frequency_mhz} MHz`;
+  const band = radio.frequency;
+  if (!band) return null;
+  return resolveFrequency(band)?.name ?? `${band} MHz`;
+}
+
+/** Inline SVG markup for a 3:2 country flag, or null. Case-insensitive. */
+export function countryFlagSvg(code) {
+  if (!code) return null;
+  return countryFlags[String(code).toUpperCase()] ?? null;
+}
+
+/**
+ * Country flags to display for a network — one per `coverage.countries` entry,
+ * regardless of scope (a regional mesh like CascadiaMesh shows CA + US). Networks
+ * with no country coverage (e.g. the general EU/UK preset) show none.
+ * @returns {{ code, svg }[]}
+ */
+export function networkFlags(network) {
+  return (network?.coverage?.countries ?? [])
+    .map((code) => ({ code, svg: countryFlagSvg(code) }))
+    .filter((f) => f.svg);
+}
+
 /**
  * Flat, pre-built index for the global (Cmd+K) search over devices, firmwares
  * and vendors. Each item carries a
@@ -438,6 +584,31 @@ export const searchItems = [
     href: `/vendor/${v.id}/`,
     image: v.logoUrl,
     text: [v.name, v.country, v.description].filter(Boolean).join(' ').toLowerCase()
+  })),
+  ...networks.map((n) => ({
+    type: 'Network',
+    title: n.name,
+    subtitle: [
+      NETWORK_SCOPE_META[n.scope]?.label ?? n.scope,
+      ...(n.coverage?.countries ?? []),
+      networkBandLabel(n)
+    ]
+      .filter(Boolean)
+      .join(' · '),
+    href: `/network/${n.id}/`,
+    text: [
+      n.name,
+      n.short_name,
+      n.scope,
+      n.description,
+      ...(n.coverage?.countries ?? []),
+      ...networkBands(n),
+      ...networkRadioSettings(n).flatMap((r) => [r.name, r.description, r.frequency_mhz]),
+      ...(n.regions ?? []).flatMap((r) => [r.code, r.name])
+    ]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase()
   }))
 ];
 

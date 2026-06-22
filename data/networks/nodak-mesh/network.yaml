@@ -1,0 +1,56 @@
+name: NoDak Mesh
+short_name: NoDak Mesh
+description: >-
+  Community-driven mesh network building resilient off-grid communication
+  infrastructure across North Dakota using MeshCore and Meshtastic. Active
+  members in Fargo, Bismarck, Grand Forks, Minot and rural areas, running on
+  the USA/Canada 915 MHz preset with the #nodakmesh public channel.
+scope: regional
+status: active
+visibility: public
+
+coverage:
+  countries:
+    - US
+area: area.geojson
+
+regions:
+  - code: us
+    name: United States
+  - code: us-nd
+    name: North Dakota
+    parent: us
+
+radio:
+  frequency: '915'
+  frequency_mhz: 910.525
+  bandwidth_khz: 62.5
+  spreading_factor: 7
+  coding_rate: 4/5
+  region_code: us-nd
+  public_channel: nodakmesh
+
+community:
+  website: https://nodakmesh.org/
+  discord: https://discord.gg/JUBrZepkaM
+  reddit: https://www.reddit.com/r/NoDakMesh/
+  contact: https://nodakmesh.org/community
+
+maps:
+  - name: NoDak MeshCore map
+    url: https://nodakmesh.org/meshcore/map
+
+resources:
+  getting_started: https://nodakmesh.org/meshcore/getting-started
+  repeater_list: https://nodakmesh.org/meshcore/analyzer
+  links:
+    - name: Repeater setup guide
+      url: https://nodakmesh.org/meshcore/repeater-setup
+    - name: Room server guide
+      url: https://nodakmesh.org/meshcore/room-server
+    - name: Recommended devices
+      url: https://nodakmesh.org/meshcore/devices
+    - name: 3D printing cases
+      url: https://nodakmesh.org/3d-printing
+    - name: MeshCore vs Meshtastic
+      url: https://nodakmesh.org/protocols

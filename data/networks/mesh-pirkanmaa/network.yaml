@@ -1,0 +1,42 @@
+name: Mesh Pirkanmaa
+also_known_as:
+  - Mesh Pirkanmaa MeshCore
+  - Mesh Pirkanmaa Finland
+short_name: Pirkanmaa
+description: >-
+  Tampere-region Meshtastic and MeshCore community covering Pirkanmaa, including
+  Tampere, Nokia, Pirkkala and Ylöjärvi. Its MeshCore network follows the EU/UK
+  Narrow preset on 869.618 MHz and publishes local mapping and chat resources.
+scope: regional
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - FI
+
+radio:
+  frequency: '868'
+  frequency_mhz: 869.618
+  bandwidth_khz: 62.5
+  spreading_factor: 8
+  coding_rate: 4/8
+  tx_power_dbm: 22
+  duty_cycle_pct: 10
+  public_channel: Public
+
+community:
+  website: https://meshpirkanmaa.org/
+  matrix: https://matrix.to/#/#meshtastic-pirkanmaa:hacklab.fi
+
+maps:
+  - name: MeshMapper
+    url: https://tmp.meshmapper.net/
+  - name: Mesh Pirkanmaa map
+    url: https://meshpirkanmaa.org/map.html
+  - name: Tropo map
+    url: http://meshpirkanmaa.org:8080/public/tropo_map
+
+resources:
+  getting_started: https://meshpirkanmaa.org/

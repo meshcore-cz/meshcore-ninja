@@ -1,0 +1,243 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://meshcore-atlas/schema/network.yaml
+title: Network
+description: >-
+  An organized regional or local MeshCore mesh (national, regional, city-level
+  or experimental) — its radio/joining settings, coverage, community and
+  resources. The id comes from the directory name, not this file. Compatible
+  devices are derived at render time from `radio.frequency` / `radios[].frequency`
+  band keys against the device catalog, so networks do not list devices themselves.
+type: object
+additionalProperties: false
+required:
+  - name
+properties:
+  name:
+    type: string
+    minLength: 1
+  also_known_as:
+    description: Longer official names or alternate labels for the network.
+    type: array
+    minItems: 1
+    items:
+      type: string
+      minLength: 1
+  short_name:
+    type: string
+    minLength: 1
+  description:
+    type: string
+  scope:
+    type: string
+    # `general` = a standard MeshCore preset/region not tied to one community
+    # (e.g. the EU/UK band defaults), rather than an organized local mesh.
+    enum: [general, national, regional, local, experimental]
+  status:
+    type: string
+    enum: [active, planned, dormant, inactive]
+  visibility:
+    type: string
+    enum: [public, private]
+  coverage:
+    type: object
+    additionalProperties: false
+    properties:
+      countries:
+        type: array
+        minItems: 1
+        items:
+          type: string
+          # ISO-3166 alpha-2, uppercase (e.g. CZ, GB, DE).
+          pattern: ^[A-Z]{2}$
+  area:
+    type: string
+    description: >-
+      Optional GeoJSON filename in this network directory (usually
+      `area.geojson`). Published as `/network-area/<id>.geojson` and shown on
+      the Networks map.
+    pattern: ^[A-Za-z0-9._-]+\.geojson$
+  regions:
+    description: >-
+      MeshCore regions this network defines (firmware ≥1.14.0). Each is the
+      region code used with `region put <code>` plus a friendly name;
+      administrative subdivisions point at their national root via `parent`.
+    type: array
+    minItems: 1
+    items:
+      type: object
+      additionalProperties: false
+      required:
+        - code
+        - name
+      properties:
+        code:
+          type: string
+          minLength: 1
+        name:
+          type: string
+          minLength: 1
+        parent:
+          type: string
+          minLength: 1
+  radio:
+    $ref: '#/$defs/radioSetting'
+    description: >-
+      The "how to join" panel for networks with a single joining preset. All
+      fields optional, but a network with no `frequency` band key shows no
+      derived compatible-device list.
+  radios:
+    type: array
+    description: >-
+      Multiple joining presets for one organized network, e.g. a primary band
+      plus a secondary/growing band. Compatible devices are derived from the
+      union of all `frequency` band keys.
+    minItems: 1
+    items:
+      $ref: '#/$defs/radioSetting'
+  community:
+    type: object
+    additionalProperties: false
+    properties:
+      website:
+        type: string
+        pattern: ^https?://
+      matrix:
+        type: string
+        minLength: 1
+      discord:
+        type: string
+        pattern: ^https?://
+      telegram:
+        type: string
+        pattern: ^https?://
+      forum:
+        type: string
+        pattern: ^https?://
+      facebook:
+        type: string
+        pattern: ^https?://
+      reddit:
+        type: string
+        pattern: ^https?://
+      youtube:
+        type: string
+        pattern: ^https?://
+      peertube:
+        type: string
+        pattern: ^https?://
+      contact:
+        type: string
+        minLength: 1
+  maps:
+    description: >-
+      Map instances for this network — a network can run several (live node map,
+      coverage/propagation map, etc.). Each has a display `name` and a `url`.
+    type: array
+    minItems: 1
+    items:
+      $ref: '#/$defs/namedLink'
+  analyzers:
+    description: >-
+      Network analyzer / diagnostic instances (e.g. CoreScope deployments). A
+      network can run many; each has a display `name` and a `url`.
+    type: array
+    minItems: 1
+    items:
+      $ref: '#/$defs/namedLink'
+  resources:
+    description: Single-instance documentation/links for the network.
+    type: object
+    additionalProperties: false
+    properties:
+      status_page:
+        type: string
+        pattern: ^https?://
+      repeater_list:
+        type: string
+        pattern: ^https?://
+      getting_started:
+        type: string
+        pattern: ^https?://
+      links:
+        description: Other useful network resources (`{ name, url }`).
+        type: array
+        minItems: 1
+        items:
+          $ref: '#/$defs/namedLink'
+  refs:
+    type: object
+    description: >-
+      Cross-references to external databases. Each key must be a ref id defined
+      in data/globals.yaml `refs`; each value is this record's id/slug on that
+      site, expanded into a URL via the ref's urlTemplate.
+    minProperties: 1
+    additionalProperties:
+      type: string
+      minLength: 1
+$defs:
+  radioSetting:
+    type: object
+    additionalProperties: false
+    properties:
+      name:
+        description: Friendly label when a network publishes multiple radio presets.
+        type: string
+        minLength: 1
+      description:
+        description: Short note explaining when/why to use this preset.
+        type: string
+        minLength: 1
+      frequency:
+        description: >-
+          Band key matching a key in data/globals.yaml `frequency`
+          (e.g. "433", "868", "915"). Drives the compatible-device match.
+        type: string
+        minLength: 1
+      frequency_mhz:
+        description: Exact centre frequency in MHz shown to users (e.g. 869.432).
+        type: number
+        exclusiveMinimum: 0
+      bandwidth_khz:
+        type: number
+        exclusiveMinimum: 0
+      spreading_factor:
+        type: integer
+        minimum: 5
+        maximum: 12
+      coding_rate:
+        type: string
+        # e.g. "4/5", "4/8"
+        pattern: ^4/[5-8]$
+      tx_power_dbm:
+        type: number
+      duty_cycle_pct:
+        description: Legal/agreed duty cycle for the band, in percent (e.g. 10).
+        type: number
+        exclusiveMinimum: 0
+        maximum: 100
+      path_hash_mode:
+        description: MeshCore path hash mode (e.g. "1-Byte", "2-Byte").
+        type: string
+        minLength: 1
+      region_code:
+        type: string
+        minLength: 1
+      max_hops:
+        type: integer
+        minimum: 1
+      public_channel:
+        type: string
+        minLength: 1
+  namedLink:
+    type: object
+    additionalProperties: false
+    required:
+      - name
+      - url
+    properties:
+      name:
+        type: string
+        minLength: 1
+      url:
+        type: string
+        pattern: ^https?://

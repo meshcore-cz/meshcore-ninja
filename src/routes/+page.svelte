@@ -1,13 +1,8 @@
 <script>
   import { base } from '$app/paths';
-  import { TYPE_META, FW_STATUS_TW } from '$lib/data.js';
-  import { SITE_NAME, absUrl } from '$lib/seo.js';
+  import { SITE_NAME, REPO_URL, absUrl } from '$lib/seo.js';
+  import { searchOpen } from '$lib/search.js';
   import Seo from '$lib/Seo.svelte';
-  import ReleaseRow from '$lib/ReleaseRow.svelte';
-  import { fwCompareIds, toggleFwCompare, clearFwCompare } from '$lib/fwCompare.js';
-  import { browser } from '$app/environment';
-  import { page } from '$app/stores';
-  import { get } from 'svelte/store';
   let { data } = $props();
 
   const homeJsonLd = {
@@ -16,162 +11,117 @@
     name: SITE_NAME,
     url: absUrl('/'),
     description:
-      'A catalog of official and community MeshCore firmwares and the devices they run on.'
+      'An open catalog of the MeshCore ecosystem — networks, devices and firmwares.'
   };
 
-  // Filter state is hydrated from / synced to the URL so a filtered view links.
-  const initParams = browser ? get(page).url.searchParams : new URLSearchParams();
-  let query = $state(initParams.get('q') ?? '');
-  let typeFilter = $state(
-    ['official', 'fork', 'custom'].includes(initParams.get('type')) ? initParams.get('type') : 'all'
-  );
+  // The primary collections, in headline order. `n` is read from the
+  // build-time counts so the numbers track the dataset automatically.
+  const sections = [
+    {
+      href: '/networks/',
+      label: 'Networks',
+      n: data.counts.networks,
+      blurb: 'Regional & national meshes — radio settings, coverage and how to join.',
+      icon: 'M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z'
+    },
+    {
+      href: '/devices/',
+      label: 'Devices',
+      n: data.counts.devices,
+      blurb: 'LoRa hardware that runs MeshCore — specs, radios and node roles.',
+      icon: 'M9 2h6a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm0 2v16h6V4H9Zm2 14h2v.5h-2V18Z'
+    },
+    {
+      href: '/firmwares/',
+      label: 'Firmwares',
+      n: data.counts.firmwares,
+      blurb: 'The official build plus community forks and custom variants.',
+      icon: 'M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v3H3V5Zm0 5h18v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-9Zm3 3v2h2v-2H6Zm0 4v2h2v-2H6Z'
+    }
+  ];
 
-  $effect(() => {
-    if (!browser) return;
-    const p = new URLSearchParams();
-    if (query.trim()) p.set('q', query.trim());
-    if (typeFilter !== 'all') p.set('type', typeFilter);
-    const qs = p.toString();
-    history.replaceState(history.state, '', qs ? `${location.pathname}?${qs}` : location.pathname);
-  });
-
-  const statusLabels = {
-    active: 'Active',
-    maintenance: 'Maintenance',
-    inactive: 'Inactive',
-    experimental: 'Experimental'
-  };
-
-  let filtered = $derived(
-    data.firmwares.filter((fw) => {
-      if (typeFilter !== 'all' && fw.type !== typeFilter) return false;
-      if (!query.trim()) return true;
-      const q = query.toLowerCase();
-      return (
-        fw.name.toLowerCase().includes(q) ||
-        (fw.maintainer ?? '').toLowerCase().includes(q) ||
-        (fw.description ?? '').toLowerCase().includes(q) ||
-        (fw.features ?? []).some((f) => f.toLowerCase().includes(q))
-      );
-    })
-  );
+  const tools = [
+    { href: '/matrix/', label: 'Compatibility matrix' },
+    { href: '/device-rank/', label: 'Device ranking' },
+    { href: '/compare/', label: 'Compare devices' },
+    { href: '/compare-firmwares/', label: 'Compare firmwares' },
+    { href: '/releases/', label: 'All releases' },
+    { href: '/vendors/', label: 'Vendors' }
+  ];
 </script>
 
 <Seo
-  description="A catalog of official and community MeshCore firmwares and the devices they run on — with details, node roles, and a compatibility matrix."
+  description="An open catalog of the MeshCore ecosystem — the regional networks people run, the LoRa devices that join them, and the firmwares that power them."
   jsonLd={homeJsonLd}
 />
 
-<section class="mb-7">
-  <h1 class="mb-1.5 text-[clamp(1.6rem,5vw,2.2rem)] font-bold">{SITE_NAME}</h1>
-  <p class="max-w-[60ch] text-dim">
-    A catalog of official and community MeshCore firmwares and the
-    <a class="text-accent2 hover:underline" href="{base}/devices/">devices</a> they run on — with
-    details, node roles, and a
-    <a class="text-accent2 hover:underline" href="{base}/matrix/">compatibility matrix</a>.
+<section class="mb-8">
+  <h1 class="mb-2 text-[clamp(1.8rem,6vw,2.6rem)] font-bold tracking-tight">{SITE_NAME}</h1>
+  <p class="max-w-[62ch] text-[1.05rem] text-dim">
+    An open catalog of the MeshCore ecosystem — the regional
+    <a class="text-accent2 hover:underline" href="{base}/networks/">networks</a> people run, the LoRa
+    <a class="text-accent2 hover:underline" href="{base}/devices/">devices</a> that join them, and the
+    <a class="text-accent2 hover:underline" href="{base}/firmwares/">firmwares</a> that power them.
   </p>
+
+  <button
+    type="button"
+    onclick={() => ($searchOpen = true)}
+    class="mt-5 flex w-full max-w-[460px] items-center gap-3 rounded-xl border border-edge bg-elev px-4 py-3 text-left text-dim transition hover:border-accent hover:text-ink"
+  >
+    <svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <circle cx="11" cy="11" r="7" /><path d="m21 21-4.3-4.3" stroke-linecap="round" />
+    </svg>
+    <span class="flex-1 text-[0.95rem]">Search networks, devices, firmwares…</span>
+    <span class="hidden rounded border border-edge px-1.5 py-0.5 font-mono text-[0.72rem] sm:inline">⌘K</span>
+  </button>
 </section>
 
-<h2 class="mb-3 text-[1.1rem] font-semibold">All firmwares</h2>
-
-<div class="mb-4 flex flex-wrap items-center gap-4">
-  <input
-    type="search"
-    placeholder="Search firmwares, features, maintainers…"
-    bind:value={query}
-    class="min-w-[220px] flex-1 rounded-lg border border-edge bg-elev px-3 py-2.5 text-[0.95rem] outline-none focus:border-transparent focus:ring-2 focus:ring-accent"
-  />
-  <div class="flex flex-wrap gap-1.5">
-    {#each ['all', 'official', 'fork', 'custom'] as t}
-      <button
-        onclick={() => (typeFilter = t)}
-        class="rounded-full border px-3 py-1.5 text-[0.85rem] {typeFilter === t
-          ? 'border-accent bg-accent font-semibold text-[#06231a]'
-          : 'border-edge bg-elev text-dim hover:text-ink'}"
-      >
-        {t === 'all' ? 'All' : TYPE_META[t].label}
-      </button>
-    {/each}
-  </div>
-</div>
-
-<p class="mb-4 text-[0.85rem] text-dim">{filtered.length} firmware{filtered.length === 1 ? '' : 's'}</p>
-
-<div class="grid gap-4 [grid-template-columns:repeat(auto-fill,minmax(280px,1fr))]">
-  {#each filtered as fw (fw.id)}
+<section class="mb-8 grid gap-4 [grid-template-columns:repeat(auto-fill,minmax(230px,1fr))]">
+  {#each sections as s}
     <a
-      class="group flex flex-col gap-2.5 rounded-xl border border-edge bg-elev p-[1.1rem] transition hover:-translate-y-0.5 hover:border-accent"
-      href="{base}/firmware/{fw.id}/"
+      class="group flex flex-col gap-2 rounded-xl border border-edge bg-elev p-5 transition hover:-translate-y-0.5 hover:border-accent"
+      href="{base}{s.href}"
     >
-      <div class="flex items-center justify-between gap-2">
-        <div class="flex items-center gap-2">
-          <span class="rounded-md px-2 py-0.5 text-[0.72rem] font-bold tracking-wide uppercase {TYPE_META[fw.type]?.tw}">
-            {TYPE_META[fw.type]?.label ?? fw.type}
-          </span>
-          <button
-            type="button"
-            aria-label="Compare {fw.name}"
-            aria-pressed={$fwCompareIds.includes(fw.id)}
-            onclick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              toggleFwCompare(fw.id);
-            }}
-            class="rounded-md border px-1.5 py-0.5 text-[0.66rem] font-medium transition {$fwCompareIds.includes(
-              fw.id
-            )
-              ? 'border-accent bg-accent text-bg'
-              : 'border-edge text-dim opacity-0 group-hover:opacity-100 hover:text-ink'}"
-          >
-            {$fwCompareIds.includes(fw.id) ? '✓ Compare' : '+ Compare'}
-          </button>
-        </div>
-        <span class="text-[0.75rem] {FW_STATUS_TW[fw.status] ?? 'text-dim'}">
-          {statusLabels[fw.status] ?? fw.status}
-        </span>
+      <div class="flex items-center justify-between">
+        <svg class="h-6 w-6 text-accent" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d={s.icon} />
+        </svg>
+        <span class="font-mono text-[1.4rem] font-bold tabular-nums">{s.n}</span>
       </div>
-      <h2 class="text-[1.15rem] font-semibold">{fw.name}</h2>
-      <p class="line-clamp-3 text-[0.9rem] text-dim">{fw.description}</p>
-      <div class="mt-auto flex flex-wrap gap-1.5">
-        {#each fw.roles ?? [] as role}
-          <span class="rounded bg-elev2 px-2 py-0.5 text-[0.72rem] text-dim">{role}</span>
-        {/each}
-      </div>
-      <div class="flex items-center justify-between border-t border-edge pt-2.5 text-[0.8rem] text-dim">
-        <span>{fw.maintainer}</span>
-        {#if fw.latest_version}<span class="font-mono">{fw.latest_version}</span>{/if}
-      </div>
+      <h2 class="text-[1.1rem] font-semibold group-hover:text-accent">{s.label}</h2>
+      <p class="text-[0.85rem] text-dim">{s.blurb}</p>
     </a>
   {/each}
+</section>
+
+<div class="mb-10 flex items-start gap-3 rounded-xl border border-warn/40 bg-warn/10 p-4">
+  <svg class="mt-0.5 h-5 w-5 shrink-0 text-warn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+    <path d="M12 9v4M12 17h.01M10.3 3.9 2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" stroke-linecap="round" stroke-linejoin="round" />
+  </svg>
+  <div class="text-[0.9rem]">
+    <p class="font-semibold text-ink">Work in progress</p>
+    <p class="mt-1 text-dim">
+      This site is brand new and data is still being ingested, so entries may be incomplete or
+      incorrect. We'd appreciate any corrections — please open an
+      <a class="text-accent2 hover:underline" href="{REPO_URL}/issues" target="_blank" rel="noreferrer">issue</a>
+      or
+      <a class="text-accent2 hover:underline" href="{REPO_URL}/pulls" target="_blank" rel="noreferrer">pull request</a>
+      on GitHub.
+    </p>
+  </div>
 </div>
 
-{#if data.latest?.length}
-  <section class="mt-9">
-    <div class="mb-3 flex items-baseline justify-between border-b border-edge pb-1.5">
-      <h2 class="text-[1.1rem] font-semibold">Latest releases</h2>
-      <a class="text-[0.85rem] text-accent2 hover:underline" href="{base}/releases/">Show all releases →</a>
-    </div>
-    <ol class="flex flex-col">
-      {#each data.latest as r}
-        <li><ReleaseRow release={r} /></li>
-      {/each}
-    </ol>
-  </section>
-{/if}
-
-{#if $fwCompareIds.length}
-  <div class="pointer-events-none fixed inset-x-0 bottom-4 z-40 flex justify-center px-4">
-    <div class="pointer-events-auto flex items-center gap-3 rounded-full border border-edge bg-elev2 py-2 pr-2 pl-4 shadow-2xl">
-      <span class="text-[0.85rem] text-dim">
-        <span class="font-semibold text-ink">{$fwCompareIds.length}</span> selected
-      </span>
-      <button class="text-[0.85rem] text-dim hover:text-ink" onclick={clearFwCompare}>Clear</button>
+<section>
+  <h2 class="mb-3 text-[1.1rem] font-semibold">Tools</h2>
+  <div class="flex flex-wrap gap-2">
+    {#each tools as t}
       <a
-        class="rounded-full bg-accent px-4 py-1.5 text-[0.85rem] font-semibold text-bg hover:opacity-90"
-        href="{base}/compare-firmwares/?ids={$fwCompareIds.join(',')}"
+        class="rounded-lg border border-edge bg-elev px-3.5 py-2 text-[0.9rem] text-dim transition hover:border-accent hover:text-ink"
+        href="{base}{t.href}"
       >
-        Compare →
+        {t.label}
       </a>
-    </div>
+    {/each}
   </div>
-{/if}
+</section>

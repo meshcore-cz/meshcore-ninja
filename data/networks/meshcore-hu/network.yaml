@@ -1,0 +1,39 @@
+name: Hungary
+also_known_as:
+  - MeshCore Hungary
+short_name: MeshCore HU
+description: >-
+  Hungarian MeshCore community for LoRa-based off-grid messaging, coordinated
+  through mc868.hu with Telegram/Facebook groups, a local CoreScope analyzer and
+  EU/UK Narrow radio settings for the national 868 MHz mesh.
+scope: national
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - HU
+
+radio:
+  frequency: '868'
+  frequency_mhz: 869.618
+  bandwidth_khz: 62.5
+  spreading_factor: 8
+  coding_rate: 4/8
+  tx_power_dbm: 22
+  duty_cycle_pct: 10
+  path_hash_mode: 2-Byte
+  public_channel: Public
+
+community:
+  website: https://mc868.hu/
+  telegram: https://t.me/+63o5qlHPrl1iNjc0
+  facebook: https://www.facebook.com/groups/421299027712536
+
+analyzers:
+  - name: map.meshcore.hu
+    url: https://map.meshcore.hu
+
+resources:
+  getting_started: https://mc868.hu/

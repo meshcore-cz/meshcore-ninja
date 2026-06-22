@@ -1,0 +1,35 @@
+name: Münsterland
+also_known_as:
+  - MeshCore Münsterland
+  - MCML
+short_name: MeshCore MCML
+description: >-
+  Community-driven MeshCore network for the Münsterland region of North
+  Rhine-Westphalia, Germany, enabling long-range text communication completely
+  without internet or cellular networks.
+scope: regional
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - DE
+
+radio:
+  frequency: '868'
+  frequency_mhz: 869.618
+  bandwidth_khz: 62.5
+  spreading_factor: 8
+  coding_rate: 4/8
+  tx_power_dbm: 22
+  duty_cycle_pct: 10
+  public_channel: Public
+
+community:
+  website: https://mcml.info/
+  forum: https://forum.mcml.info/
+
+analyzers:
+  - name: map.mcml.info
+    url: https://map.mcml.info

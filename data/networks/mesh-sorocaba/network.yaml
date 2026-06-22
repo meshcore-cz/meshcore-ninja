@@ -1,0 +1,36 @@
+name: Mesh Sorocaba
+also_known_as:
+  - MeshSorocaba
+short_name: Mesh Sorocaba
+description: >-
+  MeshCore community based in Sorocaba, covering the state of São Paulo, Brazil,
+  building off-grid mesh communication.
+scope: regional
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - BR
+
+regions:
+  - code: br
+    name: Brazil
+  - code: sao-paulo
+    name: São Paulo
+    parent: br
+  - code: sorocaba
+    name: Sorocaba
+    parent: sao-paulo
+
+radio:
+  frequency: '915'
+  public_channel: Public
+
+community:
+  website: https://www.meshsorocaba.org/
+
+analyzers:
+  - name: corescope.meshsorocaba.org
+    url: https://corescope.meshsorocaba.org

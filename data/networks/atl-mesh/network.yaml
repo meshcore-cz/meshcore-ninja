@@ -1,0 +1,40 @@
+name: ATL Mesh
+also_known_as:
+  - Atlanta Mesh
+short_name: ATL Mesh
+description: >-
+  MeshCore community for metro Atlanta, Georgia, building off-grid mesh
+  communication across the city and surrounding counties.
+scope: regional
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - US
+
+regions:
+  - code: us
+    name: United States
+  - code: georgia
+    name: Georgia
+    parent: us
+  - code: atlanta
+    name: Atlanta
+    parent: georgia
+
+radio:
+  frequency: '915'
+  frequency_mhz: 910.525
+  bandwidth_khz: 62.5
+  spreading_factor: 7
+  coding_rate: 4/5
+  public_channel: Public
+
+community:
+  website: https://atlmesh.org/
+
+analyzers:
+  - name: map.atlmesh.org
+    url: https://map.atlmesh.org

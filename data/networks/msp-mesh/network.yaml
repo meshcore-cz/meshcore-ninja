@@ -1,0 +1,59 @@
+name: MSP Mesh
+also_known_as:
+  - MSPMesh
+  - Minneapolis St Paul Mesh
+  - Twin Cities Mesh
+short_name: MSP Mesh
+description: >-
+  Minneapolis-Saint Paul and Greater Minnesota mesh networking group, extending
+  into western Wisconsin by proximity, with community meetups, partner sites,
+  mesh maps and CoreScope live activity.
+scope: regional
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - US
+
+regions:
+  - code: us
+    name: United States
+  - code: minnesota
+    name: Minnesota
+    parent: us
+  - code: twin-cities
+    name: Twin Cities
+    parent: minnesota
+
+radio:
+  frequency: '915'
+  frequency_mhz: 910.525
+  bandwidth_khz: 62.5
+  spreading_factor: 7
+  coding_rate: 4/5
+  public_channel: Public
+
+community:
+  website: https://mspmesh.org/
+
+maps:
+  - name: Mesh map
+    url: https://mspmesh.org/map/
+
+analyzers:
+  - name: corescope.mspmesh.org
+    url: https://corescope.mspmesh.org
+
+resources:
+  getting_started: https://mspmesh.org/how-to-get-involved/
+  links:
+    - name: Settings
+      url: https://mspmesh.org/settings/
+    - name: Get involved
+      url: https://mspmesh.org/how-to-get-involved/
+    - name: Partners
+      url: https://mspmesh.org/partners/
+    - name: Monitor
+      url: https://monitor.mspmesh.org

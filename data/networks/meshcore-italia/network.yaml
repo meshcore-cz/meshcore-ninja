@@ -1,0 +1,45 @@
+name: Italia
+also_known_as:
+  - MeshCore Italia
+short_name: MeshCore IT
+description: >-
+  Nationwide community MeshCore mesh covering Italy, using the standard EU/UK
+  narrow-band preset (869.618 MHz / 62.5 kHz / SF8 / CR4/8) so it stays
+  interoperable with neighbouring European networks. A distributed,
+  non-centralised infrastructure coordinated by the meshcoreitalia community.
+scope: national
+status: active
+visibility: public
+
+area: area.geojson
+
+coverage:
+  countries:
+    - IT
+
+radio:
+  frequency: '868'
+  frequency_mhz: 869.618
+  bandwidth_khz: 62.5
+  spreading_factor: 8
+  coding_rate: 4/8
+  tx_power_dbm: 22
+  duty_cycle_pct: 10
+  public_channel: Public
+
+community:
+  website: https://www.meshcoreitalia.it
+  telegram: https://t.me/meshcoreitalia
+  facebook: https://www.facebook.com/groups/meshcoreitalia
+  contact: info@meshcoreitalia.it
+
+maps:
+  - name: Worldwide node distribution
+    url: https://www.meshcoreitalia.it/distribuzione-mondiale-nodi-meshcore/
+
+analyzers:
+  - name: Analyzer MeshCore Italia
+    url: https://analyzer.meshcoreitalia.it
+
+resources:
+  getting_started: https://www.meshcoreitalia.it/flash-meshcore/

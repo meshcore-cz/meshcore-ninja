@@ -1,0 +1,26 @@
+name: Denmark
+also_known_as:
+  - MeshCore Denmark
+short_name: MeshCore DK
+description: >-
+  Danish MeshCore community building a long-range offline LoRa mesh across
+  Denmark.
+scope: national
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - DK
+
+radio:
+  frequency: '868'
+  public_channel: Public
+
+community:
+  facebook: https://www.facebook.com/groups/662384603098531/
+
+analyzers:
+  - name: meshview.dk
+    url: https://meshview.dk

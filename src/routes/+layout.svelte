@@ -5,10 +5,9 @@
   import { page } from '$app/stores';
   import { generatedAt } from '$lib/data.js';
   import { REPO_URL, SITE_NAME } from '$lib/seo.js';
+  import { searchOpen } from '$lib/search.js';
   import CommandPalette from '$lib/CommandPalette.svelte';
   let { children } = $props();
-
-  let searchOpen = $state(false);
 
   // Theme is bootstrapped before paint in app.html; mirror it into state and
   // let the user flip it (persisted to localStorage).
@@ -27,24 +26,28 @@
   }
 
   const updatedLabel = generatedAt
-    ? new Date(generatedAt).toLocaleDateString(undefined, {
+    ? new Date(generatedAt).toLocaleString(undefined, {
         year: 'numeric',
         month: 'short',
-        day: 'numeric'
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZoneName: 'short'
       })
     : null;
 
   function onkeydown(e) {
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
       e.preventDefault();
-      searchOpen = !searchOpen;
+      $searchOpen = !$searchOpen;
     }
   }
 
   const nav = [
-    { href: '/', label: 'Firmwares' },
+    { href: '/', label: 'Home' },
+    { href: '/networks/', label: 'Networks' },
     { href: '/devices/', label: 'Devices' },
-    { href: '/vendors/', label: 'Vendors' },
+    { href: '/firmwares/', label: 'Firmwares' },
     { href: '/matrix/', label: 'Compatibility' },
     { href: '/about/', label: 'About' }
   ];
@@ -81,7 +84,7 @@
       {/each}
       <button
         type="button"
-        onclick={() => (searchOpen = true)}
+        onclick={() => ($searchOpen = true)}
         aria-label="Search"
         class="ml-1 flex items-center gap-2 rounded-md border border-edge px-2.5 py-1.5 text-[0.85rem] text-dim hover:border-accent hover:text-ink"
       >
@@ -113,21 +116,34 @@
     </nav>
   </header>
 
-  <CommandPalette bind:open={searchOpen} />
+  <CommandPalette bind:open={$searchOpen} />
 
   <main class="mx-auto w-full max-w-[1100px] flex-1 px-[clamp(1rem,4vw,2rem)] py-[clamp(1.2rem,4vw,2.5rem)]">
     {@render children()}
   </main>
 
   <footer
-    class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 border-t border-edge px-[clamp(1rem,4vw,2rem)] py-5 text-center text-sm text-dim"
+    class="flex flex-col items-center gap-3 border-t border-edge px-[clamp(1rem,4vw,2rem)] py-6 text-center text-sm text-dim"
   >
-    <a class="text-accent2 hover:underline" href="{base}/about/">How to contribute</a>
-    <span class="text-edge">·</span>
-    <span>Open source on <a class="text-accent2 hover:underline" href={REPO_URL} target="_blank" rel="noreferrer">GitHub</a></span>
-    {#if updatedLabel}
+    <a
+      href={REPO_URL}
+      target="_blank"
+      rel="noreferrer"
+      class="inline-flex items-center gap-2 rounded-lg border border-edge bg-elev px-3.5 py-2 font-medium text-ink transition hover:border-accent hover:text-accent"
+    >
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.11.79-.25.79-.56v-2c-3.2.7-3.88-1.54-3.88-1.54-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.78 1.2 1.78 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.67 0-1.25.45-2.27 1.18-3.07-.12-.29-.51-1.46.11-3.04 0 0 .96-.31 3.15 1.17a10.9 10.9 0 0 1 5.74 0c2.18-1.48 3.14-1.17 3.14-1.17.63 1.58.24 2.75.12 3.04.74.8 1.18 1.82 1.18 3.07 0 4.4-2.69 5.37-5.25 5.66.41.36.78 1.06.78 2.14v3.17c0 .31.21.68.8.56A11.5 11.5 0 0 0 12 .5Z" />
+      </svg>
+      <span>Contribute on GitHub</span>
+    </a>
+    <div class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5">
+      <a class="text-accent2 hover:underline" href="{base}/about/">About</a>
       <span class="text-edge">·</span>
-      <span>Data updated {updatedLabel}</span>
-    {/if}
+      <a class="text-accent2 hover:underline" href="{base}/about/">How to contribute</a>
+      {#if updatedLabel}
+        <span class="text-edge">·</span>
+        <span>Last updated at {updatedLabel}</span>
+      {/if}
+    </div>
   </footer>
 </div>

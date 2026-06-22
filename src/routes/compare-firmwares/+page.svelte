@@ -122,12 +122,12 @@
     <h1 class="text-[clamp(1.5rem,5vw,2rem)] font-bold">Compare firmwares</h1>
     <p class="text-dim">{selected.length} firmware{selected.length === 1 ? '' : 's'} selected.</p>
   </div>
-  <a class="text-[0.9rem] text-accent2 hover:underline" href="{base}/">+ Add firmwares</a>
+  <a class="text-[0.9rem] text-accent2 hover:underline" href="{base}/firmwares/">+ Add firmwares</a>
 </div>
 
 {#if selected.length === 0}
   <p class="rounded-xl border border-edge bg-elev p-10 text-center text-dim">
-    No firmwares selected. Go to <a class="text-accent2 hover:underline" href="{base}/">Firmwares</a> and tick the
+    No firmwares selected. Go to <a class="text-accent2 hover:underline" href="{base}/firmwares/">Firmwares</a> and tick the
     compare boxes to line them up side by side.
   </p>
 {:else}

@@ -1,5 +1,12 @@
-import { firmwares, latestReleasePerFirmware } from '$lib/data.js';
+import { networks, devices, firmwares, vendors } from '$lib/data.js';
 
 export function load() {
-  return { firmwares, latest: latestReleasePerFirmware() };
+  return {
+    counts: {
+      networks: networks.length,
+      devices: devices.length,
+      firmwares: firmwares.length,
+      vendors: vendors.length
+    }
+  };
 }

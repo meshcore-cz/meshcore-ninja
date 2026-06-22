@@ -1,0 +1,42 @@
+name: Canada
+also_known_as:
+  - MeshCore Canada
+short_name: MeshCore CA
+description: >-
+  National Canadian MeshCore community hub and shared network baseline using the
+  USA/Canada recommended preset on 910.525 MHz, coordinated through meshcore.ca
+  with Discord, forum, MQTT brokers, CoreScope analyzer and live map services.
+scope: national
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - CA
+
+radio:
+  frequency: '915'
+  frequency_mhz: 910.525
+  bandwidth_khz: 62.5
+  spreading_factor: 7
+  coding_rate: 4/5
+  path_hash_mode: 3-Byte
+  public_channel: Public
+
+community:
+  website: https://meshcore.ca/
+  discord: https://discord.gg/BESFVMt7yk
+  forum: https://forum.meshcore.ca
+  contact: https://github.com/MeshCore-ca/MeshCore-Canada/issues
+
+maps:
+  - name: MeshCore Canada map
+    url: https://live.meshcore.ca/#/map
+
+analyzers:
+  - name: live.meshcore.ca
+    url: https://live.meshcore.ca
+
+resources:
+  getting_started: https://meshcore.ca/resources/getting-started/

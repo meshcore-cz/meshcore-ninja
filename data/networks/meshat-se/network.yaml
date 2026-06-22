@@ -1,0 +1,34 @@
+name: Sweden
+also_known_as:
+  - meshat.se
+  - Sweden Mesh
+short_name: meshat.se
+description: >-
+  Swedish gathering place for people who build, use and develop mesh networks,
+  supporting both MeshCore and Meshtastic with shared maps, MQTT and status
+  infrastructure.
+scope: national
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - SE
+
+radio:
+  frequency: '868'
+  public_channel: Public
+
+community:
+  website: https://meshat.se/
+  forum: https://forum.meshat.se/
+  discord: https://discord.com/invite/gchSzHkPGG
+  matrix: https://matrix.to/#/#sweden-mesh:swecyb.com
+
+analyzers:
+  - name: meshcore-edge.meshat.se
+    url: https://meshcore-edge.meshat.se
+
+resources:
+  status_page: https://status.meshat.se/

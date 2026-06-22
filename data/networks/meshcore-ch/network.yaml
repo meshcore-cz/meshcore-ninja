@@ -1,0 +1,41 @@
+name: Switzerland
+also_known_as:
+  - MeshCore Switzerland
+short_name: MeshCore CH
+description: >-
+  Nationwide community MeshCore mesh covering Switzerland on the 869.618 MHz
+  band (62.5 kHz / SF8 / CR4/8), coordinated via the meshcore.ch community with
+  a shared world map and a 10% duty-cycle preset.
+scope: national
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - CH
+
+radio:
+  frequency: '868'
+  frequency_mhz: 869.618
+  bandwidth_khz: 62.5
+  spreading_factor: 8
+  coding_rate: 4/8
+  tx_power_dbm: 22
+  duty_cycle_pct: 10
+  path_hash_mode: 2-Byte
+  public_channel: Public
+
+community:
+  website: https://www.meshcore.ch
+  discord: https://discord.com/invite/fUfWevRXAg
+  forum: https://community.meshcore.ch/
+  facebook: https://www.facebook.com/groups/9587060018050008
+  contact: https://www.meshcore.ch/contact/
+
+maps:
+  - name: MeshCore map
+    url: https://www.meshcore.ch/map/
+
+resources:
+  getting_started: https://www.meshcore.ch/settings/

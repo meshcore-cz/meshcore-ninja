@@ -1,0 +1,53 @@
+name: Mesh Dresden
+short_name: MeshDD
+description: >-
+  Volunteer-run MeshCore and Meshtastic community for Dresden and the wider
+  Saxony region. Operates solar-powered autonomous repeaters on the EU 868 MHz
+  band with Dresden-scoped regions and public hashtag channels for local chat,
+  support and meetups.
+scope: local
+status: active
+visibility: public
+
+coverage:
+  countries:
+    - DE
+area: area.geojson
+
+regions:
+  - code: de-ost
+    name: East Germany
+  - code: de-sn
+    name: Saxony
+  - code: de-sn-vvo
+    name: VVO area
+  - code: de-sn-dd
+    name: Dresden
+
+radio:
+  frequency: '868'
+  frequency_mhz: 869.525
+  bandwidth_khz: 62.5
+  spreading_factor: 7
+  coding_rate: 4/5
+  region_code: de-sn-dd
+  public_channel: Public
+
+community:
+  website: https://meshdresden.eu/
+  telegram: https://t.me/mesh_dresden
+  contact: mailto:info@meshdresden.eu
+
+analyzers:
+  - name: regio.meshdresden.eu
+    url: https://regio.meshdresden.eu
+
+resources:
+  getting_started: https://meshdresden.eu/meshcore-regions-dresden/
+  links:
+    - name: MeshCore Regions Dresden
+      url: https://meshdresden.eu/meshcore-regions-dresden/
+    - name: Path Hash Mode guide
+      url: https://meshdresden.eu/meshcore-path-hash-mode/
+    - name: LoRaMesh Dresden
+      url: https://loramesh-dresden.de/

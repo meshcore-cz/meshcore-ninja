@@ -107,7 +107,7 @@
 
 <Seo title={fw.name} description={fwDescription} type="article" image={ogImageFor('firmware', fw.id)} jsonLd={fwJsonLd} />
 
-<a class="mb-4 inline-block text-[0.9rem] text-dim hover:underline" href="{base}/">← All firmwares</a>
+<a class="mb-4 inline-block text-[0.9rem] text-dim hover:underline" href="{base}/firmwares/">← All firmwares</a>
 
 <header class="mb-6">
   <div class="flex flex-wrap items-center gap-3">

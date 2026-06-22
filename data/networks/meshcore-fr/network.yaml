@@ -1,0 +1,46 @@
+name: France
+also_known_as:
+  - MeshCore France
+short_name: MeshCore FR
+description: >-
+  French MeshCore community for a long-range offline LoRa mesh across France,
+  using the EU/UK Narrow-compatible 869.618 MHz profile with public setup
+  guidance, Discord coordination and local Lyon and Lorient/Ouest activity.
+scope: national
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - FR
+
+radio:
+  frequency: '868'
+  frequency_mhz: 869.618
+  bandwidth_khz: 62.5
+  spreading_factor: 8
+  coding_rate: 4/8
+  tx_power_dbm: 22
+  duty_cycle_pct: 10
+  path_hash_mode: 2-Byte
+  public_channel: Public
+
+community:
+  website: https://www.meshcore.fr/
+  discord: https://discord.gg/qbYuBEEpMa
+  contact: mesh-contact@meshcore.fr
+
+analyzers:
+  - name: meshstats.serveurperso.in
+    url: https://meshstats.serveurperso.in
+
+resources:
+  getting_started: https://www.meshcore.fr/#        
+  links:
+    - name: LoRa settings
+      url: https://www.meshcore.fr/#settings
+    - name: Repeater configuration
+      url: https://www.meshcore.fr/#repeater
+    - name: Website source
+      url: https://github.com/nextgens/www.meshcore.fr/

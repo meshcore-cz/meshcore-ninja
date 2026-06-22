@@ -1,0 +1,83 @@
+name: ON8AR
+also_known_as:
+  - ON8AR MeshCore Belgium
+  - MeshCore Belgium
+  - MeshCore Belgie
+  - RRY MeshCore Belgium
+short_name: ON8AR
+description: >-
+  Belgian MeshCore hub and CoreScope environment operated by ON8AR, showing live
+  Belgian MeshCore traffic, nodes, observers and packet statistics while linking
+  into the wider Radio-Actief / RRY Belgian MeshCore community.
+scope: regional
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - BE
+
+regions:
+  - code: be
+    name: Belgium
+  - code: BEmesh
+    name: BEmesh
+    parent: be
+  - code: RRY
+    name: RRY Belgium
+    parent: be
+
+radio:
+  frequency: '868'
+  frequency_mhz: 869.618
+  bandwidth_khz: 62.5
+  spreading_factor: 8
+  coding_rate: 4/8
+  tx_power_dbm: 22
+  duty_cycle_pct: 10
+  path_hash_mode: 2-Byte
+  region_code: be
+  public_channel: Public
+
+community:
+  website: https://on8ar.eu/
+  facebook: https://www.facebook.com/meshcoreBE
+
+maps:
+  - name: CoreScope live map
+    url: https://analyzer.on8ar.eu/#/live
+  - name: CoreScope network map
+    url: https://analyzer.on8ar.eu/#/map
+  - name: Belgian MeshCore map
+    url: https://meshcore.radio-actief.be/meshcore-kaart-belgie/
+
+analyzers:
+  - name: analyzer.on8ar.eu
+    url: https://analyzer.on8ar.eu
+
+resources:
+  getting_started: https://on8ar.eu/wat-is-meshcore
+  links:
+    - name: ON8AR tools
+      url: https://on8ar.eu/tools
+    - name: ON8AR nodes
+      url: https://on8ar.eu/nodes
+    - name: CoreDrive RX
+      url: https://on8ar.eu/coredrive-rx
+    - name: MeshCore Belgium
+      url: https://meshcore.radio-actief.be/
+    - name: Belgian settings
+      url: https://meshcore.radio-actief.be/instellingen/
+    - name: BEmesh channel
+      url: https://meshcore.radio-actief.be/belgisch-bemesh-meshcore-kanaal/
+    - name: RRY MeshCore Belgium network
+      url: https://meshcore.radio-actief.be/rry-meshcore-netwerk-belgie/
+    - name: Belgian region and scope
+      url: https://meshcore.radio-actief.be/meshcore-regio-en-scope/
+    - name: Repeater configurator
+      url: https://meshcore.radio-actief.be/meshcore-regio-configurator/
+    - name: MeshCore analyzer page
+      url: https://meshcore.radio-actief.be/meshcore-analyzer/
+    - name: MeshCore official site
+      url: https://meshcore.io/

@@ -1,0 +1,32 @@
+name: United Kingdom
+also_known_as:
+  - MeshCore United Kingdom
+short_name: MeshCore UK
+description: >-
+  National MeshCore mesh across the United Kingdom, running on the 868 MHz
+  public channel with regional repeater coverage and a shared live node map.
+scope: national
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - GB
+
+radio:
+  frequency: '868'
+  frequency_mhz: 869.525
+  bandwidth_khz: 250
+  spreading_factor: 11
+  coding_rate: 4/5
+  region_code: uk
+  max_hops: 6
+  public_channel: Public
+
+community:
+  website: https://meshcore.co.uk
+
+maps:
+  - name: Live node map
+    url: https://meshcore.co.uk/map.html

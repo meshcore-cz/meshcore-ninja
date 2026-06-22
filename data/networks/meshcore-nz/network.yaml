@@ -1,0 +1,71 @@
+name: New Zealand
+also_known_as:
+  - MeshCore New Zealand
+  - MeshCore NZ
+  - New Zealand MeshCore Community Networks Contingent
+short_name: MeshCore NZ
+description: >-
+  National New Zealand MeshCore community network for resilient off-grid
+  messaging, coordinating repeater sites, node-admin resources, NZ MeshMapper,
+  CoreScope monitoring, prefix planning and community support.
+scope: national
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - NZ
+
+regions:
+  - code: nz
+    name: New Zealand
+  - code: AKL
+    name: Auckland
+    parent: nz
+  - code: HLZ
+    name: Hamilton
+    parent: nz
+  - code: NPE
+    name: Napier / Hastings
+    parent: nz
+  - code: NPL
+    name: New Plymouth
+    parent: nz
+  - code: NSN
+    name: Nelson
+    parent: nz
+  - code: TRG
+    name: Tauranga
+    parent: nz
+  - code: WRE
+    name: Whangarei
+    parent: nz
+
+radio:
+  frequency: '915'
+  frequency_mhz: 917.375
+  bandwidth_khz: 62.5
+  spreading_factor: 7
+  coding_rate: 4/5
+  path_hash_mode: 2-Byte
+  region_code: nz
+  public_channel: Public
+
+community:
+  website: https://meshed.kiwi/
+  discord: https://discord.gg/sn5pG68w
+  facebook: https://www.facebook.com/groups/meshcorenz
+
+maps:
+  - name: CoreScope live map
+    url: http://mapper.mesh.baird.io/#/live
+  - name: NZ MeshMapper
+    url: http://nz.meshmapper.net
+
+analyzers:
+  - name: mapper.mesh.baird.io
+    url: http://mapper.mesh.baird.io
+
+resources:
+  getting_started: https://meshed.kiwi/resources/

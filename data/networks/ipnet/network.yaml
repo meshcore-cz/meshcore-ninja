@@ -1,0 +1,61 @@
+name: IPNet
+also_known_as:
+  - Ipswich Packet Network
+  - IPNet Ipswich
+short_name: IPNet
+description: >-
+  Ipswich, UK MeshCore Hub / CoreScope instance for off-grid open-source
+  encrypted messaging, with dashboard, nodes, channels, packets, map, member
+  and operator views.
+scope: local
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - GB
+
+regions:
+  - code: gb
+    name: United Kingdom
+  - code: suffolk
+    name: Suffolk
+    parent: gb
+  - code: ipswich
+    name: Ipswich
+    parent: suffolk
+
+radio:
+  frequency: '868'
+  frequency_mhz: 869.618
+  bandwidth_khz: 62.5
+  spreading_factor: 8
+  coding_rate: 4/8
+  tx_power_dbm: 22
+  duty_cycle_pct: 10
+  region_code: ipswich
+  public_channel: Public
+
+community:
+  website: https://ipnt.uk/
+
+maps:
+  - name: IPNet map
+    url: https://corescope.ipnt.uk/map
+
+#analyzers:
+#  - name: corescope.ipnt.uk
+#    url: https://corescope.ipnt.uk
+
+resources:
+  getting_started: https://corescope.ipnt.uk/join
+  links:
+    - name: Dashboard
+      url: https://corescope.ipnt.uk/dashboard
+    - name: Nodes
+      url: https://corescope.ipnt.uk/nodes
+    - name: Operators
+      url: https://corescope.ipnt.uk/operators
+    - name: GitHub
+      url: https://github.com/ipnt

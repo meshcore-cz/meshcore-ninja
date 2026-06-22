@@ -9,6 +9,8 @@ node_modules
 /static/device/
 /static/firmware/
 /static/vendor/
+/static/network/
+/static/network-area/
 /static/compatibility/
 /static/sitemap.xml
 /static/robots.txt

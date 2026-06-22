@@ -1,0 +1,67 @@
+name: WNY MeshCore
+also_known_as:
+  - Western NY MeshCore
+short_name: WNY MeshCore
+description: >-
+  Volunteer-run MeshCore community building a Western New York communication
+  backbone from the Pennsylvania border to Lake Ontario, east to Rochester, with
+  repeaters across the Buffalo-Rochester corridor and public setup guides.
+scope: regional
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - US
+
+regions:
+  - code: us
+    name: United States
+  - code: us-ny
+    name: New York
+    parent: us
+  - code: wny
+    name: Western New York
+    parent: us-ny
+
+radio:
+  frequency: '915'
+  frequency_mhz: 910.525
+  bandwidth_khz: 62.5
+  spreading_factor: 7
+  coding_rate: 4/5
+  region_code: wny
+  public_channel: Public
+
+community:
+  website: https://wnymeshcore.org/
+  discord: https://discord.gg/hmUbVzP9jk
+  contact: https://wnymeshcore.org/contact
+
+maps:
+  - name: Network map
+    url: https://wnymeshcore.org/map
+  - name: LetsMesh live node
+    url: https://analyzer.letsmesh.net/node/EBF7C41EE88B54CE50E28354B4225CC8210E57F2731BBE322C61816755B2704C
+
+analyzers:
+  - name: map.wnymeshcore.org
+    url: https://map.wnymeshcore.org
+
+resources:
+  getting_started: https://wnymeshcore.org/guides/getting-started
+  repeater_list: https://wnymeshcore.org/observer
+  links:
+    - name: Radio settings
+      url: https://wnymeshcore.org/guides/radio-settings
+    - name: Repeater setup guide
+      url: https://wnymeshcore.org/guides/repeater-setup
+    - name: Host a repeater
+      url: https://wnymeshcore.org/host
+    - name: Guides
+      url: https://wnymeshcore.org/guides
+    - name: LetsMesh
+      url: https://letsmesh.net
+    - name: GitHub
+      url: https://github.com/WNY-MeshCore/wnymc

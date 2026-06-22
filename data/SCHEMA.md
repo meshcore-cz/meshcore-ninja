@@ -15,6 +15,7 @@ data/firmwares/<id>/firmware.yaml
 data/firmwares/<id>/data.json    (optional generated overlay)
 data/devices/<id>/device.yaml   (+ optional <image>.svg, <datasheet>.pdf)
 data/vendors/<id>/vendor.yaml   (+ logo.svg)
+data/networks/<id>/network.yaml (+ optional area.geojson)
 data/compatibility/<firmware-id>/<firmware-version>/<device-id>.yaml
 ```
 
@@ -286,10 +287,78 @@ Create `data/vendors/<id>/vendor.yaml` plus a `logo.svg`.
 | `logo`        | no       | string | Logo filename in the same directory. Prefer SVG, but PNG/JPG/WebP are allowed. |
 | `description` | no       | string | One short paragraph. |
 
+## Adding a network
+
+Create `data/networks/<id>/network.yaml`. A network is an organized regional or
+national MeshCore mesh (not an individual repeater). Compatible devices are
+**derived** from `radio.frequency` or the union of `radios[].frequency` against
+the device catalog — networks never list devices themselves.
+
+| Field            | Required | Type   | Notes |
+|------------------|----------|--------|-------|
+| `name`           | yes      | string | Short display name. Drop repeated prefixes such as `MeshCore` when the context already makes that obvious. |
+| `also_known_as`  | no       | list   | Longer official names or alternate labels, e.g. `MeshCore Germany`. |
+| `short_name`     | no       | string | Abbreviated label (e.g. `MeshCore CZ`). |
+| `description`    | no       | string | One short paragraph. |
+| `scope`          | no       | enum   | `general` (a standard preset/region, not a community) \| `national` \| `regional` \| `local` \| `experimental`. |
+| `status`         | no       | enum   | `active` \| `planned` \| `dormant` \| `inactive`. |
+| `visibility`     | no       | enum   | `public` \| `private`. |
+| `coverage`       | no       | object | `countries` — list of ISO-3166 alpha-2 codes (e.g. `CZ`). |
+| `area`           | no       | string | GeoJSON filename in the same directory, usually `area.geojson`; shown on the Networks map. |
+| `regions`        | no       | list   | MeshCore regions this network defines — see below. |
+| `radio`          | no       | object | Single joining preset — see below. |
+| `radios`         | no       | list   | Multiple joining presets for one network — each item has the same fields as `radio`. |
+| `community`      | no       | object | URLs: `website` / `forum` / `discord` / `telegram` / `facebook` / `reddit` / `youtube` / `peertube`; `matrix` / `contact` (URL or handle). |
+| `maps`           | no       | list   | Map instances (`{ name, url }`) — a network may run several. |
+| `analyzers`      | no       | list   | CoreScope analyzer instances only (`{ name, url }`), using the bare domain/root URL without paths. |
+| `resources`      | no       | object | Links: `getting_started` / `repeater_list` / `status_page` (URLs), plus `links[]` for other named resources. |
+| `refs`           | no       | object | External cross-references (see below). |
+
+Use `radio` for a simple one-preset network. Use `radios[]` when a network
+publishes more than one joining preset (for example a popular 433 MHz mesh and a
+growing 868 MHz mesh). When both are present, app helpers prefer `radios[]`.
+
+`radio` / `radios[]` fields (all optional): `name` (friendly preset label),
+`description` (short per-preset note), `frequency` (**band key** matching a
+`globals.yaml` `frequency` entry such as `"868"` — this drives the compatible-device
+match), `frequency_mhz` (exact centre frequency shown to users), `bandwidth_khz`,
+`spreading_factor` (5–12), `coding_rate` (`4/5`–`4/8`), `tx_power_dbm`,
+`duty_cycle_pct`, `path_hash_mode` (e.g. `2-Byte`), `region_code`, `max_hops`,
+`public_channel`. A network with no `radio.frequency` or `radios[].frequency`
+simply shows no derived device list.
+
+`area` points to a GeoJSON file beside `network.yaml`. Use this for the network's
+published coverage or coordination footprint when a community maintains one. The
+build publishes it as `/network-area/<id>.geojson`, and the Networks page draws
+all available shapes on the Leaflet map above the listings.
+
+`regions` are the MeshCore regions this network defines (firmware ≥1.14.0) — a
+top-level list, owned by the network (not a global catalog). Each item is an
+object with `code` (the firmware region code used in `region put <code>`, e.g.
+`cz-ulk`), a friendly `name`, and an optional `parent` code linking a subdivision
+to its national root:
+
+```yaml
+coverage:
+  countries: [CZ]
+regions:
+  - code: cz
+    name: Czech Republic (Public)
+  - code: cz-ulk
+    name: Ústecký
+    parent: cz
+maps:
+  - name: Live node map
+    url: https://mapa.meshcore.cz
+analyzers:
+  - name: CoreScope analyzer
+    url: https://analyzer.meshcore.cz
+```
+
 ## External references (`refs`)
 
-Any device, firmware or vendor may carry a `refs` map that cross-links the
-record to its entry in an external database. Each **key** must be a ref id
+Any device, firmware, vendor or network may carry a `refs` map that cross-links
+the record to its entry in an external database. Each **key** must be a ref id
 registered under `refs:` in [`globals.yaml`](globals.yaml); each **value** is
 this record's id/slug on that site. The site expands it into a link by
 substituting the value into the ref's `urlTemplate` (`{id}` placeholder).
