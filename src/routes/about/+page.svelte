@@ -78,3 +78,20 @@
   Details are gathered from each project's repository and may lag behind the
   latest release. Corrections via PR are very welcome.
 </p>
+
+<h2 class="mt-7 text-[1.15rem] font-semibold">Licensing</h2>
+<p class="max-w-[70ch]">
+  The MeshCore Ninja database — device, firmware, network and compatibility
+  records, schemas, and the generated exports (<a class="text-accent2 hover:underline" href="{base}/data.json">data.json</a>,
+  <a class="text-accent2 hover:underline" href="{base}/devices.json">/devices.json</a> and friends) — is dedicated to the public domain under
+  <a class="text-accent2 hover:underline" href="{REPO_URL}/blob/main/data/LICENSE" target="_blank" rel="noreferrer">CC0 1.0 Universal</a>,
+  so anyone can embed, sync or re-publish it without attribution. The application
+  source code is licensed under the
+  <a class="text-accent2 hover:underline" href="{REPO_URL}/blob/main/LICENSE" target="_blank" rel="noreferrer">MIT License</a>.
+</p>
+<p class="mt-3 max-w-[70ch]">
+  Third-party device photographs, vendor logos and trademarks remain the property
+  of their respective owners and are not covered by the CC0 dedication. See the
+  <a class="text-accent2 hover:underline" href="{REPO_URL}/blob/main/LICENSES.md" target="_blank" rel="noreferrer">full licensing breakdown</a>
+  for details.
+</p>
