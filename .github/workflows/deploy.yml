@@ -20,8 +20,8 @@ jobs:
     name: Validate data & build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
           node-version: 24
           cache: npm
@@ -29,7 +29,7 @@ jobs:
       # Reuse previously rendered OG cards; build-og.js only regenerates the
       # items whose data/template hash changed.
       - name: Cache OG cards
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             static/og
@@ -50,14 +50,14 @@ jobs:
     if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
           node-version: 24
           cache: npm
       - run: npm ci
       - name: Cache OG cards
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             static/og
@@ -67,7 +67,7 @@ jobs:
             og-
       - name: Configure Pages
         id: pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
       # base_path is "/<repo>" for project sites, "" for user/org root sites —
       # svelte.config.js reads it via process.env.BASE_PATH.
       - name: Build
@@ -83,7 +83,7 @@ jobs:
       # The single source of the github-pages artifact. Keeping this out of the
       # deploy job means re-running deploy never produces duplicate artifacts.
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: build
 
@@ -100,4 +100,4 @@ jobs:
     steps:
       - name: Deploy
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
