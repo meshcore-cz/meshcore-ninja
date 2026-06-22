@@ -1,0 +1,23 @@
+steps:
+  - name: build
+    image: node:24
+    environment:
+      SITE_ORIGIN: https://dev.meshcore.ninja
+      VITE_SITE_ORIGIN: https://dev.meshcore.ninja
+      VITE_API_BASE: https://api.meshcore.ninja
+    commands:
+      - npm ci
+      - npm test
+      - npm run build
+
+  - name: deploy
+    image: rclone/rclone:latest
+    when:
+      - event: push
+        branch: dev
+    depends_on: [build]
+    environment:
+      DEPLOY_PASSWORD:
+        from_secret: DEPLOY_SECRET
+    commands:
+      - rclone sync build/ ":sftp,host=sftpgo.pp0.co,port=2222,user=heterarchy,pass=$DEPLOY_PASSWORD:/public/meshcore-ninja/" -v

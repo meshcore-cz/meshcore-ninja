@@ -38,7 +38,7 @@ jobs:
       - name: Validate
         run: npm test
 
-      - name: Commit changes and redeploy
+      - name: Commit changes
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -50,6 +50,4 @@ jobs:
             git add data/firmwares/*/changelog.yaml
             git commit -m "chore: update firmware changelogs"
             git push
-            # Token pushes don't trigger other workflows, so kick off the deploy.
-            gh workflow run "Test & Deploy" --ref "${{ github.ref_name }}"
           fi
