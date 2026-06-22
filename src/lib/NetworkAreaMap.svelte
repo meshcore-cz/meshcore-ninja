@@ -1,9 +1,25 @@
 <script>
   import { base } from '$app/paths';
   import { onMount } from 'svelte';
+  import { networkBands, bandLabel } from '$lib/data.js';
   import 'leaflet/dist/leaflet.css';
 
   let { networks = [] } = $props();
+
+  // "network" → each area gets a distinct rotating color (default).
+  // "band"    → areas are colored by the frequency band the network uses, so
+  //             you can see which regions share a band at a glance.
+  let colorMode = $state('network');
+  let bandLegend = $state([]);
+  // Restyle drawn layers in place when the mode flips (assigned in init).
+  let applyColors = () => {};
+  function setColorMode(mode) {
+    if (colorMode === mode) return;
+    colorMode = mode;
+    applyColors();
+  }
+
+  const primaryBand = (n) => networkBands(n)[0] ?? null;
 
   let mapEl = $state(null);
   let status = $state('');
@@ -34,6 +50,8 @@
   }
 
   const COLORS = ['#4dd0a7', '#5aa9ff', '#d29922', '#f85149', '#a78bfa', '#f97316'];
+  const BAND_PALETTE = ['#4dd0a7', '#5aa9ff', '#d29922', '#f85149', '#a78bfa', '#f97316', '#34d399', '#e879f9'];
+  const NO_BAND_COLOR = '#8b949e';
 
   onMount(() => {
     if (!mapEl || !hasAreas) return;
@@ -116,10 +134,32 @@
         .filter((n) => n.areaUrl && byNetwork.has(n.id))
         .sort((a, b) => (b.areaKm2 ?? 0) - (a.areaKm2 ?? 0));
 
+      // Stable band → color map: every band present gets a fixed palette slot in
+      // ascending-frequency order, so the legend and fills stay consistent.
+      const presentBands = [...new Set(areaNetworks.map(primaryBand).filter(Boolean))].sort(
+        (a, b) => Number(a) - Number(b)
+      );
+      const bandColor = new Map(presentBands.map((b, i) => [b, BAND_PALETTE[i % BAND_PALETTE.length]]));
+      const hasUnbanded = areaNetworks.some((n) => !primaryBand(n));
+      bandLegend = [
+        ...presentBands.map((b) => ({ key: b, label: bandLabel(b) ?? b, color: bandColor.get(b) })),
+        ...(hasUnbanded ? [{ key: null, label: 'Unknown', color: NO_BAND_COLOR }] : [])
+      ];
+
+      // Color for a network in the current mode. Read at draw time and on every
+      // mode toggle via applyColors().
+      const colorFor = (network, index) =>
+        colorMode === 'band'
+          ? bandColor.get(primaryBand(network)) ?? NO_BAND_COLOR
+          : COLORS[index % COLORS.length];
+
+      const drawn = [];
+
       for (const [index, network] of areaNetworks.entries()) {
         const geojson = { type: 'FeatureCollection', features: byNetwork.get(network.id) };
 
-        const color = COLORS[index % COLORS.length];
+        const color = colorFor(network, index);
+        const band = primaryBand(network);
         const layer = L.geoJSON(geojson, {
           style: {
             color,
@@ -130,7 +170,9 @@
           },
           onEachFeature: (_feature, featureLayer) => {
             featureLayer.bindPopup(
-              `<strong>${escapeHtml(network.name)}</strong><br><a href="${base}/network/${network.id}/">Open network</a>`
+              `<strong>${escapeHtml(network.name)}</strong>${
+                band ? `<br><span>${escapeHtml(bandLabel(band) ?? band)}</span>` : ''
+              }<br><a href="${base}/network/${network.id}/">Open network</a>`
             );
           }
         }).addTo(map);
@@ -141,9 +183,20 @@
           mouseout: () => layer.setStyle({ opacity: 0.5 })
         });
 
+        drawn.push({ network, layer, index });
+
         const layerBounds = layer.getBounds();
         if (layerBounds.isValid()) bounds.extend(layerBounds);
       }
+
+      // Recolor all drawn areas for the active mode (color + fill only, so the
+      // hover opacity/weight styling is preserved).
+      applyColors = () => {
+        for (const { network, layer, index } of drawn) {
+          const c = colorFor(network, index);
+          layer.setStyle({ color: c, fillColor: c });
+        }
+      };
 
       if (bounds.isValid()) {
         if (areaNetworks.length >= 3) {
@@ -227,6 +280,18 @@
         <p class="text-[0.82rem] text-dim">Published coverage/coordination shapes from network records.</p>
       </div>
       <div class="flex items-center gap-2">
+        <div class="flex overflow-hidden rounded-md border border-edge text-[0.72rem]" role="group" aria-label="Color areas by">
+          <button
+            type="button"
+            onclick={() => setColorMode('network')}
+            class="px-2.5 py-1 transition {colorMode === 'network' ? 'bg-elev2 text-ink' : 'text-dim hover:text-ink'}"
+          >Network</button>
+          <button
+            type="button"
+            onclick={() => setColorMode('band')}
+            class="border-l border-edge px-2.5 py-1 transition {colorMode === 'band' ? 'bg-elev2 text-ink' : 'text-dim hover:text-ink'}"
+          >Band</button>
+        </div>
         <span class="rounded-md bg-elev2 px-2 py-1 text-[0.72rem] text-dim">
           {networks.filter((n) => n.areaUrl).length} shaped
         </span>
@@ -258,6 +323,20 @@
           : 'h-[360px] md:h-[430px] xl:h-[560px] 2xl:h-[640px]')}
     >
       <div bind:this={mapEl} class="network-area-map bg-bg h-full"></div>
+      {#if loaded && colorMode === 'band' && bandLegend.length}
+        <!-- Floating legend, bottom-left (clear of Leaflet's bottom-right
+             attribution and top-left zoom controls). -->
+        <div
+          class="pointer-events-none absolute bottom-3 left-3 z-[800] flex max-w-[60%] flex-col gap-1 rounded-lg border border-edge bg-elev/90 px-3 py-2 text-[0.75rem] shadow-lg backdrop-blur-sm"
+        >
+          {#each bandLegend as item (item.key ?? 'none')}
+            <span class="inline-flex items-center gap-1.5">
+              <span class="h-2.5 w-2.5 shrink-0 rounded-[3px]" style:background-color={item.color}></span>
+              <span class="text-dim">{item.label}</span>
+            </span>
+          {/each}
+        </div>
+      {/if}
       {#if !loaded}
         <!-- Covers the map (incl. Leaflet controls at z-index 1000) until every
              area is fetched and drawn, so the user never sees a half-empty map. -->
