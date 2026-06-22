@@ -205,19 +205,44 @@ function publishNetworkAreas(root, networks) {
   mkdirSync(outDir, { recursive: true });
 
   let count = 0;
+  // One combined FeatureCollection so the map loads every area in a single
+  // request instead of one fetch per network. Each feature is tagged with its
+  // networkId/networkName so the client can regroup them per network.
+  const combined = { type: 'FeatureCollection', features: [] };
   for (const network of networks) {
     if (!network.area) continue;
     const raw = readFileSync(join(root, 'data', 'networks', network.id, network.area), 'utf8');
     writeFileSync(join(outDir, `${network.id}.geojson`), raw);
     network.areaUrl = `/network-area/${network.id}.geojson`;
+    let parsed;
     try {
-      network.areaKm2 = Math.round(geojsonAreaKm2(JSON.parse(raw)));
+      parsed = JSON.parse(raw);
+      network.areaKm2 = Math.round(geojsonAreaKm2(parsed));
     } catch {
-      // Leave areaKm2 unset if the geojson can't be parsed.
+      // Leave areaKm2 unset (and out of the combined file) if it won't parse.
+    }
+    for (const feature of geojsonFeatures(parsed)) {
+      combined.features.push({
+        type: 'Feature',
+        geometry: feature.geometry,
+        properties: { ...(feature.properties ?? {}), networkId: network.id, networkName: network.name }
+      });
     }
     count += 1;
   }
+  writeFileSync(join(outDir, 'all.geojson'), JSON.stringify(combined));
   return count;
+}
+
+// Normalize any GeoJSON value (FeatureCollection, Feature, or bare geometry)
+// to a flat list of Feature objects.
+function geojsonFeatures(geojson) {
+  if (!geojson) return [];
+  if (geojson.type === 'FeatureCollection') return geojson.features ?? [];
+  if (geojson.type === 'Feature') return [geojson];
+  if (geojson.geometry) return [geojson];
+  if (geojson.coordinates) return [{ type: 'Feature', geometry: geojson, properties: {} }];
+  return [];
 }
 
 // Production origin; BASE_PATH is supplied by the GitHub Pages workflow when needed.

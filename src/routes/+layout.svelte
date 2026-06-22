@@ -68,6 +68,11 @@
     <a class="flex items-center gap-2.5 text-[1.05rem] font-bold" href="{base}/">
       <img src="{base}/logo.png" alt="" class="h-8 w-8 shrink-0 rounded-md" width="32" height="32" />
       <span>{SITE_NAME}</span>
+      <span
+        class="rounded-full border border-accent2/40 bg-accent2/10 px-1.5 py-0.5 text-[0.62rem] font-semibold uppercase leading-none tracking-wider text-accent2"
+      >
+        Alpha
+      </span>
     </a>
     <nav class="flex items-center gap-1">
       {#each nav as item}

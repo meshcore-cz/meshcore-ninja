@@ -7,6 +7,9 @@
 
   let mapEl = $state(null);
   let status = $state('');
+  // The map stays hidden behind a loading overlay until every area's GeoJSON
+  // has been fetched (one combined request) and drawn.
+  let loaded = $state(false);
   let hasAreas = $derived(networks.some((n) => n.areaUrl));
 
   // Fullscreen pins the map below the sticky site header (which stays visible)
@@ -85,47 +88,61 @@
         return;
       }
 
+      // Every area arrives in one combined FeatureCollection (built by
+      // scripts/build-data.js), so we fetch once and regroup features by their
+      // networkId tag instead of issuing a request per network.
+      let byNetwork = new Map();
+      try {
+        const res = await fetch(`${base}/network-area/all.geojson`);
+        if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+        const all = await res.json();
+        if (disposed || !map) return;
+        for (const feature of all.features ?? []) {
+          const id = feature.properties?.networkId;
+          if (!id) continue;
+          if (!byNetwork.has(id)) byNetwork.set(id, []);
+          byNetwork.get(id).push(feature);
+        }
+      } catch (e) {
+        status = `Could not load network areas: ${e.message}`;
+        loaded = true;
+        return;
+      }
+
       const bounds = L.latLngBounds([]);
       // Draw largest areas first so smaller networks end up on top and stay
       // hoverable/clickable even when they sit inside a bigger one's polygon.
       const areaNetworks = networks
-        .filter((n) => n.areaUrl)
+        .filter((n) => n.areaUrl && byNetwork.has(n.id))
         .sort((a, b) => (b.areaKm2 ?? 0) - (a.areaKm2 ?? 0));
 
       for (const [index, network] of areaNetworks.entries()) {
-        try {
-          const res = await fetch(`${base}${network.areaUrl}`);
-          if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
-          const geojson = await res.json();
-          if (disposed || !map) return;
+        const geojson = { type: 'FeatureCollection', features: byNetwork.get(network.id) };
 
-          const color = COLORS[index % COLORS.length];
-          const layer = L.geoJSON(geojson, {
-            style: {
-              color,
-              weight: 1,
-              opacity: 0.5,
-              fillColor: color,
-              fillOpacity: 0.18
-            },
-            onEachFeature: (_feature, featureLayer) => {
-              featureLayer.bindPopup(
-                `<strong>${escapeHtml(network.name)}</strong><br><a href="${base}/network/${network.id}/">Open network</a>`
-              );
-            }
-          }).addTo(map);
+        const color = COLORS[index % COLORS.length];
+        const layer = L.geoJSON(geojson, {
+          style: {
+            color,
+            weight: 1,
+            opacity: 0.5,
+            fillColor: color,
+            fillOpacity: 0.18
+          },
+          onEachFeature: (_feature, featureLayer) => {
+            featureLayer.bindPopup(
+              `<strong>${escapeHtml(network.name)}</strong><br><a href="${base}/network/${network.id}/">Open network</a>`
+            );
+          }
+        }).addTo(map);
 
-          // Dim boundary by default; reveal it fully while hovering the area.
-          layer.on({
-            mouseover: () => layer.setStyle({ opacity: 1 }),
-            mouseout: () => layer.setStyle({ opacity: 0.5 })
-          });
+        // Dim boundary by default; reveal it fully while hovering the area.
+        layer.on({
+          mouseover: () => layer.setStyle({ opacity: 1 }),
+          mouseout: () => layer.setStyle({ opacity: 0.5 })
+        });
 
-          const layerBounds = layer.getBounds();
-          if (layerBounds.isValid()) bounds.extend(layerBounds);
-        } catch (e) {
-          status = `Could not load ${network.name} area: ${e.message}`;
-        }
+        const layerBounds = layer.getBounds();
+        if (layerBounds.isValid()) bounds.extend(layerBounds);
       }
 
       if (bounds.isValid()) {
@@ -137,6 +154,9 @@
       } else {
         status = 'No valid network area shapes found yet.';
       }
+
+      // Areas are drawn and the view is framed — reveal the map.
+      loaded = true;
     }
 
     init();
@@ -232,11 +252,22 @@
     <!-- Size lives on this wrapper; the inner map element keeps a STATIC class
          so Svelte never rewrites it and clobbers Leaflet's runtime classes. -->
     <div
-      class={fullscreen
-        ? 'min-h-0 flex-1'
-        : 'h-[360px] md:h-[430px] xl:h-[560px] 2xl:h-[640px]'}
+      class={'relative ' +
+        (fullscreen
+          ? 'min-h-0 flex-1'
+          : 'h-[360px] md:h-[430px] xl:h-[560px] 2xl:h-[640px]')}
     >
       <div bind:this={mapEl} class="network-area-map bg-bg h-full"></div>
+      {#if !loaded}
+        <!-- Covers the map (incl. Leaflet controls at z-index 1000) until every
+             area is fetched and drawn, so the user never sees a half-empty map. -->
+        <div
+          class="absolute inset-0 z-[1100] flex flex-col items-center justify-center gap-3 bg-bg"
+        >
+          <span class="map-spinner" aria-hidden="true"></span>
+          <p class="text-[0.82rem] text-dim">Loading network areas…</p>
+        </div>
+      {/if}
     </div>
     {#if status}
       <p class="border-t border-edge px-4 py-2 text-[0.82rem] text-warn">{status}</p>
@@ -255,6 +286,21 @@
        Making the container its own positioning context keeps Leaflet's panes
        contained and fixes it. */
     position: relative;
+  }
+
+  .map-spinner {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 3px solid var(--color-edge);
+    border-top-color: var(--color-accent2);
+    animation: map-spin 0.7s linear infinite;
+  }
+
+  @keyframes map-spin {
+    to {
+      transform: rotate(360deg);
+    }
   }
 
   .network-area-map :global(.leaflet-container) {
