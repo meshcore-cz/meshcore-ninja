@@ -1,7 +1,57 @@
 source: github
 repo: ALLFATHER-BV/wadamesh
-updatedAt: '2026-06-21T09:55:40.738Z'
+updatedAt: '2026-06-22T12:12:18.187Z'
 releases:
+  - version: beta_10
+    name: wadamesh beta_10
+    datetime: '2026-06-21T22:08:55Z'
+    url: https://github.com/ALLFATHER-BV/wadamesh/releases/tag/beta_10
+    prerelease: false
+    notes: >-
+      **wadamesh beta_10** — flash from **https://flasher.wadamesh.com**, or update on-device
+      (Settings → About).
+
+
+      ## What's new
+
+
+      ### T-Deck input
+
+      - **Trackball mode** — switch the T-Deck trackball between a **mouse cursor** (the default)
+      and **D-pad navigation** (roll to move the selection, click to choose), under **Settings →
+      Keyboard**. Handy if you prefer button-style navigation.
+
+
+      ### Map — #20
+
+      - **microSD tiles now fill in as you explore.** With *Use microSD for tiles* on, the device
+      also downloads any missing tiles over Wi-Fi and saves them straight onto the SD card, so your
+      offline library **grows** instead of showing blank areas past its edge. Thanks @1nerdherder
+      ([#20](https://github.com/ALLFATHER-BV/wadamesh/issues/20)).
+
+
+      ### Power — by @Vybo (#19)
+
+      - **Experimental battery saver (idle power-save).** Throttles the CPU when the device is
+      parked — screen off, on battery, no app connected and the mesh quiet — to trim idle power use,
+      **without ever missing a received packet**. Off by default; enable under **Settings → System →
+      Battery**. ([#19](https://github.com/ALLFATHER-BV/wadamesh/pull/19))
+
+
+      ### Settings
+
+      - **New "Battery" section** under Settings → System — opens the battery & power-history screen
+      (the same one you get by tapping the battery icon up top), and is where the battery saver now
+      lives (it moved out of the Lock settings).
+
+
+      ---
+
+      🙏 Thanks to **Dan Vybiral (@Vybo)** for the idle power-save feature (#19) and
+      **@1nerdherder** for the microSD-tiles report (#20).
+
+
+      **Boards:** LilyGo T-Deck · Heltec V4 TFT.
   - version: beta_9
     name: wadamesh beta_9
     datetime: '2026-06-20T13:18:47Z'

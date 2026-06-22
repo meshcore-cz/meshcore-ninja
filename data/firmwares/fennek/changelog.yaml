@@ -1,7 +1,144 @@
 source: github
 repo: danst0/fennek
-updatedAt: '2026-06-21T09:55:29.691Z'
+updatedAt: '2026-06-22T12:12:05.972Z'
 releases:
+  - version: v2.5.9
+    name: Fennek v2.5.9
+    datetime: '2026-06-21T19:36:11Z'
+    url: https://github.com/danst0/fennek/releases/tag/v2.5.9
+    prerelease: false
+    notes: >-
+      Podcast-App deaktiviert (WLAN-Sync zu langsam).
+
+
+      - Auto-WLAN-Sync vor Standby (podcast::flushBeforeStandby) auskommentiert — brachte bei jedem
+      Standby das WLAN über den 4-MHz-SD-Bus hoch
+
+      - Launcher-Kachel + appmgr-Registrierung + podcast::begin() aus → App vom Gerät verschwunden,
+      Slot 13 (Seite 2) bleibt leer
+
+      - Code/Konsolen-Befehle/NVS-Toggle/i18n bewusst behalten (reaktivierbar)
+  - version: v2.5.7
+    name: v2.5.7
+    datetime: '2026-06-21T19:05:52Z'
+    url: https://github.com/danst0/fennek/releases/tag/v2.5.7
+    prerelease: false
+    notes: >-
+      ## Sudoku als fünftes Spiel
+
+
+      Neues Spiel **Sudoku** in der Spiele-App (neben 2048, Minensucher, Schach, Tic-Tac-Toe).
+
+
+      - Arduino-freier Generator + Solver (`sudoku_core.h`, host-getestet): randomisiertes
+      Backtracking für die Vollösung, dann eindeutigkeitsprüfendes Ausgraben — erzeugt nur Rätsel
+      mit genau einer Lösung. Rekursionsfrei (iterativer Level-Stack).
+
+      - 9×9-Gitter à 26 px, Touch-Tap/WASD-Cursor, Zifferntasten 1–9 setzen, 0/Backspace/Mikrofon
+      leeren, Konfliktzellen invertiert, „Gelöst"-Overlay mit Zeit.
+
+      - Schwierigkeit Leicht/Mittel/Schwer (40/32/26 Vorgaben).
+
+      - Beststände im NVS (gelöste Rätsel + Bestzeit), inkl. INI-Export/-Import.
+
+
+      **OTA:** `firmware.bin` angehängt.
+  - version: v2.5.6
+    name: v2.5.6
+    datetime: '2026-06-21T15:32:44Z'
+    url: https://github.com/danst0/fennek/releases/tag/v2.5.6
+    prerelease: false
+    notes: >-
+      fix(power): Dateien-Modus am Kabel nicht einschlafen lassen
+
+
+      - battery::external() (DSG-Bit aus BatteryStatus 0x0A) erkennt Netzteil zuverlässig, auch bei
+      vollem Akku (charging() fiel bei Strom ~0 auf false)
+
+      - power::poll() nutzt external() statt charging() für die Dateien-Standby-Bremse
+  - version: v2.5.5
+    name: v2.5.5
+    datetime: '2026-06-21T15:07:48Z'
+    url: https://github.com/danst0/fennek/releases/tag/v2.5.5
+    prerelease: false
+    notes: |-
+      feat(wecker): Einmalig-Option für Wecker
+
+      - Neues Alarm-Feld `once` (NVS byte0 Bit4, abwärtskompatibel)
+      - Einmalige Wecker feuern am nächsten hh:mm tageunabhängig und schalten sich danach selbst aus
+      - Editor-Preset "Einmalig" im Feld Tage; Liste/Editor zeigen es an
+      - Konsole: `alarm <i> <hh:mm> einmal` (once/1x)
+
+      OTA: firmware.bin angehängt.
+  - version: v2.5.4
+    name: v2.5.4
+    datetime: '2026-06-21T15:00:17Z'
+    url: https://github.com/danst0/fennek/releases/tag/v2.5.4
+    prerelease: false
+    notes: >-
+      OTA-Update-Fix + Ollama-Timeout.
+
+
+      - **OTA `-104` behoben:** GitHub liefert für Release-Assets eine signierte Redirect-URL
+      (`release-assets.githubusercontent.com`, ~900 Zeichen). Diese sprengte den 300-Byte-Puffer in
+      `apply()` → abgeschnittene URL → `httpUpdate`-Fehler `-104` (wrong http code). Puffer auf 1400
+      Byte vergrößert.
+
+      - **notes_ai (Ollama) Timeout:** `HTTPClient::setTimeout()` nimmt `uint16_t` (max 65535 ms);
+      der Wert 120000 lief still auf 54464 ms über. Konstante auf 65000 ms korrigiert.
+
+
+      Erstes Release, mit dem OTA von einer früheren Version aus zuverlässig durchläuft.
+  - version: v2.5.3
+    name: v2.5.3
+    datetime: '2026-06-21T14:48:58Z'
+    url: https://github.com/danst0/fennek/releases/tag/v2.5.3
+    prerelease: false
+    notes: |-
+      perf(dateien): Request-Zähler-Refresh 10x seltener gegen E-Ink-Flackern
+
+      - Drosselung des Request-Zähler-Voll-Redraws im RUNNING-Zustand von 5 s auf 50 s
+      - Zähler ist reine Info; seltenere Voll-Redraws sparen sichtbares E-Ink-Flackern
+  - version: v2.5.2
+    name: Fennek v2.5.2
+    datetime: '2026-06-21T14:29:15Z'
+    url: https://github.com/danst0/fennek/releases/tag/v2.5.2
+    prerelease: false
+    notes: >-
+      ## Highlights
+
+
+      - **On-Device-OTA-Knopf** (Settings → Update → „Aktualisieren"): prüft GitHub-Releases und
+      flasht direkt am Gerät mit Vollbild-Fortschritt (Phase + Balken + %). Kein Browser/Konsole
+      mehr nötig.
+
+      - **Notizen:** Audionotiz-Player (Play/Pause, ±10 s, Region-Fortschritt) + hoch-scrollbarer
+      Editor.
+
+      - **Karteikarten:** Übersicht mit Leitner-Fächer-Verteilung (fällig/bearbeitet).
+
+      - **Kopfrechnen:** adaptive Schwierigkeit, je-Modus persistierte Stufe.
+
+      - **notes_ai:** behutsamerer Korrektur-Prompt (nur Rechtschreibung/Umlaute, kein Umdichten).
+
+      - **Tools:** `maps_tiles.py` mit wählbaren Kachelquellen (`--preset standard|cyclosm|topo`).
+
+
+      ## OTA-Update
+
+
+      Geräte ab v2.5.1 können direkt am Gerät auf diese Version aktualisieren (Settings → Update →
+      „Aktualisieren") oder via Web-UI (`fennek.local`) / Konsole (`ota update`).
+
+
+      **Flashen (USB):** `firmware.bin` in den inaktiven OTA-Slot bzw. via `pio run -e fennek -t
+      upload`.
+  - version: v2.5.0
+    name: v2.5.0
+    datetime: '2026-06-21T10:11:51Z'
+    url: https://github.com/danst0/fennek/releases/tag/v2.5.0
+    prerelease: false
+    notes: '**Full Changelog**: https://github.com/danst0/fennek/compare/v2.4.9...v2.5.0'
   - version: v2.4.8
     name: Fennek v2.4.8
     datetime: '2026-06-20T19:59:52Z'
@@ -255,100 +392,3 @@ releases:
 
       - Console hashtag commands `join` / `chan`, plus a new `i2cscan` command. Verified on device:
       the T-Deck Pro V1.1 has **no hardware RTC** (0x51 empty).
-  - version: v1.6.2
-    name: v1.6.2
-    datetime: '2026-06-13T04:03:31Z'
-    url: https://github.com/danst0/fennek/releases/tag/v1.6.2
-    prerelease: false
-    notes: >-
-      ## 📄 Licensing
-
-      - SPDX `GPL-3.0-or-later` / © Dr. Daniel Dumke headers added to all Fennek-owned `src` files
-      (the vendored Hynitron touch driver in `src/core/hyn/` is left untouched).
-
-      - Options screen now shows an author/copyright footer.
-  - version: v1.6.1
-    name: v1.6.1
-    datetime: '2026-06-13T04:03:30Z'
-    url: https://github.com/danst0/fennek/releases/tag/v1.6.1
-    prerelease: false
-    notes: >-
-      ## 📡 Mesh app overhaul (MVP)
-
-      - Contacts split from the chat list (chats show only channels + contacts with history; a new
-      contacts screen lists all adverts).
-
-      - HH:MM timestamps + touch scrollback in conversations.
-
-      - Status line (noise floor / RX / TX / contacts / clock), contact detail view (hops + last
-      seen).
-
-      - Touch scroll strip for lists, error-retry button, DM resend on timeout, and multi-ACK
-      tracking for parallel DMs.
-  - version: v1.6.0
-    name: v1.6.0
-    datetime: '2026-06-13T04:03:29Z'
-    url: https://github.com/danst0/fennek/releases/tag/v1.6.0
-    prerelease: false
-    notes: >-
-      ## ✨ Added
-
-      - **Unlimited music library:** on-demand growing PSRAM blocks (instead of `MAX_TRACKS=512`),
-      track cache `/.fennek/tracks.bin` (boot in seconds), background scan in `readdir` chunks.
-      Scans pause during playback (anti-stutter). Track paths up to 256 chars (Calibre).
-
-      - **Web file manager** (Files app + `webfm`): Wi-Fi station with an embedded HTML page + JSON
-      API to browse/upload/download/delete SD files over `http://fennek.local`.
-
-      - Console: `sleep` command + boot/reset diagnostics in `status`.
-  - version: v1.5.0
-    name: v1.5.0
-    datetime: '2026-06-13T04:03:29Z'
-    url: https://github.com/danst0/fennek/releases/tag/v1.5.0
-    prerelease: false
-    notes: >-
-      ## 🌍 Localization
-
-      - Extended with **English and Spanish** (`FENNEK_STRS` now 5 columns, EN/ES appended —
-      NVS-compatible).
-
-      - Documented the CP437 limitation for missing uppercase accented characters.
-
-      - Reader rescan rework, chess brace fixes, MeshSeeLog entry.
-  - version: v1.4.0
-    name: v1.4.0
-    datetime: '2026-06-13T04:03:28Z'
-    url: https://github.com/danst0/fennek/releases/tag/v1.4.0
-    prerelease: false
-    notes: >-
-      ## 🌍 Internationalization framework
-
-      - New `core/i18n`: central string table, language selectable in settings, applied across all
-      apps (launcher, music, book, reader, mesh, games, settings).
-
-      - README screenshots + host-side renderer (`tools/screenshot.cpp`) for generating UI
-      screenshots without the device.
-  - version: v1.3.1
-    name: v1.3.1
-    datetime: '2026-06-13T04:03:27Z'
-    url: https://github.com/danst0/fennek/releases/tag/v1.3.1
-    prerelease: false
-    notes: >-
-      ## 🎨 Standby & project
-
-      - **Standby screen:** AI-generated sleeping fennec as a 1-bit bitmap (Floyd–Steinberg,
-      240×320) with a bottom banner.
-
-      - GPL-3.0+ license, README reworked as an alternative firmware.
-
-      - Repo slimmed down and detached from the Meck fork; build env renamed `mp3player` → `fennek`.
-  - version: v1.3.0
-    name: v1.3.0
-    datetime: '2026-06-13T04:03:26Z'
-    url: https://github.com/danst0/fennek/releases/tag/v1.3.0
-    prerelease: false
-    notes: >-
-      ## 🎮 Games app
-
-      - New Games app: **2048, Minesweeper, Chess (Negamax AI), Tic-Tac-Toe**. Game logic lives in
-      Arduino-free, host-tested cores.
