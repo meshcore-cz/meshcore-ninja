@@ -8,8 +8,9 @@ lifecycle: active
 familyId: rak-wismesh-pocket-v2
 official: true
 product_url: https://store.rakwireless.com/products/wismesh-pocket
+image: rak-wishmesh-pocket-v2.svg
 refs:
-  mesh-sh-device: rak-wismesh-pocket-v2
+  mesh-sh-device: rak-wismesh-pocket-v2.svg
 price:
   # Source: https://store.rakwireless.com/products/wismesh-pocket
   amount: 90

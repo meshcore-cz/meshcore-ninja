@@ -1,5 +1,11 @@
 // Small formatting helpers shared across release listings.
 
+/** Count + noun with naive pluralization: pluralize(2, 'device') → "2 devices".
+ *  Pass an explicit plural for irregular nouns. */
+export function pluralize(n, singular, plural = `${singular}s`) {
+  return `${n} ${n === 1 ? singular : plural}`;
+}
+
 /** Prefix bare numeric versions with "v" (e.g. 1.16.0 → v1.16.0). */
 export function displayVersion(v) {
   return /^\d/.test(v) ? 'v' + v : v;

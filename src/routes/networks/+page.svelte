@@ -11,12 +11,11 @@
   import NetworkAreaMap from '$lib/NetworkAreaMap.svelte';
   import AppPresetBadge from '$lib/AppPresetBadge.svelte';
   import Seo from '$lib/Seo.svelte';
+  import PageHeader from '$lib/PageHeader.svelte';
   import Button from '$lib/Button.svelte';
   import { Toggle } from 'bits-ui';
   import { onMount } from 'svelte';
   import { browser } from '$app/environment';
-  import { page } from '$app/stores';
-  import { get } from 'svelte/store';
   import { LIVE_ENABLED, poll, fmtRate } from '$lib/pulse.js';
   let { data } = $props();
 
@@ -76,14 +75,24 @@
   // --- Filters --------------------------------------------------------------
   // Narrow the table (and, via `visibleIds`, the map) by free-text name, scope
   // and frequency band. Scopes/bands are multi-select: empty means "any".
-  // State is hydrated from / synced to the URL (see the $effect below), so a
-  // filtered view is shareable and bookmarkable — matching the Devices page.
-  const initParams = browser ? get(page).url.searchParams : new URLSearchParams();
-  const csv = (key) => (initParams.get(key) ?? '').split(',').filter(Boolean);
+  // State is synced to / from the URL (see the $effect below), so a filtered view
+  // is shareable and bookmarkable — matching the Devices page. It starts at its
+  // defaults so the first client render matches the prerendered (unfiltered) HTML;
+  // the URL is read in onMount, after hydration. Reading it at init instead
+  // diverged from the prerendered table and corrupted hydration.
+  let query = $state('');
+  let selectedScopes = $state(new Set());
+  let selectedBands = $state(new Set());
+  let hydrated = $state(false);
 
-  let query = $state(initParams.get('q') ?? '');
-  let selectedScopes = $state(new Set(csv('scope')));
-  let selectedBands = $state(new Set(csv('band')));
+  onMount(() => {
+    const p = new URLSearchParams(location.search);
+    const csv = (key) => (p.get(key) ?? '').split(',').filter(Boolean);
+    query = p.get('q') ?? '';
+    selectedScopes = new Set(csv('scope'));
+    selectedBands = new Set(csv('band'));
+    hydrated = true;
+  });
 
   // Toggling reassigns a fresh Set so Svelte's reactivity picks up the change.
   function toggleIn(set, value) {
@@ -132,7 +141,9 @@
   // shareable. Native history.replaceState keeps it a pure URL-bar update — no
   // navigation, no scroll, no history entries, and no dependence on the router.
   $effect(() => {
-    if (!browser) return;
+    // Wait until onMount has applied the URL → state, or the first run would
+    // immediately overwrite the incoming query string with empty defaults.
+    if (!browser || !hydrated) return;
     const p = new URLSearchParams();
     if (query.trim()) p.set('q', query.trim());
     if (selectedScopes.size) p.set('scope', [...selectedScopes].join(','));
@@ -162,11 +173,10 @@
   description={`${data.networks.length} organized MeshCore meshes — their radio settings, coverage and how to join.`}
 />
 
-<h1 class="mb-1 text-[clamp(1.5rem,5vw,2rem)] font-bold">Networks</h1>
-<p class="mb-5 text-dim">
+<PageHeader title="Networks">
   Organized regional and national MeshCore meshes — their radio settings, coverage and how to
   join.
-</p>
+</PageHeader>
 
 {#if data.networks.length}
   <NetworkAreaMap networks={activeNetworks} {visibleIds} {liveById} />

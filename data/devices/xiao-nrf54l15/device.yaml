@@ -9,6 +9,7 @@ description: >-
   ZephCore XIAO nRF54L15 target paired with an external SX1262 LoRa module over
   SPI. Intended as a developer build for testing nRF54L15 BLE/USB companion
   firmware with MeshCore LoRa packet routing.
+image: xiao-nrf54l15.svg
 price:
   # Source: Seeed XIAO nRF54L15 launch pricing estimate
   amount: 10

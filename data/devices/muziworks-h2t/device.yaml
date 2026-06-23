@@ -1,0 +1,96 @@
+# Source: https://muzi.works/products/h2t-complete-device-heltec-t114-with-gps-running-meshtastic
+# Source: https://heltec.org/project/mesh-node-t114/
+name: Muzi Works H2T
+vendorId: muziworks
+kind: product
+lifecycle: active
+familyId: muziworks-h2t
+variantOf: heltec-t114
+aliases:
+  - "H2T - Complete Device: Heltec T114 with GPS running Meshtastic"
+product_url: https://muzi.works/products/h2t-complete-device-heltec-t114-with-gps-running-meshtastic
+price:
+  # Source: https://muzi.works/products/h2t-complete-device-heltec-t114-with-gps-running-meshtastic
+  amount: 89
+  currency: USD
+  asOf: 2026-06
+  url: https://muzi.works/products/h2t-complete-device-heltec-t114-with-gps-running-meshtastic
+description: >-
+  Ready-to-use Meshtastic device based on the Heltec T114 V2, assembled with a
+  GPS module, SMA pigtail, whip antenna, 2000 mAh LiPo battery, and 3D-printed
+  ASA enclosure.
+image: muziworks-h2t.svg
+roles:
+  - companion
+  - repeater
+  - room-server
+  - standalone-ui
+transports:
+  - ble
+  - usb
+variants:
+  - name: UK/EU 868 MHz
+    bands:
+      - '868'
+  - name: US/AU 915 MHz
+    bands:
+      - '915'
+hardware:
+  mcu:
+    model: nrf52840
+    flashMb: 1
+    ramKb: 256
+  radios:
+    - technology: lora
+      chip: sx1262
+      bands:
+        - '868'
+        - '915'
+      txPowerDbm: 21
+      antenna: SMA
+  display:
+    status: present
+    technology: display
+    controller: LH114T-IF03
+    size: 1.14
+    resolution:
+      width: 135
+      height: 240
+    colors: color
+  gnss:
+    status: present
+    chip: L76K
+  input:
+    - type: button
+      description: User button
+  leds:
+    status: present
+    description: Status LEDs
+  power:
+    batterySupported: true
+    batteryBuiltIn: true
+    batteryCapacityMah: 2000
+    batteryChemistry: li-po
+    charging: true
+    solarInput: true
+    batteryConnector: Built-in LiPo 2000mAh
+  enclosure:
+    builtIn: true
+  physical:
+    dimensionsMm:
+      width: 50.9
+      height: 72.7
+      depth: 19.7
+    weightG: 85
+interfaces:
+  usb:
+    connector: USB-C
+    capabilities:
+      - power
+      - serial
+      - flashing
+  bluetooth:
+    version: '5.0'
+    ble: true
+  wifi:
+    status: none

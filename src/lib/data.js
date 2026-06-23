@@ -38,6 +38,18 @@ for (const [path, url] of Object.entries(
   const parts = path.split('/');
   logoByVendorFile[`${parts.at(-2)}/${parts.at(-1)}`] = url;
 }
+// Software icons and screenshots, keyed `<id>/<file>` (a dir can hold several).
+const softwareAssetByFile = {};
+for (const [path, url] of Object.entries(
+  import.meta.glob('../../data/software/*/*.{svg,png,jpg,jpeg,webp}', {
+    query: '?url',
+    import: 'default',
+    eager: true
+  })
+)) {
+  const parts = path.split('/');
+  softwareAssetByFile[`${parts.at(-2)}/${parts.at(-1)}`] = url;
+}
 
 /** All vendors (from data.json), with their bundled logo URL attached. */
 export const vendors = dataset.vendors.map((v) => ({
@@ -79,6 +91,46 @@ export function getVendor(id) {
 
 export function getNetwork(id) {
   return networkById.get(id);
+}
+
+/**
+ * All software (from data.json), ordered by name in build-data.js, with the
+ * bundled icon URL and per-screenshot URLs attached (images must go through the
+ * bundler to get hashed asset URLs).
+ */
+export const software = (dataset.software ?? []).map((s) => ({
+  ...s,
+  imageUrl: s.image ? (softwareAssetByFile[`${s.id}/${s.image}`] ?? null) : null,
+  screenshotUrls: (s.screenshots ?? []).map((shot) => ({
+    ...shot,
+    url: softwareAssetByFile[`${s.id}/${shot.file}`] ?? null
+  }))
+}));
+
+const softwareById = new Map(software.map((s) => [s.id, s]));
+
+export function getSoftware(id) {
+  return softwareById.get(id);
+}
+
+/**
+ * Software kinds — one catalogue split by `kind`. `order` drives section order
+ * on the listing; `tw` is the badge colour utility.
+ */
+export const SOFTWARE_KIND_META = {
+  client: { label: 'Clients', singular: 'Client', order: 0, tw: 'bg-accent/15 text-accent' },
+  integration: { label: 'Integrations', singular: 'Integration', order: 1, tw: 'bg-accent2/15 text-accent2' },
+  gateway: { label: 'Gateways & Bridges', singular: 'Gateway / Bridge', order: 2, tw: 'bg-warn/15 text-warn' },
+  tool: { label: 'Tools', singular: 'Tool', order: 3, tw: 'bg-ok/15 text-ok' },
+  library: { label: 'Libraries & SDKs', singular: 'Library / SDK', order: 4, tw: 'bg-dim/20 text-dim' },
+  'network-app': { label: 'Network Apps', singular: 'Network App', order: 5, tw: 'bg-accent/15 text-accent' }
+};
+
+/** Kinds present in the catalogue, in display order. */
+export function softwareKindsInUse() {
+  return Object.keys(SOFTWARE_KIND_META)
+    .filter((k) => software.some((s) => s.kind === k))
+    .sort((a, b) => SOFTWARE_KIND_META[a].order - SOFTWARE_KIND_META[b].order);
 }
 
 /**
@@ -533,6 +585,45 @@ export const FW_STATUS_TW = {
   inactive: 'text-bad'
 };
 
+/** High-level source model → label + badge utility classes. */
+export const LICENSE_TYPE_META = {
+  'open-source': { label: 'Open source', tw: 'bg-ok/15 text-ok' },
+  'source-available': { label: 'Source available', tw: 'bg-warn/15 text-warn' },
+  proprietary: { label: 'Proprietary', tw: 'bg-bad/15 text-bad' }
+};
+
+// SPDX ids (license families) treated as open source when deriving a record's
+// license_type from its `license`. Matched case-insensitively against the id
+// with any "+"/"-or-later"/"-only" qualifier stripped; "NOASSERTION" and other
+// unknown ids don't match (so they stay unclassified rather than guessed).
+const OPEN_SOURCE_LICENSES = new Set([
+  'mit', 'isc', 'apache-2.0', 'bsd-2-clause', 'bsd-3-clause', 'bsd-4-clause',
+  'mpl-2.0', 'gpl-2.0', 'gpl-3.0', 'lgpl-2.1', 'lgpl-3.0', 'agpl-3.0',
+  'unlicense', 'cc0-1.0', 'zlib', 'epl-2.0', 'eupl-1.2', 'osl-3.0',
+  'cddl-1.0', 'artistic-2.0', 'wtfpl'
+]);
+
+function isOpenSourceLicense(license) {
+  if (!license) return false;
+  const id = String(license).trim().toLowerCase().replace(/\+$/, '').replace(/-(or-later|only)$/, '');
+  return OPEN_SOURCE_LICENSES.has(id);
+}
+
+/**
+ * High-level source model for a firmware or software record: 'open-source',
+ * 'source-available' or 'proprietary'. Prefers an explicit `license_type`;
+ * otherwise derives it from a recognised open-source SPDX `license`, or from an
+ * explicit `verification.sourceAvailable: false` (→ proprietary). Returns null
+ * when nothing indicates a classification.
+ */
+export function licenseType(record) {
+  if (!record) return null;
+  if (record.license_type) return record.license_type;
+  if (isOpenSourceLicense(record.license)) return 'open-source';
+  if (record.verification?.sourceAvailable === false) return 'proprietary';
+  return null;
+}
+
 /** Network scope → label + badge utility classes. */
 export const NETWORK_SCOPE_META = {
   general: { label: 'General', tw: 'bg-dim/15 text-dim' },
@@ -548,6 +639,15 @@ export const NETWORK_STATUS_META = {
   planned: { label: 'Planned', tw: 'text-warn' },
   dormant: { label: 'Dormant', tw: 'text-dim' },
   inactive: { label: 'Inactive', tw: 'text-bad' }
+};
+
+/** Software status → label + text colour utility. */
+export const SOFTWARE_STATUS_META = {
+  active: { label: 'Active', tw: 'text-ok' },
+  planned: { label: 'Planned', tw: 'text-warn' },
+  dormant: { label: 'Dormant', tw: 'text-dim' },
+  inactive: { label: 'Inactive', tw: 'text-bad' },
+  archived: { label: 'Archived', tw: 'text-bad' }
 };
 
 /** Compact band label for a network, e.g. "EU868" or "EU433 / CN, EU868". */

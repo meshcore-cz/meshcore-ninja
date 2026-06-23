@@ -1,0 +1,91 @@
+# Source: https://atlavox.com/products/atlavox-beacon-solar-meshtastic-node
+name: Atlavox Beacon Solar
+vendorId: atlavox
+kind: product
+lifecycle: active
+familyId: atlavox-beacon
+variantOf: rak-4631
+aliases:
+  - Atlavox Beacon Solar Mesh Node
+  - Atlavox Beacon
+official: false
+product_url: https://atlavox.com/products/atlavox-beacon-solar-meshtastic-node
+price:
+  amount: 236
+  currency: USD
+  asOf: 2026-06
+description: >-
+  Outdoor solar Meshtastic/MeshCore node built around RAK19007 + RAK4631, with
+  a 5 W panel, 5000 mAh LiPo battery, and IP67 enclosure. Designed for
+  stand-alone repeater deployments, with Bluetooth pairing and waterproof
+  USB-C service access.
+image: altavox-beacon.svg
+roles:
+  - companion
+  - repeater
+  - room-server
+transports:
+  - ble
+  - usb
+# Source: https://atlavox.com/products/atlavox-beacon-solar-meshtastic-node (Shopify product JSON variants).
+variants:
+  - name: 915MHz
+    sku: AVX-RA-BCN9
+    bands:
+      - '915'
+  - name: 868MHz
+    sku: AVX-RA-BCN8
+    bands:
+      - '868'
+
+hardware:
+  mcu:
+    model: nrf52840
+    flashMb: 1
+    ramKb: 256
+  radios:
+    - technology: lora
+      chip: sx1262
+      bands:
+        - '868'
+        - '915'
+      txPowerDbm: 22
+      antenna: SMA
+  display:
+    status: none
+  gnss:
+    status: none
+  leds:
+    status: present
+    description: WisBlock status LED
+  power:
+    batterySupported: true
+    batteryBuiltIn: true
+    batteryCapacityMah: 5000
+    batteryChemistry: li-po
+    charging: true
+    solarInput: true
+    solarPanelBuiltIn: true
+    solarPanelWatts: 5
+  enclosure:
+    builtIn: true
+    ipRating: IP67
+  # Source: https://atlavox.com/products/atlavox-beacon-solar-meshtastic-node
+  physical:
+    dimensionsMm:
+      width: 140
+      height: 257
+      depth: 102
+    weightG: 1000
+interfaces:
+  usb:
+    connector: USB-C
+    capabilities:
+      - power
+      - serial
+      - flashing
+  bluetooth:
+    version: '5.0'
+    ble: true
+  wifi:
+    status: none

@@ -1,0 +1,79 @@
+# Source: https://www.yetiwurks.com/product/yeti-wurks-meshtastic-basestation/
+name: Yeti Wurks Base Station
+vendorId: yetiwurks
+kind: product
+lifecycle: active
+familyId: yetiwurks-basestation
+variantOf: rak-4631
+aliases:
+  - Yeti Wurks Meshtastic Base Station
+official: false
+product_url: https://www.yetiwurks.com/product/yeti-wurks-meshtastic-basestation/
+price:
+  amount: 125
+  currency: USD
+  asOf: 2026-06
+description: >-
+  Outdoor RAK WisBlock-based base station and repeater in an IP65 enclosure,
+  built around the RAK19003 + RAK4631 starter kit with external antenna,
+  USB-C passthrough, and solar input. Uses removable 18650 cells instead of an
+  integrated battery pack.
+image: yetiwurks-basestation.svg
+roles:
+  - companion
+  - repeater
+  - room-server
+transports:
+  - ble
+  - usb
+
+hardware:
+  mcu:
+    model: nrf52840
+    flashMb: 1
+    ramKb: 256
+  radios:
+    - technology: lora
+      chip: sx1262
+      bands:
+        - '868'
+        - '915'
+      txPowerDbm: 22
+      antenna: Type N
+  display:
+    status: none
+  gnss:
+    status: none
+  leds:
+    status: present
+    description: Illuminated external power button
+  input:
+    - type: button
+      description: external power button
+  power:
+    batterySupported: true
+    batteryBuiltIn: false
+    batteryChemistry: li-ion
+    charging: true
+    solarInput: true
+    batteryConnector: 4x18650 holder
+  enclosure:
+    builtIn: true
+    ipRating: IP65
+  physical:
+    dimensionsMm:
+      width: 100
+      height: 150
+      depth: 70
+interfaces:
+  usb:
+    connector: USB-C
+    capabilities:
+      - power
+      - serial
+      - flashing
+  bluetooth:
+    version: '5.0'
+    ble: true
+  wifi:
+    status: none

@@ -10,15 +10,24 @@ required:
   - releases
 properties:
   source:
+    description: >-
+      Where the release history comes from. `github` (default) is fetched from
+      GitHub releases; `manual` is hand-written; `script` uses a custom fetcher
+      shipped in the firmware directory.
     enum:
       - github
       - manual
       - script
   repo:
+    description: owner/name of the GitHub repository, e.g. "meshcore-dev/MeshCore".
     type: string
   updatedAt:
+    description: >-
+      ISO 8601 timestamp set by the updater when this cache was last refreshed,
+      e.g. "2026-06-20T08:30:00Z".
     type: string
   releases:
+    description: Release entries, newest first.
     type: array
     items:
       type: object
@@ -27,22 +36,29 @@ properties:
         - version
       properties:
         version:
+          description: Version tag or label, e.g. "v1.16.0".
           type: string
           minLength: 1
         name:
+          description: Release title, e.g. "Companion v1.16.0".
           type: string
         datetime:
           type: string
-          description: Full ISO 8601 timestamp.
+          description: Full ISO 8601 timestamp, e.g. "2026-06-06T18:30:00Z".
         date:
           type: string
-          description: YYYY-MM-DD (manual fallback).
+          description: Release date as YYYY-MM-DD, e.g. "2026-06-06" (manual fallback when no datetime).
         url:
+          description: Link to the release page, e.g. https://github.com/owner/name/releases/tag/v1.16.0.
           type: string
         prerelease:
+          description: True for alpha/beta/RC releases not marked as the latest stable.
           type: boolean
         notes:
+          description: Release notes, typically Markdown.
           type: string
         notesUrl:
           type: string
-          description: Where enriched notes were sourced from.
+          description: >-
+            Where enriched notes were sourced from, when not the GitHub release
+            body itself (e.g. a project blog or Atom feed).

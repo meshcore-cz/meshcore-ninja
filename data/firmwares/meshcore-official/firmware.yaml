@@ -296,6 +296,26 @@ devices:
     status: supported
     target: rak4631
     platformio_board: rak4631
+  # Source: alias of rak-4631, same target rak4631
+  - id: atlavox-m1
+    status: supported
+    target: rak4631
+    platformio_board: rak4631
+  # Source: alias of rak-4631, same target rak4631
+  - id: atlavox-beacon
+    status: supported
+    target: rak4631
+    platformio_board: rak4631
+  # Source: alias of rak-4631, same target rak4631
+  - id: rak-wismesh-repeater-mini
+    status: supported
+    target: rak4631
+    platformio_board: rak4631
+  # Source: alias of rak-4631, same target rak4631
+  - id: yetiwurks-basestation
+    status: supported
+    target: rak4631
+    platformio_board: rak4631
   - id: rak-wismesh-tag
     status: supported
     target: rak_wismesh_tag

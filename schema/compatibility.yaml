@@ -11,27 +11,32 @@ type: object
 additionalProperties: false
 properties:
   status:
+    description: Overall support verdict for this firmware + device pairing.
     enum:
       - supported
       - partial
       - untested
       - unsupported
   support:
+    description: How the build is obtained and how strongly the pairing is verified.
     type: object
     additionalProperties: false
     properties:
       availability:
+        description: Whether a usable build exists for this device.
         enum:
           - available
           - unavailable
           - unknown
       level:
+        description: Who provides/blesses the build.
         enum:
           - official
           - vendor
           - community
           - experimental
       verification:
+        description: How far the build has been verified, from imported data to fully tested.
         enum:
           - unknown
           - imported-unverified
@@ -39,6 +44,9 @@ properties:
           - radio-tested
           - verified
   roles:
+    description: >-
+      Per-role results, keyed by canonical role (companion, repeater,
+      room-server, observer, sensor, kiss-modem, standalone-ui).
     type: object
     additionalProperties: false
     patternProperties:
@@ -47,6 +55,7 @@ properties:
         additionalProperties: false
         properties:
           status:
+            description: Verification result for this role.
             enum:
               - verified
               - boots
@@ -54,6 +63,7 @@ properties:
               - unsupported
               - unknown
           transports:
+            description: Per-transport result for this role, keyed by transport.
             type: object
             additionalProperties: false
             patternProperties:
@@ -65,6 +75,7 @@ properties:
                   - unsupported
                   - unknown
           management:
+            description: Per-management-channel result for this role (CLI, OTA, DFU, web UI).
             type: object
             additionalProperties: false
             patternProperties:
@@ -76,6 +87,9 @@ properties:
                   - unsupported
                   - unknown
   peripherals:
+    description: >-
+      Per-peripheral result, keyed by peripheral (display, gnss, battery,
+      buttons, sd, sensors, wifi, ble, externalFlash).
     type: object
     additionalProperties: false
     patternProperties:
@@ -87,18 +101,22 @@ properties:
           - unsupported
           - unknown
   builds:
+    description: Concrete build artifacts that were tested, with how each was obtained.
     type: array
     items:
       type: object
       additionalProperties: false
       properties:
         target:
+          description: Firmware build target / variant name, e.g. "Heltec_v3_companion_radio_ble".
           type: string
           pattern: ^[A-Za-z0-9_.-]+$
         platformio_board:
+          description: PlatformIO board id, e.g. "esp32-s3-devkitc-1".
           type: string
           pattern: ^[A-Za-z0-9_.-]+$
         role:
+          description: Node role this build runs.
           enum:
             - companion
             - repeater
@@ -108,6 +126,7 @@ properties:
             - kiss-modem
             - standalone-ui
         transports:
+          description: Transports this build exposes.
           type: array
           items:
             enum:
@@ -118,6 +137,7 @@ properties:
               - ethernet
               - serial
         artifactSource:
+          description: Where the tested artifact came from.
           enum:
             - github-release
             - web-flasher
@@ -125,21 +145,28 @@ properties:
             - manual
             - unknown
   verification:
+    description: Who tested this pairing, when, and how trustworthy the evidence is.
     type: object
     additionalProperties: false
     properties:
       firmwareVersion:
+        description: Exact firmware version tested, e.g. "v1.16.0".
         type: string
       hardwareRevision:
+        description: Hardware revision tested, when relevant, e.g. "3.1".
         type: string
       testedAt:
+        description: Date the test was performed, e.g. "2026-06-06".
         type: string
       testedBy:
+        description: Person or team who tested it.
         type: string
       evidenceUrl:
+        description: Link to supporting evidence (issue, forum post, screenshot, etc.).
         type: string
         pattern: ^https?://
       confidence:
+        description: How much to trust this report, from manufacturer claim to community test.
         enum:
           - manufacturer
           - upstream-maintainer
@@ -148,17 +175,22 @@ properties:
           - imported-unverified
           - unknown
   notes:
+    description: Free-form notes about this firmware + device combination.
     type: string
   provenance:
+    description: Where this report was imported/derived from, for traceability.
     type: object
     additionalProperties: false
     properties:
       source:
+        description: Name of the source dataset or document.
         type: string
       sourceUrl:
+        description: Link to the source.
         type: string
         pattern: ^https?://
       importedAt:
+        description: When the report was imported, e.g. "2026-06-06".
         type: string
 required:
   - status

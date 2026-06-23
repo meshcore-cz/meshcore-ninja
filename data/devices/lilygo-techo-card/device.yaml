@@ -17,6 +17,7 @@ description: >-
   Low-power nRF52840 + SX1262 card-sized node with a 0.42-inch OLED, L76K GNSS,
   ICM20948 IMU, speaker, microphone, and WS2812 LED. Solar panel for continuous
   power supply. Bluetooth 5 only - no Wi-Fi.
+image: t-echo-card.svg
 roles:
   - companion
   - repeater

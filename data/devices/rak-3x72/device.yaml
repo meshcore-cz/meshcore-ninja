@@ -16,6 +16,7 @@ description: >-
   WisDuo LPWAN module based on STM32WL with an integrated LoRa transceiver for
   compact mesh builds and embedded devices. The MeshCore profile targets bare
   module integration rather than a finished handheld or display device.
+image: rak-3172.svg
 hardware:
   mcu:
     model: stm32wl

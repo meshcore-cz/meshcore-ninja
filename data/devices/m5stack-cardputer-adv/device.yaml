@@ -1,0 +1,115 @@
+# Source: https://docs.m5stack.com/en/core/Cardputer-Adv
+# Source: https://docs.m5stack.com/en/cap/Cap_LoRa-1262
+name: M5Stack Cardputer-ADV + Cap LoRa-1262
+vendorId: m5stack
+kind: product
+lifecycle: active
+familyId: m5stack-cardputer
+official: false
+aliases:
+  - Cardputer-Adv
+  - Cardputer-Adv + Cap LoRa-1262
+  - Cap LoRa-1262 for Cardputer-Adv
+  - Meshputer
+image: meshputer.svg
+product_url: https://docs.m5stack.com/en/core/Cardputer-Adv
+description: >-
+  ESP32-S3 handheld with a 1.14-inch LCD, 56-key keyboard, microSD, 1750 mAh
+  battery, and the Cap LoRa-1262 expansion module for SX1262 LoRa plus built-in
+  GNSS. The combination targeted by community MeshCore forks uses the
+  Cardputer-ADV base with the U214 cap attached.
+price:
+  amount: 44
+  currency: USD
+  asOf: 2026-06
+roles:
+  - companion
+  - standalone-ui
+transports:
+  - ble
+  - usb
+  - wifi
+# Source: https://docs.m5stack.com/en/core/Cardputer-Adv (SKU K132-Adv) + https://docs.m5stack.com/en/cap/Cap_LoRa-1262 (SKU U214).
+variants:
+  - name: Cardputer-ADV + Cap LoRa-1262
+    sku: K132-Adv + U214
+    bands:
+      - '868'
+      - '915'
+      - '920'
+      - '923'
+
+hardware:
+  mcu:
+    model: esp32-s3
+    flashMb: 8
+  radios:
+    - technology: lora
+      chip: sx1262
+      bands:
+        - '868'
+        - '915'
+        - '920'
+        - '923'
+      txPowerDbm: 22
+      antenna: RP-SMA
+  display:
+    status: present
+    technology: display
+    controller: ST7789V2
+    size: 1.14
+    resolution:
+      width: 240
+      height: 135
+    colors: color
+  gnss:
+    status: present
+    chip: ATGM336H
+  input:
+    - type: keyboard
+      description: 56-key keyboard
+    - type: button
+      description: G0 button
+    - type: microphone
+      description: MEMS microphone
+    - type: speaker
+      description: 1W speaker
+  power:
+    batterySupported: true
+    batteryBuiltIn: true
+    batteryCapacityMah: 1750
+    batteryChemistry: li-po
+    charging: true
+  expansion:
+    - type: hy2.0-4p
+      count: 1
+      interfaces:
+        - GPIO
+    - type: header-2.54
+      count: 1
+      pins: 14
+      interfaces:
+        - GPIO
+        - I2C
+        - SPI
+        - UART
+  physical:
+    dimensionsMm:
+      width: 84
+      height: 54
+      depth: 19.6
+    weightG: 81
+  environmental:
+    operatingTempC:
+      min: 0
+      max: 40
+interfaces:
+  bluetooth:
+    ble: true
+  wifi:
+    status: present
+  usb:
+    capabilities:
+      - power
+      - serial
+      - flashing

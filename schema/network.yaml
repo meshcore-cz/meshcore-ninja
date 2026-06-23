@@ -13,26 +13,34 @@ required:
   - name
 properties:
   name:
+    description: >-
+      Short display name, e.g. "Czech MeshCore". Drop a repeated "MeshCore"
+      prefix when context already makes it obvious.
     type: string
     minLength: 1
   also_known_as:
-    description: Longer official names or alternate labels for the network.
+    description: Longer official names or alternate labels, e.g. "MeshCore Germany".
     type: array
     minItems: 1
     items:
       type: string
       minLength: 1
   short_name:
+    description: Abbreviated label, e.g. "MeshCore CZ".
     type: string
     minLength: 1
   description:
+    description: One short paragraph about the network.
     type: string
   scope:
+    description: >-
+      How broad the network is. `general` = a standard MeshCore preset/region
+      not tied to one community (e.g. the EU/UK band defaults), rather than an
+      organized local mesh.
     type: string
-    # `general` = a standard MeshCore preset/region not tied to one community
-    # (e.g. the EU/UK band defaults), rather than an organized local mesh.
     enum: [general, national, regional, local, experimental]
   status:
+    description: Operational status of the network.
     type: string
     enum: [active, planned, dormant, inactive]
   deprecated:
@@ -42,18 +50,20 @@ properties:
       for reference but hidden from the coverage map and listed separately from
       active networks.
   visibility:
+    description: Whether the network is openly joinable (`public`) or closed/invite-only (`private`).
     type: string
     enum: [public, private]
   coverage:
+    description: Geographic coverage of the network.
     type: object
     additionalProperties: false
     properties:
       countries:
+        description: Countries covered, as ISO-3166 alpha-2 uppercase codes, e.g. ["CZ", "DE"].
         type: array
         minItems: 1
         items:
           type: string
-          # ISO-3166 alpha-2, uppercase (e.g. CZ, GB, DE).
           pattern: ^[A-Z]{2}$
   area:
     type: string
@@ -77,12 +87,15 @@ properties:
         - name
       properties:
         code:
+          description: Firmware region code used in `region put <code>`, e.g. "cz-ulk".
           type: string
           minLength: 1
         name:
+          description: Friendly region name, e.g. "Ústecký".
           type: string
           minLength: 1
         parent:
+          description: Code of the parent region this subdivision belongs to, e.g. "cz".
           type: string
           minLength: 1
   radio:
@@ -101,37 +114,48 @@ properties:
     items:
       $ref: '#/$defs/radioSetting'
   community:
+    description: Community hubs and contact channels for the network.
     type: object
     additionalProperties: false
     properties:
       website:
+        description: Community website, e.g. https://meshcore.cz.
         type: string
         pattern: ^https?://
       matrix:
+        description: Matrix room or space, e.g. "#meshcore-cz:matrix.org".
         type: string
         minLength: 1
       discord:
+        description: Discord invite URL.
         type: string
         pattern: ^https?://
       telegram:
+        description: Telegram group/channel URL.
         type: string
         pattern: ^https?://
       forum:
+        description: Discussion forum URL.
         type: string
         pattern: ^https?://
       facebook:
+        description: Facebook group/page URL.
         type: string
         pattern: ^https?://
       reddit:
+        description: Subreddit URL.
         type: string
         pattern: ^https?://
       youtube:
+        description: YouTube channel URL.
         type: string
         pattern: ^https?://
       peertube:
+        description: PeerTube channel URL.
         type: string
         pattern: ^https?://
       contact:
+        description: General contact, e.g. an email address or handle.
         type: string
         minLength: 1
   maps:
@@ -156,12 +180,15 @@ properties:
     additionalProperties: false
     properties:
       status_page:
+        description: Network status/health page URL.
         type: string
         pattern: ^https?://
       repeater_list:
+        description: Page listing the network's repeaters.
         type: string
         pattern: ^https?://
       getting_started:
+        description: Getting-started / how-to-join guide URL.
         type: string
         pattern: ^https?://
       links:
@@ -182,6 +209,7 @@ properties:
       minLength: 1
 $defs:
   radioSetting:
+    description: One joining preset — the LoRa settings members use to reach the mesh.
     type: object
     additionalProperties: false
     properties:
@@ -210,21 +238,24 @@ $defs:
         type: string
         minLength: 1
       frequency_mhz:
-        description: Exact centre frequency in MHz shown to users (e.g. 869.432).
+        description: Exact centre frequency in MHz shown to users, e.g. 869.432.
         type: number
         exclusiveMinimum: 0
       bandwidth_khz:
+        description: Channel bandwidth in kHz, e.g. 250.
         type: number
         exclusiveMinimum: 0
       spreading_factor:
+        description: LoRa spreading factor (5–12), e.g. 11.
         type: integer
         minimum: 5
         maximum: 12
       coding_rate:
+        description: LoRa coding rate, e.g. "4/5" or "4/8".
         type: string
-        # e.g. "4/5", "4/8"
         pattern: ^4/[5-8]$
       tx_power_dbm:
+        description: Transmit power in dBm, e.g. 22.
         type: number
       duty_cycle_pct:
         description: Legal/agreed duty cycle for the band, in percent (e.g. 10).
@@ -232,19 +263,23 @@ $defs:
         exclusiveMinimum: 0
         maximum: 100
       path_hash_mode:
-        description: MeshCore path hash mode (e.g. "1-Byte", "2-Byte").
+        description: MeshCore path hash mode, e.g. "1-Byte" or "2-Byte".
         type: string
         minLength: 1
       region_code:
+        description: MeshCore region code used with `region put`, e.g. "eu".
         type: string
         minLength: 1
       max_hops:
+        description: Maximum hop count for routed packets, e.g. 5.
         type: integer
         minimum: 1
       public_channel:
+        description: Name of the default public channel shared to join, e.g. "public".
         type: string
         minLength: 1
   namedLink:
+    description: A labelled link (`{ name, url }`).
     type: object
     additionalProperties: false
     required:
@@ -252,8 +287,10 @@ $defs:
       - url
     properties:
       name:
+        description: Display label, e.g. "Live node map".
         type: string
         minLength: 1
       url:
+        description: Link target, e.g. https://mapa.meshcore.cz.
         type: string
         pattern: ^https?://

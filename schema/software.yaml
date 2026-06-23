@@ -1,0 +1,382 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://meshcore.ninja/schema/software.yaml
+
+title: Software
+description: >-
+  A catalogue of MeshCore-related software, differentiated by `kind`
+  (clients, integrations, gateways, tools, libraries and network apps).
+  The directory name is the entry ID in kebab-case and is not repeated
+  inside the data file.
+
+type: object
+additionalProperties: false
+
+required:
+  - name
+  - kind
+
+properties:
+  name:
+    description: Full project or product name.
+    type: string
+    minLength: 1
+
+  short_name:
+    description: Shortened display name or commonly used abbreviation.
+    type: string
+    minLength: 1
+
+  also_known_as:
+    description: Previous names, alternative names or aliases.
+    type: array
+    uniqueItems: true
+    items:
+      type: string
+      minLength: 1
+
+  kind:
+    description: >-
+      Primary software category: Clients · Integrations · Gateways & Bridges ·
+      Tools · Libraries & SDKs · Network Apps.
+    type: string
+    enum:
+      - client
+      - integration
+      - gateway
+      - tool
+      - library
+      - network-app
+
+  status:
+    description: Current maintenance and project lifecycle status.
+    type: string
+    enum:
+      - planned
+      - active
+      - dormant
+      - inactive
+      - archived
+
+  maturity:
+    description: >-
+      Development maturity and expected readiness. This is separate from
+      maintenance status: an actively developed project can still be experimental.
+    type: string
+    enum:
+      - experimental
+      - alpha
+      - beta
+      - stable
+
+  description:
+    description: Short factual description of the software.
+    type: string
+    minLength: 1
+
+  image:
+    description: >-
+      Logo, app icon or hero image — a filename in the same directory as
+      software.yaml, served from the repo (svg/png/jpg/webp).
+    type: string
+    pattern: \.(svg|png|jpe?g|webp)$
+
+  screenshots:
+    description: Screenshots shown in a gallery on the entry page.
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      required:
+        - file
+      properties:
+        file:
+          description: Image filename in the same directory as software.yaml.
+          type: string
+          pattern: \.(svg|png|jpe?g|webp)$
+        caption:
+          description: Short caption describing the screenshot.
+          type: string
+          minLength: 1
+
+  maintainers:
+    description: People or organizations maintaining the project.
+    type: array
+    uniqueItems: true
+    items:
+      type: object
+      additionalProperties: false
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          minLength: 1
+        url:
+          type: string
+          pattern: ^https?://
+
+  repository:
+    description: Source repository URL.
+    type: string
+
+  website:
+    description: Main project or product website.
+    type: string
+
+  documentation:
+    description: Documentation or getting-started page.
+    type: string
+
+  license:
+    description: SPDX license identifier where possible, such as MIT or GPL-3.0-only.
+    type: string
+    minLength: 1
+
+  license_type:
+    description: >-
+      High-level source model. Derived from `license` when omitted (recognised
+      open-source SPDX ids map to open-source); set explicitly to override the
+      derivation or when no SPDX id applies.
+    type: string
+    enum:
+      - open-source
+      - source-available
+      - proprietary
+
+  latest_version:
+    description: Latest released version, such as 1.4.0 or v2.3.
+    type: string
+    minLength: 1
+
+  released:
+    description: Release date (YYYY-MM-DD) of latest_version.
+    type: string
+    pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+
+  languages:
+    description: Primary implementation languages, such as go, python or rust.
+    type: array
+    uniqueItems: true
+    items:
+      $ref: "#/$defs/slug"
+
+  platforms:
+    description: >-
+      Platforms, environments or deployment targets where the software runs,
+      such as android, ios, web, linux, macos, windows, docker,
+      home-assistant, esphome or esp32.
+    type: array
+    uniqueItems: true
+    items:
+      $ref: "#/$defs/slug"
+
+  interfaces:
+    description: User-facing or machine-facing interfaces provided by the software.
+    type: array
+    uniqueItems: true
+    items:
+      type: string
+      enum:
+        - gui
+        - mobile
+        - web
+        - cli
+        - tui
+        - api
+        - headless
+
+  connections:
+    description: Ways the software connects to MeshCore nodes or external systems.
+    type: array
+    uniqueItems: true
+    items:
+      type: string
+      enum:
+        - ble
+        - serial
+        - usb
+        - tcp
+        - udp
+        - websocket
+        - mqtt
+        - http
+        - ipc
+
+  node_roles:
+    description: MeshCore node roles the software supports or interacts with.
+    type: array
+    uniqueItems: true
+    items:
+      $ref: "#/$defs/slug"
+
+  capabilities:
+    description: Main functionality provided by the software.
+    type: array
+    uniqueItems: true
+    items:
+      type: string
+      enum:
+        - messaging
+        - contacts
+        - channels
+        - node-configuration
+        - remote-administration
+        - monitoring
+        - telemetry
+        - packet-analysis
+        - mapping
+        - flashing
+        - firmware-update
+        - automation
+        - notifications
+        - bridging
+        - proxying
+        - key-management
+        - simulation
+
+  install:
+    description: Installation and distribution methods.
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      required:
+        - type
+      properties:
+        type:
+          description: Installation or distribution channel.
+          type: string
+          enum:
+            - app-store
+            - play-store
+            - github-release
+            - docker
+            - homebrew
+            - npm
+            - pypi
+            - cargo
+            - go-install
+            - hacs
+            - esphome
+            - source
+            - web
+            - manual
+
+        package:
+          description: >-
+            Package, image, formula or module identifier, such as an npm package,
+            Docker image or Homebrew formula.
+          type: string
+          minLength: 1
+
+        url:
+          description: Installation, download or package page URL.
+          type: string
+
+        command:
+          description: Optional installation command.
+          type: string
+          minLength: 1
+
+  popularity:
+    type: object
+    additionalProperties: false
+    description: Snapshot of public project popularity/adoption signals.
+    properties:
+      githubStars:
+        type: integer
+        minimum: 0
+      githubForks:
+        type: integer
+        minimum: 0
+      githubWatchers:
+        type: integer
+        minimum: 0
+      githubOpenIssues:
+        type: integer
+        minimum: 0
+      githubContributors:
+        type: integer
+        minimum: 0
+      releaseDownloads:
+        type: integer
+        minimum: 0
+        description: Total release/package downloads, when available.
+      latestReleaseDownloads:
+        type: integer
+        minimum: 0
+        description: Downloads for the latest release, when available.
+      lastChecked:
+        type: string
+        pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+
+  verification:
+    type: object
+    additionalProperties: false
+    description: Auditability and release-process signals; complements status/maturity.
+    properties:
+      sourceAvailable:
+        type: boolean
+      releasesAvailable:
+        type: boolean
+      signedReleases:
+        type: boolean
+      ciBuilds:
+        type: boolean
+      hasDocumentation:
+        type: boolean
+      lastChecked:
+        type: string
+        pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+      notes:
+        type: array
+        items:
+          type: string
+          minLength: 1
+
+  tags:
+    description: >-
+      Free-form facets not already represented by structured properties,
+      such as official, bbs, bot, experimental or smart-home.
+    type: array
+    uniqueItems: true
+    items:
+      $ref: "#/$defs/slug"
+
+  refs:
+    description: References to related entries in the MeshCore Ninja catalogue.
+    type: object
+    additionalProperties: false
+    properties:
+      devices:
+        description: Related device IDs.
+        $ref: "#/$defs/id-list"
+
+      firmwares:
+        description: Related firmware IDs.
+        $ref: "#/$defs/id-list"
+
+      software:
+        description: Related software IDs.
+        $ref: "#/$defs/id-list"
+
+      networks:
+        description: Related network IDs.
+        $ref: "#/$defs/id-list"
+
+  last_reviewed:
+    description: Date when this catalogue entry was last manually verified.
+    type: string
+    pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+
+$defs:
+  slug:
+    type: string
+    minLength: 1
+    pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+
+  id-list:
+    type: array
+    uniqueItems: true
+    items:
+      $ref: "#/$defs/slug"

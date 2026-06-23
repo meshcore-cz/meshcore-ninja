@@ -1,0 +1,57 @@
+name: MeshCore Cardputer-ADV
+type: fork
+maintainer: MultiMote
+description: >
+  Cardputer-ADV focused MeshCore fork for the M5Stack Cardputer-Adv paired with
+  the Cap LoRa-1262 expansion module. It adds the `cardputer_adv` target with a
+  custom handheld UI, BLE companion transport, SD-backed storage, keyboard
+  input, and GNSS support.
+repository: https://github.com/MultiMote/meshcore-cardputer-adv
+status: experimental
+lifecycle: active
+maturity: alpha
+distribution: community
+lineage:
+  kind: fork
+  upstreamFirmwareId: meshcore-official
+  upstreamRepository: https://github.com/meshcore-dev/MeshCore
+runtime:
+  framework: arduino
+  language: cpp
+latest_version: latest
+released: 2026-05-15
+roles:
+  - companion
+  - standalone-ui
+features:
+  - Cardputer-specific UI
+  - BLE companion transport
+  - SD-backed message and settings storage
+  - Keyboard input
+  - GNSS support
+capabilities:
+  protocol:
+    meshcoreCompatible: true
+  transports:
+    ble: true
+    usbSerial: true
+    nativeTcp: false
+    wifiAp: false
+  operations:
+    ota: false
+    webFlasher: true
+  networking:
+    repeater: false
+    roomServer: false
+    observer: false
+    kissModem: false
+  hardware:
+    gps: true
+    display: true
+    sensors: false
+    lowPowerRx: false
+devices:
+  - id: m5stack-cardputer-adv
+    status: supported
+    target: cardputer_adv
+    platformio_board: m5stack-stamps3

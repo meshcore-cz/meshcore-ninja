@@ -11,14 +11,17 @@
   } from '$lib/data.js';
   import { compareIds, toggleCompare, clearCompare } from '$lib/compare.js';
   import { favoriteIds, toggleFavorite } from '$lib/favorites.js';
+  import { pluralize } from '$lib/format.js';
   import Seo from '$lib/Seo.svelte';
   import Select from '$lib/Select.svelte';
   import Chip from '$lib/Chip.svelte';
   import Button from '$lib/Button.svelte';
+  import PageHeader from '$lib/PageHeader.svelte';
+  import Card from '$lib/Card.svelte';
+  import CompareBar from '$lib/CompareBar.svelte';
   import { Collapsible } from 'bits-ui';
   import { browser } from '$app/environment';
-  import { page } from '$app/stores';
-  import { get } from 'svelte/store';
+  import { onMount } from 'svelte';
   let { data } = $props();
 
   // --- Per-device accessors used by both facets and card rendering -----------
@@ -121,14 +124,16 @@
     Object.fromEntries(FACETS.map((f) => [f.id, tally(data.devices.flatMap(f.get))]))
   );
 
-  // --- Filter state (hydrated from / synced to the URL, so a filtered view is
-  // shareable and bookmarkable) ----------------------------------------------
-  const initParams = browser ? get(page).url.searchParams : new URLSearchParams();
-  const csv = (key) => (initParams.get(key) ?? '').split(',').filter(Boolean);
-
-  let query = $state(initParams.get('q') ?? '');
-  let advanced = $state(initParams.get('adv') === '1');
-  let sort = $state(initParams.get('sort') ?? 'name');
+  // --- Filter state (synced to / from the URL, so a filtered view is shareable
+  // and bookmarkable). State starts at its defaults so the first client render
+  // matches the prerendered (unfiltered) HTML; the URL is read in onMount, after
+  // hydration. Reading it at init instead caused a server/client mismatch: the
+  // keyed each claims server DOM in document order during hydration, so the wrong
+  // cards got paired and their images stuck on the wrong devices. -------------
+  let query = $state('');
+  let advanced = $state(false);
+  let sort = $state('name');
+  let hydrated = $state(false);
 
   // Sort options. `cmp` orders two devices; null-valued devices always sink to
   // the bottom regardless of direction.
@@ -169,18 +174,29 @@
       label: 'TX draw', get: (d) => d.hardware?.power?.consumptionTxMa, fmt: (v) => `${v} mA`
     })
   ];
-  let sel = $state(Object.fromEntries(FACETS.map((f) => [f.id, csv(f.id)])));
-  let toggles = $state(
-    Object.fromEntries(TOGGLES.map((t) => [t.id, csv('has').includes(t.id)]))
-  );
-  let ranges = $state(
-    Object.fromEntries(
+  let sel = $state(Object.fromEntries(FACETS.map((f) => [f.id, []])));
+  let toggles = $state(Object.fromEntries(TOGGLES.map((t) => [t.id, false])));
+  let ranges = $state(Object.fromEntries(RANGES.map((r) => [r.id, { min: '', max: '' }])));
+
+  // Hydrate filter state from the URL once, after the first (SSR-matching)
+  // render, then start syncing it back. Doing this at init instead would diverge
+  // from the prerendered HTML and corrupt hydration (see the filter-state note).
+  onMount(() => {
+    const p = new URLSearchParams(location.search);
+    const csv = (key) => (p.get(key) ?? '').split(',').filter(Boolean);
+    query = p.get('q') ?? '';
+    advanced = p.get('adv') === '1';
+    sort = p.get('sort') ?? 'name';
+    sel = Object.fromEntries(FACETS.map((f) => [f.id, csv(f.id)]));
+    toggles = Object.fromEntries(TOGGLES.map((t) => [t.id, csv('has').includes(t.id)]));
+    ranges = Object.fromEntries(
       RANGES.map((r) => {
-        const [min = '', max = ''] = (initParams.get(r.id) ?? '').split(',');
+        const [min = '', max = ''] = (p.get(r.id) ?? '').split(',');
         return [r.id, { min, max }];
       })
-    )
-  );
+    );
+    hydrated = true;
+  });
 
   function toggleFacet(id, value) {
     const cur = sel[id];
@@ -254,7 +270,9 @@
   // shareable. Native history.replaceState keeps it a pure URL-bar update — no
   // navigation, no scroll, no history entries, and no dependence on the router.
   $effect(() => {
-    if (!browser) return;
+    // Wait until onMount has applied the URL → state, or the first run would
+    // immediately overwrite the incoming query string with empty defaults.
+    if (!browser || !hydrated) return;
     const p = new URLSearchParams();
     if (query.trim()) p.set('q', query.trim());
     for (const f of FACETS) if (sel[f.id].length) p.set(f.id, sel[f.id].join(','));
@@ -274,8 +292,7 @@
   description={`Browse ${data.devices.length} LoRa devices known to run MeshCore — filter by MCU, radio, node role, connectivity, price and more.`}
 />
 
-<h1 class="mb-1 text-[clamp(1.5rem,5vw,2rem)] font-bold">Devices</h1>
-<p class="mb-4 text-dim">Hardware known to run one or more MeshCore firmwares.</p>
+<PageHeader title="Devices">LoRa hardware known to run one or more MeshCore firmwares.</PageHeader>
 
 {#if favoriteDevices.length}
   <section class="mb-4 rounded-xl border border-accent/35 bg-accent/10 p-4">
@@ -415,7 +432,7 @@
 </div>
 
 <div class="my-3 flex items-center gap-3 text-[0.85rem] text-dim">
-  <span>{filtered.length} device{filtered.length === 1 ? '' : 's'}</span>
+  <span>{pluralize(filtered.length, 'device')}</span>
   {#if activeCount}
     <Button variant="link" size="sm" class="px-0" onclick={clearAll}>Clear filters ({activeCount})</Button>
   {/if}
@@ -428,10 +445,7 @@
 {#if filtered.length}
   <div class="grid gap-4 [grid-template-columns:repeat(auto-fill,minmax(240px,1fr))]">
     {#each sorted as d (d.id)}
-      <a
-        class="group flex flex-col rounded-xl border border-edge bg-elev p-3 transition hover:-translate-y-0.5 hover:border-accent"
-        href="{base}/device/{d.id}/"
-      >
+      <Card href="{base}/device/{d.id}/" class="flex flex-col p-3">
         <div class="relative mb-3 flex h-[120px] items-center justify-center overflow-hidden rounded-lg bg-elev2">
           {#if d.imageUrl}
             <img src={d.imageUrl} alt={d.name} loading="lazy" class="max-h-full max-w-full object-contain p-3 transition group-hover:scale-105" />
@@ -505,7 +519,7 @@
           {/if}
 
           <div class="mt-2.5 flex items-center justify-between border-t border-edge px-1 pt-2.5 text-[0.78rem] text-dim">
-          <span>{d.firmwareCount} firmware{d.firmwareCount === 1 ? '' : 's'}</span>
+          <span>{pluralize(d.firmwareCount, 'firmware')}</span>
           {#if devicePriceLabel(d)}
             <span class="font-semibold text-ink">{devicePriceLabel(d)}</span>
           {:else}
@@ -513,26 +527,15 @@
           {/if}
           </div>
         </div>
-      </a>
+      </Card>
     {/each}
   </div>
 {:else}
   <p class="rounded-xl border border-edge bg-elev p-8 text-center text-dim">No devices match these filters.</p>
 {/if}
 
-{#if $compareIds.length}
-  <div class="pointer-events-none fixed inset-x-0 bottom-4 z-40 flex justify-center px-4">
-    <div class="pointer-events-auto flex items-center gap-3 rounded-full border border-edge bg-elev2 py-2 pr-2 pl-4 shadow-2xl">
-      <span class="text-[0.85rem] text-dim">
-        <span class="font-semibold text-ink">{$compareIds.length}</span> selected
-      </span>
-      <Button variant="" size="none" class="text-[0.85rem] text-dim hover:text-ink" onclick={clearCompare}>Clear</Button>
-      <a
-        class="rounded-full bg-accent px-4 py-1.5 text-[0.85rem] font-semibold text-bg hover:opacity-90"
-        href="{base}/compare/?ids={$compareIds.join(',')}"
-      >
-        Compare →
-      </a>
-    </div>
-  </div>
-{/if}
+<CompareBar
+  count={$compareIds.length}
+  href="{base}/compare/?ids={$compareIds.join(',')}"
+  onclear={clearCompare}
+/>

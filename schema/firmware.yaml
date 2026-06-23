@@ -13,6 +13,7 @@ required:
   - devices
 properties:
   name:
+    description: Human-readable firmware name, e.g. "MeshCore (official)".
     type: string
     minLength: 1
   refs:
@@ -26,11 +27,13 @@ properties:
       type: string
       minLength: 1
   type:
+    description: Relationship to the upstream MeshCore project.
     enum:
       - official
       - fork
       - custom
   maintainer:
+    description: Person or team that maintains the firmware, e.g. "Ripple Radio".
     type: string
     minLength: 1
   maintainerUrl:
@@ -47,69 +50,95 @@ properties:
         - name
       properties:
         name:
+          description: Maintainer name, e.g. "Jane Doe".
           type: string
           minLength: 1
         url:
+          description: Maintainer's homepage/profile URL.
           type: string
           pattern: ^https?://
   description:
+    description: One short paragraph about the firmware.
     type: string
     minLength: 1
   status:
+    description: Current maintenance activity.
     enum:
       - active
       - maintenance
       - inactive
       - experimental
   lifecycle:
+    description: Longer-term lifecycle stage of the project.
     enum:
       - active
       - maintenance
       - archived
   maturity:
+    description: Release maturity / stability level.
     enum:
       - experimental
       - alpha
       - beta
       - stable
   distribution:
+    description: How the firmware is distributed.
     enum:
       - official
       - vendor
       - community
       - personal
   lineage:
+    description: Where this firmware came from relative to upstream MeshCore.
     type: object
     additionalProperties: false
     properties:
       kind:
+        description: Relationship type — built on upstream, a fork, or a clean reimplementation.
         enum:
           - upstream
           - fork
           - reimplementation
       upstreamFirmwareId:
+        description: Firmware id this one derives from, e.g. "meshcore-official".
         type: string
         pattern: ^[a-z0-9-]+$
       upstreamRepository:
+        description: Upstream source repo, when the upstream isn't catalogued here.
         type: string
   runtime:
+    description: Build/runtime stack the firmware is written against.
     type: object
     additionalProperties: false
     properties:
       framework:
+        description: Embedded framework used.
         enum:
           - arduino
           - zephyr
           - esp-idf
           - other
       language:
+        description: Primary implementation language, e.g. "C++".
         type: string
   repository:
+    description: Source repository URL, e.g. https://github.com/meshcore-dev/MeshCore.
     type: string
   website:
+    description: Project or documentation website.
     type: string
   license:
+    description: SPDX license id where possible, e.g. "MIT".
     type: string
+  license_type:
+    description: >-
+      High-level source model. Derived from `license` when omitted (recognised
+      open-source SPDX ids map to open-source); set explicitly to override the
+      derivation or when no SPDX id applies.
+    enum:
+      - open-source
+      - source-available
+      - proprietary
   popularity:
     type: object
     additionalProperties: false
@@ -172,13 +201,15 @@ properties:
     type: string
     description: >-
       Computed at build time from changelog.yaml when present. Set manually in
-      firmware.yaml only when there is no changelog.
+      firmware.yaml only when there is no changelog. Example: "v1.16.0".
   released:
     type: string
     description: >-
       YYYY-MM-DD of latest_version. Computed at build time from changelog.yaml
       when present. Set manually in firmware.yaml only when there is no changelog.
+      Example: "2026-06-06".
   roles:
+    description: Node roles this firmware can run as.
     type: array
     items:
       enum:
@@ -190,24 +221,31 @@ properties:
         - kiss-modem
         - standalone-ui
   features:
+    description: Short feature labels shown on the firmware page, e.g. ["OTA updates", "MQTT"].
     type: array
     items:
       type: string
   capabilities:
+    description: Stable capability flags used for filtering and side-by-side comparison.
     type: object
     additionalProperties: false
     properties:
       protocol:
+        description: MeshCore protocol-level capabilities.
         type: object
         additionalProperties: false
         properties:
           meshcoreCompatible:
+            description: Speaks the standard MeshCore mesh protocol.
             type: boolean
           rawPacketSend:
+            description: Can transmit raw/arbitrary packets, e.g. for testing or bridging.
             type: boolean
           rawPacketObserve:
+            description: Can capture and observe raw packets off the air.
             type: boolean
       transports:
+        description: Client connection transports the firmware exposes.
         type: object
         additionalProperties: false
         properties:
@@ -222,18 +260,24 @@ properties:
           ethernet:
             type: boolean
       operations:
+        description: Update and management operations the firmware supports.
         type: object
         additionalProperties: false
         properties:
           webFlasher:
+            description: Can be installed from a browser-based web flasher.
             type: boolean
           ota:
+            description: Supports over-the-air firmware updates.
             type: boolean
           bleDfu:
+            description: Supports firmware update over BLE DFU.
             type: boolean
           configurationBackup:
+            description: Can export and restore its configuration.
             type: boolean
       networking:
+        description: Mesh networking roles and features.
         type: object
         additionalProperties: false
         properties:
@@ -246,8 +290,10 @@ properties:
           mqtt:
             type: boolean
           kissModem:
+            description: Can act as a KISS modem for an external TNC/stack.
             type: boolean
       hardware:
+        description: Optional onboard hardware the firmware can drive.
         type: object
         additionalProperties: false
         properties:
@@ -258,6 +304,7 @@ properties:
           sensors:
             type: boolean
           lowPowerRx:
+            description: Supports duty-cycled / low-power receive.
             type: boolean
   changelog:
     type: object
@@ -265,6 +312,7 @@ properties:
     description: Release source config. Defaults to GitHub releases parsed from `repository`.
     properties:
       source:
+        description: Where release history comes from.
         enum:
           - github
           - manual
@@ -276,6 +324,9 @@ properties:
         type: string
         description: 'filename in the firmware dir, for source: script'
   devices:
+    description: >-
+      Per-device support list — the source of truth for which boards this
+      firmware runs on. Each entry references a data/devices/<id> record.
     type: array
     items:
       type: object
@@ -285,19 +336,24 @@ properties:
         - status
       properties:
         id:
+          description: Device id — the data/devices/<id> directory name, e.g. "heltec-v3".
           type: string
           pattern: ^[a-z0-9-]+$
         status:
+          description: Support level for this board.
           enum:
             - supported
             - partial
             - untested
             - unsupported
         target:
+          description: Firmware build target / variant name, e.g. "Heltec_v3_companion_radio_ble".
           type: string
           pattern: ^[A-Za-z0-9_.-]+$
         platformio_board:
+          description: PlatformIO board id, e.g. "heltec_wifi_lora_32_V3".
           type: string
           pattern: ^[A-Za-z0-9_.-]+$
         notes:
+          description: Free-form notes about this board's support.
           type: string

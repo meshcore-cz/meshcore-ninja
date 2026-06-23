@@ -17,6 +17,7 @@ price:
   amount: 30
   currency: USD
   asOf: 2026-06
+image: gat562-watch13.svg
 datasheet: datasheet.pdf
 roles:
   - companion

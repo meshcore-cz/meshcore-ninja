@@ -1,0 +1,64 @@
+name: Official MeshCore app
+short_name: MeshCore
+kind: client
+status: active
+maturity: stable
+description: >-
+  The official MeshCore companion app for messaging, managing contacts and
+  channels, and configuring nodes over BLE/serial.
+
+image: icon.webp
+#screenshots:
+#  - file: screenshot-messages.svg
+#    caption: Channel and direct messaging
+#  - file: screenshot-contacts.svg
+#    caption: Contact and node management
+
+maintainers:
+  - name: Liam Cottle
+    url: https://github.com/liamcottle
+
+website: https://meshcore.nz
+license_type: proprietary
+
+languages:
+   - flutter
+
+latest_version: 1.45.0
+released: 2026-06-14
+
+platforms:
+  - android
+  - ios
+  - web
+interfaces:
+  - mobile
+  - web
+connections:
+  - ble
+  - serial
+  - tcp
+capabilities:
+  - messaging
+  - contacts
+  - channels
+  - node-configuration
+
+install:
+  - type: play-store
+    url: https://play.google.com/store/apps/details?id=com.liamcottle.meshcore.android
+  - type: app-store
+    url: https://apps.apple.com/us/app/meshcore/id6742354151
+  - type: web
+    url: https://app.meshcore.nz/
+
+verification:
+  sourceAvailable: false
+  releasesAvailable: false
+  ciBuilds: false
+  hasDocumentation: false
+  lastChecked: 2026-06-23
+
+tags:
+  - official
+  - companion

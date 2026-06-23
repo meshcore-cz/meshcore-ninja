@@ -4,6 +4,7 @@
   import { searchOpen } from '$lib/search.js';
   import Seo from '$lib/Seo.svelte';
   import Button from '$lib/Button.svelte';
+  import Card from '$lib/Card.svelte';
   import ShortcutHint from '$lib/ShortcutHint.svelte';
   let { data } = $props();
 
@@ -32,6 +33,13 @@
       n: data.counts.devices,
       blurb: 'LoRa hardware that runs MeshCore — specs, radios and node roles.',
       icon: 'M9 2h6a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm0 2v16h6V4H9Zm2 14h2v.5h-2V18Z'
+    },
+    {
+      href: '/software/',
+      label: 'Software',
+      n: data.counts.software,
+      blurb: 'Clients, integrations, gateways, tools and libraries for the network.',
+      icon: 'M8.7 7.3 4 12l4.7 4.7 1.4-1.4L6.8 12l3.3-3.3-1.4-1.4Zm6.6 0-1.4 1.4L17.2 12l-3.3 3.3 1.4 1.4L20 12l-4.7-4.7Z'
     },
     {
       href: '/firmwares/',
@@ -84,10 +92,7 @@
 
 <section class="mb-8 grid gap-4 [grid-template-columns:repeat(auto-fill,minmax(230px,1fr))]">
   {#each sections as s}
-    <a
-      class="group flex flex-col gap-2 rounded-xl border border-edge bg-elev p-5 transition hover:-translate-y-0.5 hover:border-accent"
-      href="{base}{s.href}"
-    >
+    <Card href="{base}{s.href}" class="flex flex-col gap-2 p-5">
       <div class="flex items-center justify-between">
         <svg class="h-6 w-6 text-accent" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path d={s.icon} />
@@ -96,7 +101,7 @@
       </div>
       <h2 class="text-[1.1rem] font-semibold group-hover:text-accent">{s.label}</h2>
       <p class="text-[0.85rem] text-dim">{s.blurb}</p>
-    </a>
+    </Card>
   {/each}
 </section>
 

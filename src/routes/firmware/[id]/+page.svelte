@@ -1,7 +1,9 @@
 <script>
   import { base } from '$app/paths';
   import RecordFooter from '$lib/RecordFooter.svelte';
-  import { STATUS_META, TYPE_META, FW_STATUS_TW, groupReleases, getFirmware, deviceMcuLabel, deviceRadioLabel, resolveRefs } from '$lib/data.js';
+  import BackLink from '$lib/BackLink.svelte';
+  import { pluralize } from '$lib/format.js';
+  import { STATUS_META, TYPE_META, FW_STATUS_TW, LICENSE_TYPE_META, licenseType, groupReleases, getFirmware, deviceMcuLabel, deviceRadioLabel, resolveRefs } from '$lib/data.js';
   import { clampDescription, absUrl, ogImageFor } from '$lib/seo.js';
   import Seo from '$lib/Seo.svelte';
   import ReleaseGroupList from '$lib/ReleaseGroupList.svelte';
@@ -13,6 +15,7 @@
   let releaseGroups = $derived(groupReleases(fw.releases));
   let refs = $derived(resolveRefs(fw.refs));
   let previewGroups = $derived(releaseGroups.slice(0, PREVIEW));
+  let licensing = $derived(licenseType(fw));
 
   const FRAMEWORK_LABELS = { arduino: 'Arduino', zephyr: 'Zephyr', 'esp-idf': 'ESP-IDF', other: 'Other' };
   const LANGUAGE_LABELS = { cpp: 'C++', c: 'C', rust: 'Rust' };
@@ -89,7 +92,7 @@
   let fwDescription = $derived(
     clampDescription(
       fw.description ||
-        `${fw.name} — ${TYPE_META[fw.type]?.label ?? fw.type} MeshCore firmware${fw.maintainer ? ` by ${fw.maintainer}` : ''}, supporting ${data.devices.length} device${data.devices.length === 1 ? '' : 's'}.`
+        `${fw.name} — ${TYPE_META[fw.type]?.label ?? fw.type} MeshCore firmware${fw.maintainer ? ` by ${fw.maintainer}` : ''}, supporting ${pluralize(data.devices.length, 'device')}.`
     )
   );
   let fwJsonLd = $derived({
@@ -108,7 +111,7 @@
 
 <Seo title={fw.name} description={fwDescription} type="article" image={ogImageFor('firmware', fw.id)} jsonLd={fwJsonLd} />
 
-<a class="mb-4 inline-block text-[0.9rem] text-dim hover:underline" href="{base}/firmwares/">← All firmwares</a>
+<BackLink href="{base}/firmwares/">All firmwares</BackLink>
 
 <header class="mb-6">
   <div class="flex flex-wrap items-center gap-3">
@@ -169,6 +172,7 @@
     {#if fw.released}<div><dt class="text-[0.72rem] tracking-wide text-dim uppercase">Released</dt><dd class="mt-1 text-[0.95rem]">{fw.released}</dd></div>{/if}
     {#if runtimeLabel}<div><dt class="text-[0.72rem] tracking-wide text-dim uppercase">Runtime</dt><dd class="mt-1 text-[0.95rem]">{runtimeLabel}</dd></div>{/if}
     {#if fw.distribution}<div><dt class="text-[0.72rem] tracking-wide text-dim uppercase">Distribution</dt><dd class="mt-1 text-[0.95rem] capitalize">{fw.distribution}</dd></div>{/if}
+    {#if licensing}<div><dt class="text-[0.72rem] tracking-wide text-dim uppercase">Licensing</dt><dd class="mt-1"><span class="inline-block rounded px-1.5 py-0.5 text-[0.78rem] font-medium {LICENSE_TYPE_META[licensing]?.tw ?? ''}">{LICENSE_TYPE_META[licensing]?.label ?? licensing}</span></dd></div>{/if}
     {#if fw.license}<div><dt class="text-[0.72rem] tracking-wide text-dim uppercase">License</dt><dd class="mt-1 text-[0.95rem]">{fw.license}</dd></div>{/if}
   </div>
 </dl>

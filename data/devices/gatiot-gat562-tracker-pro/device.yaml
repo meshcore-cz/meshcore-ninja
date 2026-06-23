@@ -8,6 +8,7 @@ familyId: gatiot-gat562
 variantOf: gatiot-gat562
 aliases:
   - GAT562 Mesh Tracker Pro
+image: gat562.svg
 official: true
 refs:
   mesh-sh-device: gat562-mesh-tracker-pro

@@ -60,6 +60,18 @@ capabilities:
 devices:
   - id: rak-4631
     status: supported
+  # Source: alias of rak-4631, same target rak4631
+  - id: atlavox-m1
+    status: supported
+  # Source: alias of rak-4631, same target rak4631
+  - id: atlavox-beacon
+    status: supported
+  # Source: alias of rak-4631, same target rak4631
+  - id: rak-wismesh-repeater-mini
+    status: supported
+  # Source: alias of rak-4631, same target rak4631
+  - id: yetiwurks-basestation
+    status: supported
   - id: uart-solar-node-station
     status: supported
   - id: lilygo-techo
@@ -136,6 +148,6 @@ devices:
   # Source: ZephCore release asset xiao_nrf52840
   - id: xiao-nrf52
     status: supported
-  - id: nrf54l15
+  - id: xiao-nrf54l15
     status: partial
     notes: Early bring-up; not all peripherals wired.

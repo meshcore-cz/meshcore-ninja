@@ -1,6 +1,8 @@
 <script>
   import { base } from '$app/paths';
   import RecordFooter from '$lib/RecordFooter.svelte';
+  import BackLink from '$lib/BackLink.svelte';
+  import { pluralize } from '$lib/format.js';
   import { deviceMcuLabel, deviceRadioLabel, resolveRefs } from '$lib/data.js';
   import { clampDescription, abs, absUrl, ogImageFor } from '$lib/seo.js';
   import Seo from '$lib/Seo.svelte';
@@ -10,7 +12,7 @@
   let vendorDescription = $derived(
     clampDescription(
       v.description ||
-        `${v.name}${v.country ? ` (${v.country})` : ''} — ${data.devices.length} MeshCore-compatible device${data.devices.length === 1 ? '' : 's'}.`
+        `${v.name}${v.country ? ` (${v.country})` : ''} — ${pluralize(data.devices.length, 'MeshCore-compatible device')}.`
     )
   );
   let vendorJsonLd = $derived({
@@ -24,7 +26,7 @@
 
 <Seo title={v.name} description={vendorDescription} image={ogImageFor('vendor', v.id)} jsonLd={vendorJsonLd} />
 
-<a class="mb-4 inline-block text-[0.9rem] text-dim hover:underline" href="{base}/vendors/">← All vendors</a>
+<BackLink href="{base}/vendors/">All vendors</BackLink>
 
 <header class="mb-7 flex flex-wrap items-center gap-6">
   <div class="flex h-[128px] w-[128px] shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white p-3.5">

@@ -6,7 +6,7 @@ kind: product
 lifecycle: active
 familyId: seeed-sensecap-indicator-esp-now
 official: true
-product_url: https://wiki.seeedstudio.com/sensecap_indicator_meshtastic/
+product_url: https://www.seeedstudio.com/SenseCAP-Indicator-D1L-for-Meshtastic-p-6304.html
 price:
   # Source: https://forum.seeedstudio.com/t/i-cant-even-get-started-is-there-phone-support/285080
   amount: 61
@@ -18,6 +18,7 @@ description: >-
   4-inch SenseCAP Indicator touchscreen platform for firmware experiments and
   mesh-network control panels. The Meshtastic-capable version pairs ESP32-S3
   and RP2040 MCUs with Wi-Fi, BLE, LoRa, and a capacitive RGB touch display.
+image: sensecap-indicator-espnow.svg
 transports:
   - ble
   - usb

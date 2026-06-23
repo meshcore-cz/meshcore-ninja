@@ -3,8 +3,9 @@
   import { page } from '$app/stores';
   import { browser } from '$app/environment';
   import { goto } from '$app/navigation';
-  import { TYPE_META, getFirmware } from '$lib/data.js';
+  import { TYPE_META, LICENSE_TYPE_META, licenseType, getFirmware } from '$lib/data.js';
   import { fwCompareIds } from '$lib/fwCompare.js';
+  import { pluralize } from '$lib/format.js';
   import { CAPABILITY_GROUPS } from '$lib/CapabilityMatrix.svelte';
   import Seo from '$lib/Seo.svelte';
   import Button from '$lib/Button.svelte';
@@ -64,6 +65,7 @@
     { label: 'Lifecycle', get: (f) => txt(f.lifecycle) },
     { label: 'Runtime', get: runtimeText },
     { label: 'License', get: (f) => txt(f.license) },
+    { label: 'Licensing', get: (f) => txt(LICENSE_TYPE_META[licenseType(f)]?.label) },
     { label: 'Latest version', get: (f) => txt(f.latest_version) },
     { label: 'Released', get: (f) => txt(f.released) },
     { label: 'Node roles', get: (f) => (f.roles ?? []).join(', ') || DASH },
@@ -121,7 +123,7 @@
 <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
   <div>
     <h1 class="text-[clamp(1.5rem,5vw,2rem)] font-bold">Compare firmwares</h1>
-    <p class="text-dim">{selected.length} firmware{selected.length === 1 ? '' : 's'} selected.</p>
+    <p class="text-dim">{pluralize(selected.length, 'firmware')} selected.</p>
   </div>
   <a class="text-[0.9rem] text-accent2 hover:underline" href="{base}/firmwares/">+ Add firmwares</a>
 </div>

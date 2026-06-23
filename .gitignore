@@ -10,6 +10,7 @@ node_modules
 /static/vendors.json
 /static/networks.json
 /static/compatibility.json
+/static/software.json
 /static/schema/
 /static/device/
 /static/firmware/
@@ -17,6 +18,7 @@ node_modules
 /static/network/
 /static/network-area/
 /static/compatibility/
+/static/software/
 /static/sitemap.xml
 /static/robots.txt
 /src/lib/generated/

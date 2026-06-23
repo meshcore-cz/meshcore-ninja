@@ -1,0 +1,89 @@
+# Source: https://muzi.works/products/superbase-kit
+name: Muzi Works SuperBase Kit
+vendorId: muziworks
+kind: kit
+lifecycle: active
+familyId: muziworks-superbase
+aliases:
+  - SuperBase Kit
+product_url: https://muzi.works/products/superbase-kit
+price:
+  # Source: https://muzi.works/products/superbase-kit
+  amount: 99
+  currency: USD
+  asOf: 2026-06
+  url: https://muzi.works/products/superbase-kit
+description: >-
+  Ready-to-use standalone Meshtastic kit built from Base Uno and Super IO, with
+  an OLED screen, navigation pad, digital compass, GPS/BDS, buzzer, 3D-printed
+  enclosure, holster, and battery.
+image: superbase-kit.svg
+roles:
+  - companion
+  - repeater
+  - room-server
+  - standalone-ui
+transports:
+  - ble
+  - usb
+variants:
+  - name: UK/EU 868 MHz
+    bands:
+      - '868'
+  - name: US/AU 915 MHz
+    bands:
+      - '915'
+hardware:
+  mcu:
+    model: nrf52840
+    flashMb: 2
+    ramKb: 256
+  radios:
+    - technology: lora
+      chip: sx1262
+      bands:
+        - '868'
+        - '915'
+      txPowerDbm: 20
+      antenna: SMA
+  display:
+    status: present
+    technology: oled
+    colors: monochrome
+  gnss:
+    status: present
+  input:
+    - type: joystick
+      description: Navigation pad
+    - type: speaker
+      description: Tone buzzer
+  leds:
+    status: unknown
+  power:
+    batterySupported: true
+    batteryBuiltIn: true
+    batteryCapacityMah: 1500
+    batteryChemistry: li-po
+    charging: true
+    solarInput: true
+    batteryConnector: Built-in LiPo 1500mAh
+  enclosure:
+    builtIn: true
+  physical:
+    dimensionsMm:
+      width: 47.8
+      height: 79.5
+      depth: 19
+    weightG: 80.3
+interfaces:
+  usb:
+    connector: USB-C
+    capabilities:
+      - power
+      - serial
+      - flashing
+  bluetooth:
+    version: '5.0'
+    ble: true
+  wifi:
+    status: none

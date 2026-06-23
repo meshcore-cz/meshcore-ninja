@@ -1,0 +1,92 @@
+# Source: https://atlavox.com/products/atlavox-m1
+name: Atlavox M1
+vendorId: atlavox
+kind: product
+lifecycle: active
+familyId: atlavox-m1
+variantOf: rak-4631
+aliases:
+  - Atlavox M1 Meshtastic Radio
+  - Atlavox M1 Meshtastic™ Radio
+official: false
+product_url: https://atlavox.com/products/atlavox-m1
+price:
+  amount: 77
+  currency: USD
+  asOf: 2026-06
+description: >-
+  Handheld RAK WisBlock-based Meshtastic/MeshCore radio with a 2000 mAh LiPo,
+  USB-C, Bluetooth, and an enclosed 3D-printed shell. Ships in 868 MHz and
+  915 MHz variants, with optional GNSS and sensor add-ons via internal
+  WisBlock slots.
+image: altavox-m1.svg
+roles:
+  - companion
+  - repeater
+  - room-server
+transports:
+  - ble
+  - usb
+# Source: https://atlavox.com/products/atlavox-m1 (Shopify product JSON variants).
+variants:
+  - name: Full Radio (US&CA)
+    sku: AVX-RA-M1F9
+    bands:
+      - '915'
+  - name: Full Radio (EU)
+    sku: AVX-RA-M1F8
+    bands:
+      - '868'
+
+hardware:
+  mcu:
+    model: nrf52840
+    flashMb: 1
+    ramKb: 256
+  radios:
+    - technology: lora
+      chip: sx1262
+      bands:
+        - '868'
+        - '915'
+      txPowerDbm: 22
+      antenna: SMA
+  display:
+    status: none
+  gnss:
+    status: none
+  leds:
+    status: present
+    description: WisBlock status LED
+  power:
+    batterySupported: true
+    batteryBuiltIn: true
+    batteryCapacityMah: 2000
+    batteryChemistry: li-po
+    charging: true
+  expansion:
+    - type: WisBlock slot
+      count: 3
+      interfaces:
+        - I2C
+        - GPIO
+        - UART
+  enclosure:
+    builtIn: true
+  physical:
+    dimensionsMm:
+      width: 58
+      height: 92
+      depth: 29
+interfaces:
+  usb:
+    connector: USB-C
+    capabilities:
+      - power
+      - serial
+      - flashing
+  bluetooth:
+    version: '5.0'
+    ble: true
+  wifi:
+    status: none

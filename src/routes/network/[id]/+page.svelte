@@ -1,6 +1,7 @@
 <script>
   import { base } from '$app/paths';
   import RecordFooter from '$lib/RecordFooter.svelte';
+  import BackLink from '$lib/BackLink.svelte';
   import {
     NETWORK_SCOPE_META,
     NETWORK_STATUS_META,
@@ -129,7 +130,7 @@
   jsonLd={networkJsonLd}
 />
 
-<a class="mb-4 inline-block text-[0.9rem] text-dim hover:underline" href="{base}/networks/">← All networks</a>
+<BackLink href="{base}/networks/">All networks</BackLink>
 
 <header class="mb-6">
   <div class="flex flex-wrap items-center gap-3">

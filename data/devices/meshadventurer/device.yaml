@@ -17,6 +17,7 @@ description: >-
   DIY off-road ESP32 + E22 LoRa board with a 0.96-inch SSD1306 OLED, rotary
   encoder UI, GPS, and optional BME280 sensor support. Built for 1 W 433 or
   868/915 MHz builds with an external SMA antenna and wide-range 9-28V input.
+image: meshadventurer_v1.3.svg
 roles:
   - companion
   - repeater

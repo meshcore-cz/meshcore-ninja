@@ -8,20 +8,32 @@ type: object
 additionalProperties: false
 properties:
   family:
+    description: >-
+      MCU/board families and their models, e.g. an `esp32` family containing
+      `esp32-s3` and `esp32-c3`. Referenced by device.yaml `familyId`.
     $ref: '#/$defs/familyCatalog'
   architecture:
+    description: CPU architectures, e.g. `xtensa-lx7` or `arm-cortex-m4`.
     $ref: '#/$defs/catalog'
   radio:
+    description: LoRa / radio chips, e.g. `sx1262` or `sx1276`. Referenced by device radios.
     $ref: '#/$defs/catalog'
   frequency:
+    description: >-
+      Regional LoRa band keys, e.g. `868` or `915`. These keys drive
+      network ⇄ device compatibility matching.
     $ref: '#/$defs/frequencyCatalog'
   display:
+    description: Display modules/controllers, e.g. `ssd1306` or `gxepd`.
     $ref: '#/$defs/catalog'
   gnss:
+    description: GNSS / GPS chips, e.g. `l76k` or `ublox-max-m10`.
     $ref: '#/$defs/catalog'
   refs:
     type: object
-    description: External reference databases that records can cross-link to via `refs`.
+    description: >-
+      External reference databases that records can cross-link to via `refs`.
+      The map key is the ref id used in each record's `refs`.
     additionalProperties:
       type: object
       additionalProperties: false
@@ -30,16 +42,21 @@ properties:
         - urlTemplate
       properties:
         name:
+          description: Label shown on the detail page, e.g. "mesh-sn.de".
           type: string
           minLength: 1
         urlTemplate:
           type: string
           pattern: \{id\}
-          description: URL with a `{id}` placeholder replaced by the record's ref value.
+          description: >-
+            URL with a `{id}` placeholder replaced by the record's ref value,
+            e.g. https://mesh-sn.de/en/devices/details/{id}.
         description:
+          description: Optional note about what this database covers.
           type: string
 $defs:
   familyCatalog:
+    description: Catalog of families, each optionally containing nested `models`.
     type: object
     additionalProperties:
       type: object
@@ -48,18 +65,24 @@ $defs:
         - name
       properties:
         name:
+          description: Canonical family name, e.g. "ESP32".
           type: string
           minLength: 1
         vendor:
+          description: Maker of the family, e.g. "Espressif".
           type: string
         url:
+          description: Reference/product page for the family.
           type: string
           pattern: ^https?://
         description:
+          description: Short note about the family.
           type: string
         architecture:
+          description: Architecture key from the `architecture` catalog, e.g. "xtensa-lx6".
           type: string
         models:
+          description: Specific models within the family, keyed by model id.
           type: object
           additionalProperties:
             type: object
@@ -68,18 +91,24 @@ $defs:
               - name
             properties:
               name:
+                description: Canonical model name, e.g. "ESP32-S3".
                 type: string
                 minLength: 1
               vendor:
+                description: Maker of the model, when it differs from the family.
                 type: string
               url:
+                description: Reference/product page for the model.
                 type: string
                 pattern: ^https?://
               description:
+                description: Short note about the model.
                 type: string
               architecture:
+                description: Architecture key for this model, e.g. "xtensa-lx7".
                 type: string
   catalog:
+    description: Generic part catalog keyed by part id (the value used in device.yaml).
     type: object
     additionalProperties:
       type: object
@@ -88,16 +117,21 @@ $defs:
         - name
       properties:
         name:
+          description: Canonical part name, e.g. "Semtech SX1262".
           type: string
           minLength: 1
         vendor:
+          description: Maker of the part, e.g. "Semtech".
           type: string
         url:
+          description: Datasheet or product page.
           type: string
           pattern: ^https?://
         description:
+          description: Short note about the part.
           type: string
   frequencyCatalog:
+    description: Catalog of regional LoRa bands, keyed by band id (e.g. "868").
     type: object
     additionalProperties:
       type: object
@@ -106,14 +140,19 @@ $defs:
         - name
       properties:
         name:
+          description: Human label for the band, e.g. "868 MHz (EU)".
           type: string
           minLength: 1
         range:
+          description: Frequency span the band covers, e.g. "863–870 MHz".
           type: string
         region:
+          description: Regulatory region the band belongs to, e.g. "EU" or "US".
           type: string
         url:
+          description: Reference page describing the band / its regulations.
           type: string
           pattern: ^https?://
         description:
+          description: Short note about the band.
           type: string

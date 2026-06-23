@@ -11,6 +11,7 @@ description: >-
   Tiny RP2040 XIAO board with USB flashing, a 14-pin footprint, and the
   standard Seeed user and charge LEDs. Suited to small companion-side
   controller projects and lightweight peripheral glue logic.
+image: xiao-rp2040.svg
 roles:
   - companion
   - repeater

@@ -8,6 +8,7 @@ required:
   - name
 properties:
   name:
+    description: Manufacturer or project name, e.g. "LilyGo" or "Heltec".
     type: string
     minLength: 1
   refs:
@@ -16,18 +17,27 @@ properties:
       Cross-references to external databases. Each key must be a ref id defined
       in data/globals.yaml `refs`; each value is this record's id/slug on that
       site, expanded into a URL via the ref's urlTemplate.
+      Example: `{ mesh-sh-vendor: lilygo }`.
     minProperties: 1
     additionalProperties:
       type: string
       minLength: 1
   website:
+    description: Official website, e.g. https://lilygo.cc.
     type: string
     pattern: ^https?://
   country:
+    description: >-
+      Country where the manufacturer is based, e.g. "China". Use "Various" for
+      generic board families with no single origin.
     type: string
     minLength: 1
   logo:
+    description: >-
+      Logo filename in the same directory as vendor.yaml, e.g. "logo.svg".
+      Prefer SVG; PNG/JPG/WebP are also allowed.
     type: string
     pattern: \.(svg|png|jpe?g|webp)$
   description:
+    description: One short paragraph about the manufacturer.
     type: string

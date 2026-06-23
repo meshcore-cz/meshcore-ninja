@@ -81,7 +81,7 @@ install: node_modules ## Install web dependencies (npm ci)
 
 .PHONY: dev
 dev: node_modules ## Run the web dev server (vite)
-	$(NPM) run dev
+	VITE_API_BASE=http://localhost$(API_ADDR) $(NPM) run dev 
 
 .PHONY: build-web
 build-web: node_modules ## Build the static site into build/

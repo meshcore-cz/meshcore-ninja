@@ -11,6 +11,7 @@ description: >-
   Compact Wio-E5 LoRaWAN development board with factory AT firmware support
   and a tiny 50 × 23 mm form factor. Intended for quick LoRa bring-up and
   GPIO-level prototyping rather than a finished enclosure.
+image: wio-e5-mini.svg
 transports:
   - usb
 price:

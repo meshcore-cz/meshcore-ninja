@@ -48,6 +48,7 @@
     { href: '/', label: 'Home' },
     { href: '/networks/', label: 'Networks' },
     { href: '/devices/', label: 'Devices' },
+    { href: '/software/', label: 'Software' },
     { href: '/firmwares/', label: 'Firmwares' },
     { href: '/matrix/', label: 'Compatibility' },
     { href: '/about/', label: 'About' }

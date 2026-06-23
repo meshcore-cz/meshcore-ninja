@@ -1,5 +1,5 @@
 # Source: https://lilygo.cc/en-us/products/t-eth-elite-1
-name: LilyGo T-ETH Elite
+name: LilyGo T-ETH ELite
 vendorId: lilygo
 kind: product
 lifecycle: active
@@ -17,6 +17,7 @@ description: >-
   ESP32-S3R8 board with Wi-Fi, BLE, and built-in Ethernet via W5500, designed
   for always-on wired IoT gateways and automation projects. USB-C power, PoE
   support, and soldered headers make it a compact network-first controller.
+image: lilygo-t-eth-elite.svg
 roles:
   - companion
   - repeater

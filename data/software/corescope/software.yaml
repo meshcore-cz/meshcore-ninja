@@ -1,0 +1,13 @@
+name: CoreScope
+kind: tool
+status: active
+tags:
+  - monitoring
+  - map
+  - analyzer
+platforms:
+  - web
+description: >-
+  Live MeshCore network monitoring and mapping — packet feeds, node maps and
+  observer stats used by several community networks.
+# repository / website: TODO — fill in canonical URLs.

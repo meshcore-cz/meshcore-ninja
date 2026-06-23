@@ -10,6 +10,7 @@ description: >-
   Compact RP2040 + SX1262 LoRa development board sold in LF and HF variants,
   with castellated GPIO, an IPEX antenna connector, and an optional USB-C FPC
   adapter for flashing and serial access.
+image: waveshare-rp2040-lora.svg
 # Source: https://www.waveshare.com/rp2040-lora.htm
 price:
   # Source: https://www.waveshare.com/rp2040-lora.htm

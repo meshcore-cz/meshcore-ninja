@@ -1,0 +1,97 @@
+# Source: https://store.rakwireless.com/products/wismesh-meshtastic-solar-repeater-mini
+# Source: https://docs.rakwireless.com/product-categories/meshtastic/wismesh-repeater-mini/quickstart/
+name: RAK WisMesh Repeater Mini
+vendorId: rak
+kind: product
+lifecycle: active
+familyId: rak-wismesh-repeater
+variantOf: rak-4631
+aliases:
+  - WisMesh Repeater Mini
+  - RAK10718
+official: false
+product_url: https://store.rakwireless.com/products/wismesh-meshtastic-solar-repeater-mini
+price:
+  amount: 99
+  currency: USD
+  asOf: 2026-06
+description: >-
+  Compact solar-ready outdoor repeater based on RAK4631 and the RAK19003 Mini
+  base board, bundled in an IP67 Unify enclosure with internal battery, BLE,
+  USB access, and external LoRa antenna. Sold in broad 8xx and 9xx regional
+  variants for quick off-grid deployment.
+image: rak-wishmesh-repeater-mini.svg
+roles:
+  - companion
+  - repeater
+  - room-server
+transports:
+  - ble
+  - usb
+# Source: https://store.rakwireless.com/products/wismesh-meshtastic-solar-repeater-mini (Shopify product JSON variants).
+variants:
+  - name: 800MHz for EU868/IN865/RU864
+    sku: '115147'
+    bands:
+      - '865'
+      - '868'
+  - name: 900MHz for US915/AU915/KR920/AS923
+    sku: '116121'
+    bands:
+      - '915'
+      - '920'
+      - '923'
+
+hardware:
+  mcu:
+    model: nrf52840
+    flashMb: 1
+    ramKb: 256
+  radios:
+    - technology: lora
+      chip: sx1262
+      bands:
+        - '865'
+        - '868'
+        - '915'
+        - '920'
+        - '923'
+      txPowerDbm: 22
+      antenna: RP-SMA
+  display:
+    status: none
+  gnss:
+    status: none
+  power:
+    batterySupported: true
+    batteryBuiltIn: true
+    batteryCapacityMah: 3200
+    batteryChemistry: li-ion
+    charging: true
+    solarInput: true
+    solarPanelBuiltIn: true
+    # Source: https://downloads.rakwireless.com/LoRa/WisBlock/Accessories/Solar%20Panel%2014090%E5%A4%9A%E6%99%B6%E5%B1%82%E5%8E%8B%E6%9D%BF%E8%A7%84%E6%A0%BC%E4%B9%A6.pdf
+    solarPanelWatts: 1.9
+  expansion:
+    - type: WisBlock sensor slot
+      count: 2
+  enclosure:
+    builtIn: true
+    ipRating: IP67
+  physical:
+    dimensionsMm:
+      width: 150
+      height: 100
+      depth: 50
+interfaces:
+  usb:
+    connector: USB-C
+    capabilities:
+      - power
+      - serial
+      - flashing
+  bluetooth:
+    version: '5.0'
+    ble: true
+  wifi:
+    status: none

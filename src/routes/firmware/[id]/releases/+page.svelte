@@ -1,5 +1,6 @@
 <script>
   import { base } from '$app/paths';
+  import BackLink from '$lib/BackLink.svelte';
   import ReleaseGroupList from '$lib/ReleaseGroupList.svelte';
   import Seo from '$lib/Seo.svelte';
   let { data } = $props();
@@ -8,7 +9,7 @@
 
 <Seo title={`${fw.name} releases`} description={`Full release history for ${fw.name}, a MeshCore firmware.`} />
 
-<a class="mb-4 inline-block text-[0.9rem] text-dim hover:underline" href="{base}/firmware/{fw.id}/">← {fw.name}</a>
+<BackLink href="{base}/firmware/{fw.id}/">{fw.name}</BackLink>
 
 <div class="mb-4 flex flex-wrap items-baseline justify-between gap-2 border-b border-edge pb-1.5">
   <h1 class="text-[clamp(1.4rem,5vw,1.9rem)] font-bold">{fw.name} · Releases</h1>

@@ -9,6 +9,7 @@ required:
   - hardware
 properties:
   name:
+    description: Short display name of the board, e.g. "Heltec V3".
     type: string
     minLength: 1
   refs:
@@ -22,9 +23,11 @@ properties:
       type: string
       minLength: 1
   vendorId:
+    description: Vendor id — the data/vendors/<id> directory name, e.g. "heltec".
     type: string
     pattern: ^[a-z0-9-]+$
   kind:
+    description: What kind of hardware this is.
     enum:
       - product
       - dev-board
@@ -32,27 +35,34 @@ properties:
       - kit
       - generic-build
   lifecycle:
+    description: Where the product sits in its sales lifecycle.
     enum:
       - announced
       - active
       - discontinued
       - unknown
   familyId:
+    description: Shared family id grouping related boards, e.g. "t-echo".
     type: string
     pattern: ^[a-z0-9-]+$
   revision:
+    description: Hardware revision label for the board, e.g. "3.1".
     type: string
   variantOf:
+    description: Device id this board is a variant of, e.g. "heltec-v3".
     type: string
     pattern: ^[a-z0-9-]+$
   aliases:
+    description: Alternate names, module codes or longer official titles, e.g. ["WSL-S3"].
     type: array
     items:
       type: string
   replaces:
+    description: Device id of the older board this one supersedes.
     type: string
     pattern: ^[a-z0-9-]+$
   product_url:
+    description: Vendor product or marketing page, e.g. https://heltec.org/project/wifi-lora-32-v3/.
     type: string
     pattern: ^https?://
   price:
@@ -63,19 +73,24 @@ properties:
       - amount
     properties:
       amount:
+        description: Price in the given currency, e.g. 19.9.
         type: number
         minimum: 0
       currency:
+        description: ISO 4217 currency code, e.g. "USD".
         type: string
         default: USD
         pattern: ^[A-Z]{3}$
       asOf:
+        description: Month the price was checked, as YYYY-MM, e.g. "2026-05".
         type: string
         pattern: ^\d{4}-\d{2}$
       url:
+        description: Where the price was seen.
         type: string
         pattern: ^https?://
   image:
+    description: SVG thumbnail filename in the same directory, e.g. "heltec-v3.svg".
     type: string
     pattern: \.svg$
   datasheet:
@@ -83,8 +98,10 @@ properties:
     pattern: \.pdf$
     description: PDF filename in the same directory as device.yaml; served from the repo.
   official:
+    description: True if the board appears in the official MeshCore flasher.
     type: boolean
   roles:
+    description: Node roles this board can run in MeshCore firmware.
     type: array
     items:
       enum:
@@ -96,6 +113,7 @@ properties:
         - kiss-modem
         - standalone-ui
   transports:
+    description: Connection transports the board exposes to clients.
     type: array
     items:
       enum:
@@ -138,38 +156,72 @@ properties:
           description: Band keys (globals.yaml `frequency`) this SKU operates on.
           items:
             type: string
+  cases:
+    description: Community or vendor 3D-printable enclosures for this device.
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      required:
+        - name
+        - url
+      properties:
+        name:
+          description: Case/model title, e.g. "H1 - Case for Heltec V3 running Meshtastic".
+          type: string
+          minLength: 1
+        author:
+          description: Designer or publisher name.
+          type: string
+          minLength: 1
+        url:
+          description: Printable model page.
+          type: string
+          pattern: ^https?://
+        image:
+          description: Optional remote cover thumbnail for the printable model.
+          type: string
+          pattern: ^https?://
   hardware:
+    description: Structured hardware details. `hardware.mcu` is required; an absent optional value means unknown.
     type: object
     additionalProperties: false
     required:
       - mcu
     properties:
       mcu:
+        description: Main microcontroller / SoC.
         type: object
         additionalProperties: false
         properties:
           model:
+            description: MCU catalog key (globals.yaml), e.g. "esp32-s3" or "nrf52840".
             type: string
           flashMb:
+            description: On-board flash in megabytes, e.g. 8.
             type: number
           psramMb:
+            description: PSRAM in megabytes, e.g. 8.
             type: number
           ramKb:
             type: number
             minimum: 0
-            description: On-chip SRAM in kilobytes.
+            description: On-chip SRAM in kilobytes, e.g. 512.
       radios:
+        description: LoRa / ESP-NOW radios on the board.
         type: array
         items:
           type: object
           additionalProperties: false
           properties:
             technology:
+              description: Radio technology.
               enum:
                 - lora
                 - esp-now
                 - other
             chip:
+              description: Radio chip catalog key (globals.yaml), e.g. "sx1262".
               type: string
             bands:
               type: array
@@ -184,19 +236,24 @@ properties:
               items:
                 type: string
             txPowerDbm:
+              description: Maximum transmit power in dBm, e.g. 22.
               type: number
             antenna:
+              description: Antenna connector or bundled antenna, e.g. "IPEX/u.FL".
               type: string
       display:
+        description: Built-in screen, if any.
         type: object
         additionalProperties: false
         properties:
           status:
+            description: Whether a display is present.
             enum:
               - unknown
               - none
               - present
           technology:
+            description: Display technology.
             enum:
               - unknown
               - display
@@ -204,42 +261,54 @@ properties:
               - e-paper
               - e-ink
           controller:
+            description: Display controller IC, e.g. "SSD1306".
             type: string
           size:
+            description: Diagonal size in inches, e.g. 0.96.
             type: number
           resolution:
+            description: Pixel resolution of the display.
             type: object
             additionalProperties: false
             properties:
               width:
+                description: Width in pixels, e.g. 128.
                 type: integer
               height:
+                description: Height in pixels, e.g. 64.
                 type: integer
           touch:
+            description: True if the screen is touch-capable.
             type: boolean
           colors:
+            description: Colour capability of the display.
             enum:
               - monochrome
               - grayscale
               - color
       gnss:
+        description: GNSS / GPS receiver, if any.
         type: object
         additionalProperties: false
         properties:
           status:
+            description: Whether a GNSS receiver is present.
             enum:
               - unknown
               - none
               - present
           chip:
+            description: GNSS chip catalog key (globals.yaml), e.g. "l76k".
             type: string
       input:
+        description: Built-in human input and audio I/O.
         type: array
         items:
           type: object
           additionalProperties: false
           properties:
             type:
+              description: Kind of input or audio device.
               enum:
                 - keyboard
                 - trackball
@@ -249,25 +318,34 @@ properties:
                 - microphone
                 - speaker
             description:
+              description: Optional detail, e.g. "mini QWERTY".
               type: string
       power:
+        description: Power, battery and charging details.
         type: object
         additionalProperties: false
         properties:
           batterySupported:
+            description: True if the board can run from a battery.
             type: boolean
           charging:
+            description: True if it can charge a battery (e.g. over USB).
             type: boolean
           solarInput:
+            description: True if it accepts a solar / auxiliary charging input.
             type: boolean
           solarPanelBuiltIn:
+            description: True if a solar panel is built in.
             type: boolean
           solarPanelWatts:
+            description: Built-in solar panel rating in watts, e.g. 0.5.
             type: number
             minimum: 0
           batteryBuiltIn:
+            description: True if a battery is included / built in.
             type: boolean
           batteryCapacityMah:
+            description: Battery capacity in mAh, e.g. 1000.
             type: number
             minimum: 1
           batteryChemistry:
@@ -289,32 +367,41 @@ properties:
             minimum: 0
             description: Typical peak current draw while transmitting, in milliamps.
           pmic:
+            description: Power-management / charge IC, e.g. "AXP2101".
             type: string
           batteryConnector:
+            description: External battery connector, e.g. "JST SH 1.25".
             type: string
       expansion:
+        description: Grove, header or other expansion ports.
         type: array
         items:
           type: object
           additionalProperties: false
           properties:
             type:
+              description: Port family, e.g. "grove" or "header-2.54".
               type: string
             count:
+              description: Number of these connectors.
               type: integer
               minimum: 1
             pins:
+              description: Pin count per connector, when relevant.
               type: integer
               minimum: 1
             interfaces:
+              description: Buses exposed on the port, e.g. ["I2C", "UART"].
               type: array
               items:
                 type: string
       leds:
+        description: Status / user LEDs.
         type: object
         additionalProperties: false
         properties:
           status:
+            description: Whether user-visible LEDs are present.
             enum:
               - unknown
               - none
@@ -323,18 +410,23 @@ properties:
             type: string
             description: 'What LEDs are present, e.g. "User RGB + charge status".'
       enclosure:
+        description: Case / enclosure.
         type: object
         additionalProperties: false
         properties:
           builtIn:
+            description: True if a factory enclosure is included.
             type: boolean
           ipRating:
+            description: Ingress-protection rating, e.g. "IP67".
             type: string
       physical:
+        description: Physical size and weight.
         type: object
         additionalProperties: false
         properties:
           dimensionsMm:
+            description: Outer dimensions in millimetres.
             type: object
             additionalProperties: false
             properties:
@@ -348,13 +440,16 @@ properties:
                 type: number
                 minimum: 0
           weightG:
+            description: Weight in grams, e.g. 38.
             type: number
             minimum: 0
       environmental:
+        description: Environmental ratings.
         type: object
         additionalProperties: false
         properties:
           operatingTempC:
+            description: Operating temperature range in °C.
             type: object
             additionalProperties: false
             properties:
@@ -363,23 +458,29 @@ properties:
               max:
                 type: number
       certifications:
+        description: Regulatory marks, e.g. ["CE", "FCC"].
         type: array
         items:
           type: string
           minLength: 1
   interfaces:
+    description: USB / Bluetooth / Wi-Fi interface details.
     type: object
     additionalProperties: false
     properties:
       usb:
+        description: USB port details.
         type: object
         additionalProperties: false
         properties:
           connector:
+            description: USB connector type, e.g. "USB-C".
             type: string
           bridge:
+            description: USB-serial bridge IC, e.g. "CP2102".
             type: string
           capabilities:
+            description: What the USB port can do.
             type: array
             items:
               enum:
@@ -388,23 +489,30 @@ properties:
                 - flashing
                 - dfu
       bluetooth:
+        description: Bluetooth details.
         type: object
         additionalProperties: false
         properties:
           version:
+            description: Bluetooth version, e.g. "5.0".
             type: string
           ble:
+            description: True if Bluetooth Low Energy is supported.
             type: boolean
       wifi:
+        description: Wi-Fi details.
         type: object
         additionalProperties: false
         properties:
           status:
+            description: Whether Wi-Fi is present.
             enum:
               - unknown
               - none
               - present
           standard:
+            description: Wi-Fi standard, e.g. "802.11 b/g/n".
             type: string
   description:
+    description: One short paragraph about the board.
     type: string

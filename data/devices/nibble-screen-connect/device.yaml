@@ -16,6 +16,7 @@ description: >-
   Breadboard-friendly Nibble node with a built-in screen, buttons, and a
   through-hole expansion layout aimed at MeshCore and Meshtastic hacking. The
   design pairs a Waveshare ESP32-S3 Zero with a Seeed Wio SX1262 radio module.
+image: nibble-screen-connect.svg
 transports:
   - ble
   - usb

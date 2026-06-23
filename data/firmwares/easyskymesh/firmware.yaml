@@ -67,6 +67,18 @@ devices:
     status: supported
   - id: rak-4631
     status: supported
+  # Source: alias of rak-4631, same target rak4631
+  - id: atlavox-m1
+    status: supported
+  # Source: alias of rak-4631, same target rak4631
+  - id: atlavox-beacon
+    status: supported
+  # Source: alias of rak-4631, same target rak4631
+  - id: rak-wismesh-repeater-mini
+    status: supported
+  # Source: alias of rak-4631, same target rak4631
+  - id: yetiwurks-basestation
+    status: supported
   - id: uart-solar-node-station
     status: supported
   # Source: release notes power table (Xiao S3, C3)

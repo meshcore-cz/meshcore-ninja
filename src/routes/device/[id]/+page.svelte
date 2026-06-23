@@ -1,6 +1,8 @@
 <script>
   import { base } from '$app/paths';
   import RecordFooter from '$lib/RecordFooter.svelte';
+  import BackLink from '$lib/BackLink.svelte';
+  import { pluralize } from '$lib/format.js';
   import {
     STATUS_META,
     TYPE_META,
@@ -38,6 +40,7 @@
   import Ruler from '@lucide/svelte/icons/ruler';
   import Cable from '@lucide/svelte/icons/cable';
   import Info from '@lucide/svelte/icons/info';
+  import Box from '@lucide/svelte/icons/box';
   import ChartNoAxesColumn from '@lucide/svelte/icons/chart-no-axes-column';
   let { data } = $props();
   let d = $derived(data.device);
@@ -49,7 +52,7 @@
       d.description ||
         [d.vendorName, deviceMcuLabel(d), deviceRadioLabel(d)]
           .filter((s) => s && s !== 'Unknown')
-          .join(' · ') + ` — runs ${data.firmwares.length} MeshCore firmware${data.firmwares.length === 1 ? '' : 's'}.`
+          .join(' · ') + ` — runs ${pluralize(data.firmwares.length, 'MeshCore firmware')}.`
     )
   );
 
@@ -644,7 +647,7 @@
 
 <Seo title={d.name} description={metaDescription} type="article" image={ogImageFor('device', d.id)} jsonLd={productJsonLd} />
 
-<a class="mb-4 inline-block text-[0.9rem] text-dim hover:underline" href="{base}/devices/">← All devices</a>
+<BackLink href="{base}/devices/">All devices</BackLink>
 
 <header class="mb-7 flex flex-wrap items-start gap-6">
   <div class="flex h-44 w-44 shrink-0 items-center justify-center rounded-xl border border-edge bg-elev2 p-3 text-muted">
@@ -912,5 +915,39 @@
     <p class="text-dim">No firmware in the atlas lists this device yet.</p>
   {/if}
 </section>
+
+<!-- Community 3D-printed cases, linked to Printables. Image is the model's
+     remote cover thumbnail; an icon stands in when one isn't recorded. -->
+{#if d.cases?.length}
+  <section class="mb-7">
+    <div class="mb-3 flex flex-wrap items-baseline gap-x-3 gap-y-1 border-b border-edge pb-1.5">
+      <h2 class="text-[1.1rem] font-semibold">3D-printed cases</h2>
+      <span class="text-[0.8rem] text-dim">Community enclosures you can print yourself</span>
+    </div>
+    <div class="grid gap-4 [grid-template-columns:repeat(auto-fill,minmax(200px,1fr))]">
+      {#each d.cases as c (c.url)}
+        <a
+          class="group flex flex-col overflow-hidden rounded-xl border border-edge bg-elev transition hover:-translate-y-0.5 hover:border-accent"
+          href={c.url}
+          target="_blank"
+          rel="noreferrer"
+        >
+          <div class="flex aspect-[4/3] items-center justify-center overflow-hidden bg-elev2 text-muted">
+            {#if c.image}
+              <img src={c.image} alt={c.name} loading="lazy" class="h-full w-full object-cover transition group-hover:scale-105" />
+            {:else}
+              <Box class="h-12 w-12" aria-hidden="true" />
+            {/if}
+          </div>
+          <div class="flex flex-1 flex-col gap-0.5 p-3">
+            <span class="text-[0.9rem] leading-tight font-medium group-hover:text-accent" title={c.name}>{c.name}</span>
+            {#if c.author}<span class="text-[0.78rem] text-dim">by {c.author}</span>{/if}
+            <span class="mt-1.5 text-[0.72rem] text-accent2">Printables ↗</span>
+          </div>
+        </a>
+      {/each}
+    </div>
+  </section>
+{/if}
 
 <RecordFooter source={d.source} jsonPath="{base}/device/{d.id}.json" />

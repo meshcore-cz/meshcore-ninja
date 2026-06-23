@@ -11,6 +11,7 @@ description: >-
   Compact Wio-E5 development board for STM32WLE5JC / LoRaWAN prototyping with
   external antenna and GPIO breakouts. Intended for quick bring-up and radio
   testing rather than a finished enclosure.
+image: wio-e5-dev.svg
 transports:
   - usb
 price:

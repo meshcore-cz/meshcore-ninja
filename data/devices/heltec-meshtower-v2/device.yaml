@@ -1,0 +1,86 @@
+# Source: https://heltec.org/project/meshtower/
+# Source: https://docs.heltec.org/en/node/meshtower/index.html
+name: Heltec MeshTower V2
+vendorId: heltec
+kind: product
+lifecycle: active
+familyId: heltec-meshsolar-meshtower
+aliases:
+  - MeshTower V2
+  - MeshTower
+official: false
+product_url: https://heltec.org/project/meshtower/
+price:
+  amount: 109
+  currency: USD
+  asOf: 2026-06
+description: >-
+  Heavy-duty outdoor solar node built on Heltec MeshSolar technology, with a
+  10 W panel, integrated battery pack, aluminum IP66 enclosure, and external
+  SMA antenna. Sold in 868 MHz and 915 MHz bands with 22 dBm or 30 dBm LoRa
+  options and optional GNSS.
+roles:
+  - companion
+  - repeater
+  - room-server
+transports:
+  - ble
+  - usb
+# Source: https://heltec.org/project/meshtower/ (band options shown on product page).
+variants:
+  - name: 863~870MHz
+    bands:
+      - '868'
+  - name: 902~928MHz
+    bands:
+      - '915'
+
+hardware:
+  mcu:
+    model: nrf52840
+  radios:
+    - technology: lora
+      chip: sx1262
+      bands:
+        - '868'
+        - '915'
+      txPowerDbm: 30
+      antenna: SMA
+  display:
+    status: none
+  gnss:
+    status: none
+  power:
+    batterySupported: true
+    batteryBuiltIn: true
+    batteryCapacityMah: 8400
+    batteryChemistry: li-ion
+    charging: true
+    solarInput: true
+    solarPanelBuiltIn: true
+    solarPanelWatts: 10
+  enclosure:
+    builtIn: true
+    ipRating: IP66
+  physical:
+    dimensionsMm:
+      width: 125
+      height: 125
+      depth: 52
+    weightG: 1500
+  environmental:
+    operatingTempC:
+      min: -20
+      max: 60
+interfaces:
+  usb:
+    connector: USB-C
+    capabilities:
+      - power
+      - serial
+      - flashing
+  bluetooth:
+    version: '5.0'
+    ble: true
+  wifi:
+    status: none

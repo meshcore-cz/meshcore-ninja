@@ -20,6 +20,7 @@ description: >-
   ESP32-S3 T-Beam variant with higher-power LoRa front end, GNSS, OLED, and an
   18650 battery bay. Designed for long-range mesh nodes where a 1 W class radio
   and the standard T-Beam layout are desired.
+image: t-beam-1w.svg
 transports:
   - ble
   - usb
@@ -93,3 +94,14 @@ interfaces:
     ble: true
   wifi:
     status: present
+# Community 3D-printable enclosures hosted on Printables. `image` is the model's
+# social cover thumbnail (remote URL); `url` links to the printable.
+cases:
+  - name: T-Beam 1W Enclosure
+    author: Blackout Comms
+    url: https://www.printables.com/model/1509835-t-beam-1w-enclosure
+    image: https://media.printables.com/media/prints/634beca8-e67e-46ba-9ed4-be67b1d78e42/images/11376688_062916ae-89cd-4920-91c8-1653465df020_7dedadb4-1b85-4f63-bed3-19b062bb0fe7/thumbs/cover/1200x630/jpg/printables_lilygo_tbeam_1w.jpg
+  - name: Lilygo T-Beam 1w basic case
+    author: BertUK
+    url: https://www.printables.com/model/1625261-lilygo-t-beam-1w-basic-case
+    image: https://media.printables.com/media/prints/9cc7a646-c930-4248-b052-66c01ebda746/images/12223453_69cc8e8b-02fc-4980-b7a7-b32d8b98c2cc_499b060f-ce58-44a1-bf48-24f90bce71e2/thumbs/cover/1200x630/jpeg/img_4962.jpg

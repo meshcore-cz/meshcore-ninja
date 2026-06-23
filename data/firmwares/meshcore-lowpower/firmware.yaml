@@ -78,6 +78,22 @@ devices:
     status: supported
     notes: Uses RAK19003 base board for power profiling.
   # Source: alias of rak-4631, same target rak4631
+  - id: atlavox-m1
+    status: supported
+    notes: Uses RAK4631 target; same as rak-4631.
+  # Source: alias of rak-4631, same target rak4631
+  - id: atlavox-beacon
+    status: supported
+    notes: Uses RAK4631 target; same as rak-4631.
+  # Source: alias of rak-4631, same target rak4631
+  - id: rak-wismesh-repeater-mini
+    status: supported
+    notes: Uses RAK4631 target; same as rak-4631.
+  # Source: alias of rak-4631, same target rak4631
+  - id: yetiwurks-basestation
+    status: supported
+    notes: Uses RAK4631 target; same as rak-4631.
+  # Source: alias of rak-4631, same target rak4631
   - id: uart-solar-node-station
     status: supported
     notes: Uses RAK4631 target; same as rak-4631.

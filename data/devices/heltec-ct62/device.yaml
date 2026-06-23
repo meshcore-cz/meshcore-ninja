@@ -17,6 +17,7 @@ description: >-
   Bluetooth LE, and IPEX antenna sockets. Designed for low-power IoT use cases
   such as Meshtastic, MeshCore and LoRaWAN, the CT62 is a stamp-hole package
   with long-range LoRa connectivity and a minimal module footprint.
+image: heltec-ct62.svg
 roles:
   - companion
   - repeater

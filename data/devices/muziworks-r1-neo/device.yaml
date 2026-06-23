@@ -1,21 +1,45 @@
+# Source: https://muzi.works/products/r1-neo-complete-meshtastic-device
 # Source: meshcore-dev/MeshCore variants/muziworks_r1_neo/platformio.ini
 name: Muzi Works R1 Neo
 vendorId: muziworks
 kind: product
 lifecycle: active
 familyId: muziworks-muzi-works-r1-neo
+aliases:
+  - R1 Neo - Complete Meshtastic Device with GPS
 official: true
+product_url: https://muzi.works/products/r1-neo-complete-meshtastic-device
 refs:
   mesh-sh-device: muzi-works-r1-neo
 price:
-  # Source: https://platfrastructure.life/post/meshtastic-hardware-thoughts/
-  amount: 40
+  # Source: https://muzi.works/products/r1-neo-complete-meshtastic-device
+  amount: 89
   currency: USD
   asOf: 2026-06
+  url: https://muzi.works/products/r1-neo-complete-meshtastic-device
+description: >-
+  Compact, factory-assembled Meshtastic handheld with built-in GPS/BDS,
+  weather-resistant sealing, a single soft-touch button, and multi-day battery
+  life from its internal pack.
+image: muziworks-r1-neo.svg
+roles:
+  - companion
+  - repeater
+  - room-server
+transports:
+  - ble
+  - usb
+variants:
+  - name: UK/EU 868 MHz
+    bands:
+      - '868'
+  - name: US/AU 915 MHz
+    bands:
+      - '915'
 hardware:
   mcu:
-    model: nrf52
-    # Source: https://mesh-sn.de/en/devices/details/muzi-works-r1-neo
+    model: nrf52840
+    flashMb: 1
     ramKb: 256
   radios:
     - technology: lora
@@ -26,12 +50,17 @@ hardware:
       txPowerDbm: 22
       antenna: SMA
   display:
-    status: unknown
+    status: none
   gnss:
     status: present
+  input:
+    - type: button
+      description: Soft-touch button
+    - type: speaker
+      description: Buzzer
   leds:
     status: present
-    description: Status LEDs
+    description: Integrated LED indicator
   power:
     batterySupported: true
     batteryBuiltIn: true
@@ -44,12 +73,11 @@ hardware:
     consumptionTxMa: 85
   enclosure:
     builtIn: true
-    ipRating: IP68
   physical:
     dimensionsMm:
       width: 58
-      height: 63
-      depth: 18
+      height: 63.5
+      depth: 17.8
     weightG: 84
 interfaces:
   usb:

@@ -17,6 +17,7 @@ description: >-
   Bluetooth LE, USB-C power/serial, and optional solar input. It is built for
   Meshtastic, MeshCore and LoRaWAN applications with external IPEX LoRa and GNSS
   antennas.
+image: heltec-t096.svg
 roles:
   - companion
   - repeater

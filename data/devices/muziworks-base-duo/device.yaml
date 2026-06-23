@@ -1,0 +1,89 @@
+# Source: https://muzi.works/products/base-duo
+# Source: https://muzi.works/pages/base
+name: Muzi Works Base Duo
+vendorId: muziworks
+kind: dev-board
+lifecycle: active
+familyId: muziworks-base
+aliases:
+  - Base Duo
+product_url: https://muzi.works/products/base-duo
+price:
+  # Source: https://muzi.works/products/base-duo
+  amount: 35
+  currency: USD
+  asOf: 2026-06
+  url: https://muzi.works/products/base-duo
+description: >-
+  Compact BASE System dev board for dual-band Meshtastic nodes, pairing an
+  nRF52840 MCU with an LR1121 LoRa radio, separate sub-GHz and 2.4 GHz antenna
+  connectors, QWIIC/STEMMA QT expansion, and battery/solar charging.
+image: base-duo.svg
+roles:
+  - companion
+  - repeater
+  - room-server
+transports:
+  - ble
+  - usb
+hardware:
+  mcu:
+    model: nrf52840
+    flashMb: 8
+    ramKb: 256
+  radios:
+    - technology: lora
+      chip: lr1121
+      bands:
+        - '868'
+        - '915'
+        - '2400'
+      txPowerDbm: 20
+      antenna: SMA + U.FL
+  display:
+    status: none
+  gnss:
+    status: none
+  input:
+    - type: button
+      description: User button
+    - type: button
+      description: Reset button
+  power:
+    batterySupported: true
+    batteryBuiltIn: false
+    charging: true
+    solarInput: true
+    pmic: BQ28185
+    batteryConnector: 3-pin Molex PicoBlade
+  expansion:
+    - type: qwiic-stemma-qt
+      count: 1
+      pins: 4
+      interfaces:
+        - I2C
+    - type: header-2.54
+      count: 1
+      pins: 25
+      interfaces:
+        - GPIO
+        - PWR
+        - UART
+        - I2C
+  physical:
+    dimensionsMm:
+      width: 42
+      height: 32
+    weightG: 10
+interfaces:
+  usb:
+    connector: USB-C
+    capabilities:
+      - power
+      - serial
+      - flashing
+  bluetooth:
+    version: '5.0'
+    ble: true
+  wifi:
+    status: none

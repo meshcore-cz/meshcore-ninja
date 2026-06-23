@@ -35,6 +35,7 @@ description: >-
   BLE, and passive Wi-Fi/GNSS scanning. Compact 20×20 mm bare module intended
   as the radio core for tracking and geolocation designs, with no display or
   enclosure.
+image: wio-wm1110.svg
 hardware:
   mcu:
     model: nrf52840

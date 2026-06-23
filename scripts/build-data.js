@@ -159,8 +159,8 @@ function cleanGeneratedDir(root, dir) {
   rmSync(join(root, 'static', dir), { recursive: true, force: true });
 }
 
-function buildRecordJson(root, { devices, firmwares, vendors, networks, compatibility }) {
-  for (const dir of ['device', 'firmware', 'vendor', 'network', 'compatibility']) {
+function buildRecordJson(root, { devices, firmwares, vendors, networks, software, compatibility }) {
+  for (const dir of ['device', 'firmware', 'vendor', 'network', 'software', 'compatibility']) {
     cleanGeneratedDir(root, dir);
   }
 
@@ -179,6 +179,10 @@ function buildRecordJson(root, { devices, firmwares, vendors, networks, compatib
   }
   for (const network of networks) {
     writeJsonRecord(join(root, 'static', 'network', `${network.id}.json`), network);
+    count += 1;
+  }
+  for (const item of software) {
+    writeJsonRecord(join(root, 'static', 'software', `${item.id}.json`), item);
     count += 1;
   }
   for (const report of compatibility) {
@@ -204,6 +208,7 @@ function buildRecordJson(root, { devices, firmwares, vendors, networks, compatib
     ['firmwares', firmwares],
     ['vendors', vendors],
     ['networks', networks],
+    ['software', software],
     ['compatibility', compatibility]
   ]) {
     writeJsonRecord(join(root, 'static', `${name}.json`), records);
@@ -319,7 +324,7 @@ const SITE_ORIGIN = (process.env.SITE_ORIGIN ?? 'https://meshcore.ninja').replac
 const BASE_PATH = (process.env.BASE_PATH ?? '').replace(/\/+$/, '');
 
 /** Write sitemap.xml + robots.txt from the compiled dataset. */
-function buildSitemap(root, { devices, firmwares, vendors, networks, generatedAt }) {
+function buildSitemap(root, { devices, firmwares, vendors, networks, software, generatedAt }) {
   const lastmod = (generatedAt ?? new Date().toISOString()).slice(0, 10);
   const prefix = `${SITE_ORIGIN}${BASE_PATH}`;
 
@@ -328,6 +333,7 @@ function buildSitemap(root, { devices, firmwares, vendors, networks, generatedAt
     '/devices/',
     '/vendors/',
     '/networks/',
+    '/software/',
     '/matrix/',
     '/releases/',
     '/about/',
@@ -335,7 +341,8 @@ function buildSitemap(root, { devices, firmwares, vendors, networks, generatedAt
     ...devices.map((d) => `/device/${d.id}/`),
     ...firmwares.flatMap((f) => [`/firmware/${f.id}/`, `/firmware/${f.id}/releases/`]),
     ...vendors.map((v) => `/vendor/${v.id}/`),
-    ...networks.map((n) => `/network/${n.id}/`)
+    ...networks.map((n) => `/network/${n.id}/`),
+    ...software.map((s) => `/software/${s.id}/`)
   ];
 
   const urls = paths
@@ -371,6 +378,10 @@ export async function buildData(root = defaultRoot) {
     a.name.localeCompare(b.name)
   );
   const networkAreas = publishNetworkAreas(root, networks);
+
+  const software = readDir(root, 'software', 'software.yaml', dirDate).sort((a, b) =>
+    a.name.localeCompare(b.name)
+  );
 
   const devices = readDir(root, 'devices', 'device.yaml', dirDate)
     .map((d) => ({ ...d, vendorName: vendorById.get(d.vendorId)?.name ?? null }))
@@ -418,6 +429,24 @@ export async function buildData(root = defaultRoot) {
       return ra !== rb ? ra - rb : a.name.localeCompare(b.name);
     });
 
+  // The global data.json is imported into every page's shared bundle, so it must
+  // stay lean. A firmware's releases carry the rendered changelog HTML
+  // (notes/notesHtml, ~1MB — two thirds of the dataset) plus per-variant URLs and
+  // titles. None of that is needed by the release listings (homepage feed,
+  // /releases, /firmwares), which only show version/date/prerelease and a variant
+  // count. The firmware detail and releases pages, which DO render notes, fetch
+  // the full per-record /firmware/<id>.json instead. So ship only the listing
+  // fields here; buildRecordJson() writes the full releases per record.
+  const liteFirmwares = firmwares.map((fw) => ({
+    ...fw,
+    releases: (fw.releases ?? []).map(({ version, datetime, date, prerelease }) => ({
+      version,
+      ...(datetime != null ? { datetime } : {}),
+      ...(date != null ? { date } : {}),
+      ...(prerelease ? { prerelease } : {})
+    }))
+  }));
+
   const dataset = {
     schemaVersion: 3,
     generatedAt: new Date().toISOString(),
@@ -427,12 +456,14 @@ export async function buildData(root = defaultRoot) {
       vendors: vendors.length,
       networks: networks.length,
       networkAreas,
+      software: software.length,
       compatibility: compatibility.length
     },
-    firmwares,
+    firmwares: liteFirmwares,
     devices,
     vendors,
     networks,
+    software,
     compatibility,
     globals
   };
@@ -451,12 +482,13 @@ export async function buildData(root = defaultRoot) {
     firmwares,
     vendors,
     networks,
+    software,
     generatedAt: dataset.generatedAt
   });
 
   return {
     ...dataset.counts,
-    recordsJson: buildRecordJson(root, { devices, firmwares, vendors, networks, compatibility }),
+    recordsJson: buildRecordJson(root, { devices, firmwares, vendors, networks, software, compatibility }),
     sitemapUrls
   };
 }
@@ -468,12 +500,13 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
     devices,
     vendors,
     networks,
+    software,
     compatibility,
     networkAreas,
     recordsJson,
     sitemapUrls
   } = await buildData();
   console.log(
-    `✓ Wrote data.json — ${firmwares} firmware(s), ${devices} device(s), ${vendors} vendor(s), ${networks} network(s), ${networkAreas} network area(s), ${compatibility} compatibility report(s); ${recordsJson} record JSON file(s); ${sitemapUrls} sitemap URL(s).`
+    `✓ Wrote data.json — ${firmwares} firmware(s), ${devices} device(s), ${vendors} vendor(s), ${networks} network(s), ${networkAreas} network area(s), ${software} software, ${compatibility} compatibility report(s); ${recordsJson} record JSON file(s); ${sitemapUrls} sitemap URL(s).`
   );
 }

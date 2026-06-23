@@ -14,6 +14,7 @@ description: >-
   WisBlock core module with RP2040 and SX1262 LoRa for compact mesh builds on
   WisBlock base boards. No Wi-Fi or BLE on board; designed to be combined with
   WisBlock communication modules and external antennas.
+image: rak-11310.svg
 price:
   # Source: https://store.rakwireless.com/products/rak11310-wisblock-lpwan-module
   amount: 10

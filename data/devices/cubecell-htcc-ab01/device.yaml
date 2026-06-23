@@ -14,6 +14,7 @@ description: >-
   Ultra-low-power CubeCell LoRa development board based on ASR6502-class
   silicon with an integrated SX1262 radio. Designed for solar-powered and
   battery-operated IoT deployments.
+image: cubecell-htcc-ab01.svg
 roles:
   - repeater
 transports:

@@ -11,6 +11,7 @@ description: >-
   Thumb-sized ESP32-S3 XIAO board with Wi-Fi, BLE, USB flashing, and onboard
   user/charge LEDs. A compact host board for wireless and sensor projects, with
   battery charging support and the standard XIAO expansion footprint.
+image: xiao-s3-plain.svg
 roles:
   - companion
   - repeater

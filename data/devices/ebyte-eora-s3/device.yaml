@@ -21,6 +21,7 @@ description: >-
   slot, USB-C, and LiPo charging circuit. Suited to small MeshCore/Meshtastic
   builds where a low-cost board with display and rechargeable battery support is
   enough.
+image: ebyte-eora-s3.svg
 roles:
   - companion
   - repeater

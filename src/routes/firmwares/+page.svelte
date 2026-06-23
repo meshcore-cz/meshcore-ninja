@@ -1,25 +1,38 @@
 <script>
   import { base } from '$app/paths';
-  import { TYPE_META, FW_STATUS_TW } from '$lib/data.js';
+  import { TYPE_META, FW_STATUS_TW, LICENSE_TYPE_META, licenseType } from '$lib/data.js';
+  import { pluralize } from '$lib/format.js';
   import Seo from '$lib/Seo.svelte';
   import ReleaseRow from '$lib/ReleaseRow.svelte';
   import Button from '$lib/Button.svelte';
   import Chip from '$lib/Chip.svelte';
+  import PageHeader from '$lib/PageHeader.svelte';
+  import Card from '$lib/Card.svelte';
+  import CompareBar from '$lib/CompareBar.svelte';
   import { fwCompareIds, toggleFwCompare, clearFwCompare } from '$lib/fwCompare.js';
   import { browser } from '$app/environment';
-  import { page } from '$app/stores';
-  import { get } from 'svelte/store';
+  import { onMount } from 'svelte';
   let { data } = $props();
 
-  // Filter state is hydrated from / synced to the URL so a filtered view links.
-  const initParams = browser ? get(page).url.searchParams : new URLSearchParams();
-  let query = $state(initParams.get('q') ?? '');
-  let typeFilter = $state(
-    ['official', 'fork', 'custom'].includes(initParams.get('type')) ? initParams.get('type') : 'all'
-  );
+  // Filter state is synced to / from the URL so a filtered view links. It starts
+  // at its defaults so the first client render matches the prerendered (unfiltered)
+  // HTML; the URL is read in onMount, after hydration. Reading it at init instead
+  // diverged from the prerendered list and corrupted hydration.
+  let query = $state('');
+  let typeFilter = $state('all');
+  let hydrated = $state(false);
+
+  onMount(() => {
+    const p = new URLSearchParams(location.search);
+    query = p.get('q') ?? '';
+    typeFilter = ['official', 'fork', 'custom'].includes(p.get('type')) ? p.get('type') : 'all';
+    hydrated = true;
+  });
 
   $effect(() => {
-    if (!browser) return;
+    // Wait until onMount has applied the URL → state, or the first run would
+    // immediately overwrite the incoming query string with empty defaults.
+    if (!browser || !hydrated) return;
     const p = new URLSearchParams();
     if (query.trim()) p.set('q', query.trim());
     if (typeFilter !== 'all') p.set('type', typeFilter);
@@ -54,11 +67,10 @@
   description="Official and community MeshCore firmwares — the official build plus community forks and custom variants, with node roles and supported devices."
 />
 
-<h1 class="mb-1 text-[clamp(1.5rem,5vw,2rem)] font-bold">Firmwares</h1>
-<p class="mb-5 max-w-[60ch] text-dim">
+<PageHeader title="Firmwares" subtitleClass="max-w-[60ch]">
   The official MeshCore build plus community forks and custom variants — with node roles and the
   <a class="text-accent2 hover:underline" href="{base}/devices/">devices</a> they run on.
-</p>
+</PageHeader>
 
 <div class="mb-4 flex flex-wrap items-center gap-4">
   <input
@@ -76,19 +88,22 @@
   </div>
 </div>
 
-<p class="mb-4 text-[0.85rem] text-dim">{filtered.length} firmware{filtered.length === 1 ? '' : 's'}</p>
+<p class="mb-4 text-[0.85rem] text-dim">{pluralize(filtered.length, 'firmware')}</p>
 
 <div class="grid gap-4 [grid-template-columns:repeat(auto-fill,minmax(280px,1fr))]">
   {#each filtered as fw (fw.id)}
-    <a
-      class="group flex flex-col gap-2.5 rounded-xl border border-edge bg-elev p-[1.1rem] transition hover:-translate-y-0.5 hover:border-accent"
-      href="{base}/firmware/{fw.id}/"
-    >
+    {@const licensing = licenseType(fw)}
+    <Card href="{base}/firmware/{fw.id}/" class="flex flex-col gap-2.5 p-[1.1rem]">
       <div class="flex items-center justify-between gap-2">
         <div class="flex items-center gap-2">
           <span class="rounded-md px-2 py-0.5 text-[0.72rem] font-bold tracking-wide uppercase {TYPE_META[fw.type]?.tw}">
             {TYPE_META[fw.type]?.label ?? fw.type}
           </span>
+          {#if licensing}
+            <span class="rounded-md px-1.5 py-0.5 text-[0.66rem] font-medium {LICENSE_TYPE_META[licensing]?.tw ?? ''}">
+              {LICENSE_TYPE_META[licensing]?.label ?? licensing}
+            </span>
+          {/if}
           <Button
             variant=""
             size="none"
@@ -123,7 +138,7 @@
         <span>{fw.maintainer}</span>
         {#if fw.latest_version}<span class="font-mono">{fw.latest_version}</span>{/if}
       </div>
-    </a>
+    </Card>
   {/each}
 </div>
 
@@ -141,19 +156,8 @@
   </section>
 {/if}
 
-{#if $fwCompareIds.length}
-  <div class="pointer-events-none fixed inset-x-0 bottom-4 z-40 flex justify-center px-4">
-    <div class="pointer-events-auto flex items-center gap-3 rounded-full border border-edge bg-elev2 py-2 pr-2 pl-4 shadow-2xl">
-      <span class="text-[0.85rem] text-dim">
-        <span class="font-semibold text-ink">{$fwCompareIds.length}</span> selected
-      </span>
-      <Button variant="" size="none" class="text-[0.85rem] text-dim hover:text-ink" onclick={clearFwCompare}>Clear</Button>
-      <a
-        class="rounded-full bg-accent px-4 py-1.5 text-[0.85rem] font-semibold text-bg hover:opacity-90"
-        href="{base}/compare-firmwares/?ids={$fwCompareIds.join(',')}"
-      >
-        Compare →
-      </a>
-    </div>
-  </div>
-{/if}
+<CompareBar
+  count={$fwCompareIds.length}
+  href="{base}/compare-firmwares/?ids={$fwCompareIds.join(',')}"
+  onclear={clearFwCompare}
+/>
