@@ -124,6 +124,31 @@ and keep counters in-memory only.
 - `GET /api/observers` — `{observers: [observerView]}` — the global observer
   activity table, most recently active first. Each entry has `observerId`, `name`,
   `firstSeen`, `lastSeen`, `observations`, and `networks`.
+- `GET /api/map` — a GeoJSON `FeatureCollection` for one map viewport, powering
+  [map.meshcore.ninja](https://map.meshcore.ninja). It aggregates dense areas into
+  **cluster** features at low zoom and returns **individual node** features when
+  searching or zoomed in (`zoom >= 10`), so the client only ever loads what the
+  current viewport needs. Served with `Cache-Control: public, max-age=30`.
+
+`GET /api/map` query params (all optional):
+
+| param | example | meaning |
+|-------|---------|---------|
+| `bbox` | `-25,34,45,72` | viewport `west,south,east,north` in degrees (ignored when `q` is set) |
+| `zoom` | `5` | map zoom level; controls cluster granularity and the cluster→node cutoff |
+| `types` | `1,2,3,4` | node types to include — `1`=chat, `2`=repeater, `3`=room, `4`=sensor |
+| `networks` | `meshcore-cz,eu-uk-narrow` | network IDs to include |
+| `active` | `24h` \| `7d` \| `30d` | keep only nodes whose last advert is within the window |
+| `since` | `1782000000` | same, as an explicit unix-seconds threshold (overrides `active`) |
+| `q` | `repeater` | name substring (case-insensitive) or pubkey hex prefix; searches globally and returns individual nodes |
+| `limit` | `3000` | cap on individual node features returned |
+
+Each feature is a GeoJSON `Point`. **Cluster** features carry
+`{cluster: true, count, dominantType, types: {repeater: n, …}, bbox}` (the `bbox`
+lets the client zoom to the cluster's extent on click). **Node** features carry
+`{cluster: false, pubkey, name, type, typeName, lastAdvertAt, advertCount, networks}`.
+The collection also reports `zoom`, `returned`, and `capped` (true when `limit`
+truncated the result).
 
 `networkSummary`:
 
