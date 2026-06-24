@@ -1,7 +1,60 @@
 source: github
 repo: ALLFATHER-BV/wadamesh
-updatedAt: '2026-06-24T03:23:04.375Z'
+updatedAt: '2026-06-24T09:37:48.552Z'
 releases:
+  - version: beta_15
+    name: wadamesh beta_15
+    datetime: '2026-06-24T09:02:52Z'
+    url: https://github.com/ALLFATHER-BV/wadamesh/releases/tag/beta_15
+    prerelease: false
+    notes: >-
+      **wadamesh beta_15** ✨
+
+
+      Two new touches, a couple of satisfying fixes, and one sensible default change.
+
+
+      ### ✨ New
+
+      - **Amber power-save battery** — idle power-saving now tints the status-bar battery **amber**,
+      just like iPhone's Low Power Mode, instead of showing a separate moon icon. (T-Deck)
+
+      - **@-mention picker** — type **`@`** in the message box to pick a contact from a list and
+      drop their name in. Thanks **@robinshizuyo-dev** (#42).
+
+
+      ### 🩹 Fixed
+
+      - **Lists stay put** — closing a settings item, menu or chat no longer snaps the list back to
+      the top; it stays where you left it. Thanks **@ZorkaTheDog** (#45).
+
+      - **App-sent messages appear on the device** — a DM sent from the MeshCore companion app now
+      also shows in the right conversation on-screen. Thanks **@HonzaDandy** (#46).
+
+      - **Typing reliability** (T-Deck / Tanmatsu) — tapping a text field, even one that's already
+      highlighted, starts typing right away, and the accent pop-up no longer interrupts typing
+      outside of chats.
+
+      - **Cursor cue** — the text cursor only appears when a field is actually ready for input, so
+      it's a dependable "you can type now" hint.
+
+      - **Smoother map panning** — tile rendering no longer trips the watchdog and reboots during
+      heavy scrolling.
+
+
+      ### ⚙️ Changed
+
+      - **Keyboard navigation is now OFF by default.** Prefer driving the UI with the trackball /
+      arrow keys? Turn it back on in **Settings → Keyboard** (your choice sticks until you change
+      it). The **Tanmatsu** keeps it on, since it has no touchscreen.
+
+
+      **Everything from [beta_14](https://github.com/ALLFATHER-BV/wadamesh/releases/tag/beta_14) is
+      included.**
+
+
+      ▶️ **Flash in the browser:** https://flasher.wadamesh.com — or install via the Launcher /
+      on-device update. 🙏
   - version: beta_14
     name: wadamesh beta_14
     datetime: '2026-06-23T22:44:21Z'
