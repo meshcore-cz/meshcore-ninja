@@ -18,6 +18,15 @@
 #   gnss                   → hardware.gnss.chip
 
 family:
+  mg24:
+    name: Silicon Labs MG24 series
+    vendor: Silicon Labs
+    url: https://www.silabs.com/wireless/zigbee/efr32mg24-series-2-socs
+    architecture: arm-cortex-m33
+    models:
+      efr32mg24:
+        name: Silicon Labs EFR32MG24
+        url: https://www.silabs.com/wireless/zigbee/efr32mg24-series-2-socs
   nrf52:
     name: Nordic nRF52 series
     vendor: Nordic Semiconductor

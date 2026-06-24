@@ -8,7 +8,9 @@ familyId: heltec-wifi-lora-32
 revision: '4.3'
 aliases:
   - Heltec WiFi LoRa 32 V4
+  - Heltec WiFi LoRa 32 V4.2
   - WiFi LoRa 32 V4
+  - WiFi LoRa 32 V4.2
   - WiFi LoRa 32 V4.3.1
 replaces: heltec-v3
 image: heltec_v4.svg
@@ -37,11 +39,21 @@ transports:
   - wifi
 # Source: https://heltec.org/project/wifi-lora-32-v4/ (variation data embedded in product page).
 variants:
-  - name: 863~870MHz OLED (CN)
+  - name: 863~870MHz OLED / V4.2
+    revision: '4.2'
+    bands:
+      - '868'
+  - name: 902~928MHz OLED / V4.2
+    revision: '4.2'
+    bands:
+      - '915'
+  - name: 863~870MHz OLED / V4.3
+    revision: '4.3'
     sku: ZC-310-1-CN
     bands:
       - '868'
-  - name: 902~928MHz OLED (CN)
+  - name: 902~928MHz OLED / V4.3
+    revision: '4.3'
     sku: ZC-310-1-CN2
     bands:
       - '915'

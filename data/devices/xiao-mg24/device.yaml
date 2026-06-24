@@ -1,0 +1,69 @@
+# Source: https://wiki.seeedstudio.com/xiao_mg24_getting_started/
+name: Seeed XIAO MG24 + SX1262
+vendorId: seeed
+kind: dev-board
+lifecycle: active
+familyId: seeed-xiao-mg24-sx1262
+aliases:
+  - XIAO MG24
+  - Seeed Studio XIAO MG24
+official: false
+description: >-
+  XIAO MG24 host board paired with an external SX1262 LoRa module over SPI for
+  ZephCore MeshCore builds. The MG24 brings low-power BLE and a compact XIAO
+  footprint to tiny companion/repeater setups.
+transports:
+  - ble
+  - usb
+roles:
+  - companion
+  - repeater
+  - room-server
+variants:
+  - name: 868/915MHz
+    bands:
+      - '868'
+      - '915'
+hardware:
+  mcu:
+    model: efr32mg24
+    # Source: https://wiki.seeedstudio.com/xiao_mg24_getting_started/
+    ramKb: 256
+  radios:
+    - technology: lora
+      chip: sx1262
+      bands:
+        - '868'
+        - '915'
+  display:
+    status: none
+  gnss:
+    status: none
+  leds:
+    status: present
+    description: User LED and power LED
+  input:
+    - type: button
+      description: reset
+  power:
+    batterySupported: true
+    batteryBuiltIn: false
+    charging: false
+    solarInput: false
+    batteryConnector: solder pads
+  physical:
+    dimensionsMm:
+      width: 21
+      height: 17.8
+interfaces:
+  usb:
+    connector: USB-C
+    capabilities:
+      - power
+      - serial
+      - flashing
+  bluetooth:
+    version: '5.3'
+    ble: true
+  wifi:
+    status: none

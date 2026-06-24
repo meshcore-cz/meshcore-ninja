@@ -148,6 +148,9 @@ devices:
   # Source: ZephCore release asset xiao_nrf52840
   - id: xiao-nrf52
     status: supported
+  # Source: ZephCore bring-up board xiao_mg24
+  - id: xiao-mg24
+    status: supported
   - id: xiao-nrf54l15
     status: partial
     notes: Early bring-up; not all peripherals wired.

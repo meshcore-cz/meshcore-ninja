@@ -9,8 +9,8 @@ description: >-
   client and an optional multi-session backend.
 
 maintainers:
-  - name: meshcore-cz
-    url: https://github.com/meshcore-cz
+  - name: burningtree
+    url: http://github.com/burningtree
 
 repository: https://github.com/meshcore-cz/meshcore-go
 documentation: https://pkg.go.dev/github.com/meshcore-cz/meshcore-go
