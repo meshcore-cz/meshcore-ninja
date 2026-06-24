@@ -43,5 +43,3 @@ verification:
   lastChecked: 2026-06-24
   notes:
     - The repository contains release binaries and usage notes but no firmware source or license.
-latest_version: v1.16.86
-released: 2026-06-21

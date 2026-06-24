@@ -29,5 +29,3 @@ devices:
     status: supported
   - id: heltec-v4
     status: supported
-latest_version: v0.1.1
-released: 2026-05-13

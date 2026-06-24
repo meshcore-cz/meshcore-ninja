@@ -37,4 +37,3 @@ devices:
     status: supported
     target: heltec_v4_tft_grid_os_ble
     notes: Requires a Heltec V4 configuration with TFT and FT6336 touch controller.
-latest_version: v0.7.1-BETA1

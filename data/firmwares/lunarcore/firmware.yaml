@@ -37,5 +37,3 @@ devices:
   - id: heltec-v3
     status: supported
     notes: The project README names the Heltec WiFi LoRa 32 V3 as its hardware target.
-latest_version: v1.1.0
-released: 2026-02-06

@@ -38,5 +38,3 @@ devices:
     status: supported
   - id: rak-wismesh-tag
     status: supported
-latest_version: v1.0.0
-released: 2026-02-08

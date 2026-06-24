@@ -40,5 +40,3 @@ devices:
   - id: m5stack-cardputer-adv
     status: supported
     notes: Requires the M5Stack Cap LoRa-1262 module.
-latest_version: Meshcore-Cardputerv1.10
-released: 2026-01-27
