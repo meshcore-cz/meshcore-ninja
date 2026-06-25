@@ -1,7 +1,64 @@
 source: github
 repo: laserir/MCLite
-updatedAt: '2026-06-23T09:49:37.827Z'
+updatedAt: '2026-06-25T15:27:18.372Z'
 releases:
+  - version: v0.4.1
+    name: v0.4.1 — MeshCore 1.16, full companion command set, message-sync fixes
+    datetime: '2026-06-25T11:41:04Z'
+    url: https://github.com/laserir/MCLite/releases/tag/v0.4.1
+    prerelease: false
+    notes: >-
+      MeshCore 1.16 upgrade, the full companion command set (status/trace, anon-req,
+      explicit-unscoped), and companion message-sync fixes. Update over WiFi (Admin → WiFi → Check
+      for updates) or via the web flasher.
+
+
+
+      ### Added
+
+      - **Manage rooms and channels from the companion app.** The companion protocol gained the
+      standard write/action
+        commands the official MeshCore app uses, so things that previously failed against MCLite now work:
+        - **Room login** (`CMD_SEND_LOGIN`): log into a configured room or repeater from the app. A blank password field
+          uses the password already in the device config, and a wrong password instantly retries with the stored one.
+          Thanks to the reporters (#32).
+        - **Add / remove channels** (`CMD_SET_CHANNEL`): join a Public, hashtag, or private channel — or remove one —
+          from the app. **Adding applies instantly with no reboot** — the channel is usable right away and its share QR
+          shows the real key, not zeros, with the session staying connected. **Removing a channel still reboots** to
+          apply (a known limitation — MeshCore offers no way to remove a channel from the running radio, so the device
+          rebuilds its channel table from config at boot; the app reconnects on its own). Gated by the
+          `permissions.conversation_management` setting, so a locked-down device still refuses it (#31).
+        - **Add / edit / remove contacts** (`CMD_ADD_UPDATE_CONTACT`, `CMD_REMOVE_CONTACT`): add a contact, rename one,
+          or delete one (and its chat history) straight from the app. **Adding and renaming apply instantly** (the app
+          stays connected); **removing reboots** to apply (the app reconnects) — see the consistent add/remove model
+          below. Editing maps to the contact's **display name**; per-contact permission flags stay device-owner settings
+          (the config tool / on-device Admin), and the app's own contact flags remain app-local. Gated by
+          `permissions.conversation_management` (#33).
+        - **Share a contact** (`CMD_SHARE_CONTACT`) re-broadcasts a contact's advert so a nearby device can add them,
+          and **reboot** (`CMD_REBOOT`) is now honoured from the app's button.
+        - The app's **Local vs Flood** advert buttons were already handled; confirmed during this work.
+        With this, the companion can fully manage rooms, channels, and contacts (#31, #32, #33 all closed). A consistent
+        rule across both contacts and channels: **adding and editing apply instantly; removing reboots** to apply (the
+        app reconnects on its own). The reboot on removal is required for channels — MeshCore has no way to drop a
+        channel from the running radio — and kept for contacts so the behaviour is uniform and predictable. Live changes
+        are reflected on the **device's own UI** too — a contact/channel added or renamed from the app shows up in the
+        on-device conversation list and Admin screens right away, no reboot. In-place editing of a contact's permission
+        flags / a channel's settings still arrives alongside on-device editing.
+      - **Change device settings from the companion app.** With `permissions.settings` set to
+      `full`, a connected app
+        can now set the **device name**, **radio parameters** (frequency / spreading factor / bandwidth / coding rate),
+        **TX power**, the **BLE pairing PIN**, and the **path-hash mode** (1/2/3 bytes per hop). Values are range-checked;
+        the device name applies instantly to mesh adverts (the Bluetooth scan name refreshes on the next reboot), while
+        radio / TX / PIN / path-hash save and apply on a quick reboot (the app reconnects). **Path-hash mode** is
+        especially useful on large meshes — it lets app users match a 3-byte network
+        without hand-editing `config.json` (see #36). A device left at `restricted` or `none` refuses these. Identity
+        keys, advert location (MCLite advertises GPS at the configured precision), and auto-add stay device-managed by
+        design and are rejected.
+
+      - **Set the region/scope from the companion app.** The companion now honours
+      `CMD_SET_DEFAULT_FLOOD_SCOPE` (set the
+        persi
+      …
   - version: v0.4.0
     name: v0.4.0 — on-device editing, contact sharing, permissions
     datetime: '2026-06-22T14:47:00Z'
@@ -791,38 +848,5 @@ releases:
       ```
 
       esptool.py write_flash 0x0 mclite-v0.1.2.bin
-
-      ```
-  - version: v0.1.1
-    name: v0.1.1
-    datetime: '2026-03-28T18:32:12Z'
-    url: https://github.com/laserir/MCLite/releases/tag/v0.1.1
-    prerelease: false
-    notes: >-
-      ## What's New
-
-
-      - **Keyboard backlight support** — turns on at boot, off on auto-dim, restores on wake.
-      Configurable via `kbd_backlight` (on/off) and `kbd_brightness` (1–255, default 127).
-
-      - **Configurable dim brightness** — new `dim_brightness` setting (0–255, default 20). Set to 0
-      to turn the screen off completely when inactive.
-
-      - **Config tool: Basic/Advanced mode** — new toggle to show only Device, Identity, Contacts,
-      and Channels by default. Switch to Advanced for Radio, Display, Messaging, Sound, GPS,
-      Battery, and Security settings.
-
-      - Updated config tool, example config, admin screen, and README.
-
-
-      ## Flashing
-
-
-      Use the [web flasher](https://laserir.github.io/MCLite/tools/web-flasher/) or download
-      `mclite-v0.1.1.bin` below and flash with esptool:
-
-      ```
-
-      esptool.py write_flash 0x0 mclite-v0.1.1.bin
 
       ```
