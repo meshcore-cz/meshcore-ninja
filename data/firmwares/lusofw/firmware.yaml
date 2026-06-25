@@ -1,0 +1,134 @@
+name: LusoFW
+type: fork
+maintainer: MeshCore Portugal
+maintainerUrl: https://github.com/Meshcore-Portugal
+description: >
+  The official MeshCore firmware distribution for the Portuguese community, with Portugal-oriented
+  radio defaults, duty-cycle enforcement, network time synchronisation, flood-advert controls, and
+  curated repeater and bridge builds.
+repository: https://github.com/Meshcore-Portugal/lusofw
+website: https://meshcore.pt
+license: MIT
+status: active
+lifecycle: active
+maturity: stable
+distribution: community
+lineage:
+  kind: fork
+  upstreamFirmwareId: meshcore-official
+  upstreamRepository: https://github.com/meshcore-dev/MeshCore
+runtime:
+  framework: arduino
+  language: C++
+roles:
+  - repeater
+features:
+  - Portugal-oriented radio and region defaults
+  - Duty-cycle enforcement
+  - Network time synchronisation
+  - Flood-advert scheduling and reduction
+  - ESP-NOW and RS-232 repeater bridge builds
+  - SX126x boosted receive gain controls
+  - Curated browser-flashable releases
+capabilities:
+  protocol:
+    meshcoreCompatible: true
+  transports:
+    usbSerial: true
+  operations:
+    webFlasher: true
+    ota: true
+  networking:
+    repeater: true
+    roomServer: false
+    observer: false
+    mqtt: false
+    kissModem: false
+  hardware:
+    gps: true
+    display: true
+    sensors: true
+    lowPowerRx: false
+verification:
+  sourceAvailable: true
+  releasesAvailable: true
+  signedReleases: false
+  reproducibleBuilds: false
+  ciBuilds: true
+  officialFlasher: false
+  hasDocumentation: true
+  lastChecked: '2026-06-25'
+  notes:
+    - Release assets include SHA-1 checksum files.
+    - Published releases are curated repeater and repeater-bridge builds.
+devices:
+  # Source: v2026.5.2 GitHub release assets and .github/workflows/new-tag-trigger.yaml
+  - id: heltec-t114
+    status: supported
+    target: heltec_t114
+    platformio_board: heltec_t114
+  - id: heltec-v3
+    status: supported
+    target: heltec_v3
+    platformio_board: heltec_wifi_lora_32_V3
+  - id: heltec-v4
+    status: supported
+    target: heltec_v4
+    platformio_board: heltec_v4
+  - id: heltec-v4-exp
+    status: supported
+    target: heltec_v4
+    platformio_board: heltec_v4
+    notes: Uses the Heltec V4 TFT release target.
+  - id: heltec-wsl3
+    status: supported
+    target: heltec_v3
+    platformio_board: heltec_wifi_lora_32_V3
+  - id: lilygo-t3-s3-sx126x
+    status: supported
+    target: lilygo_t3s3
+    platformio_board: t3_s3_v1_x
+  - id: lilygo-t3-s3-sx127x
+    status: supported
+    target: lilygo_t3s3_sx1276
+    platformio_board: t3_s3_v1_x
+  - id: lilygo-tlora-1-6
+    status: supported
+    target: lilygo_tlora_v2_1
+    platformio_board: ttgo-lora32-v21
+  - id: rak-3112
+    status: supported
+    target: rak3112
+    platformio_board: esp32-s3-devkitc-1
+  - id: rak-4631
+    status: supported
+    target: rak4631
+    platformio_board: rak4631
+  - id: sensecap-solar-p1
+    status: supported
+    target: sensecap_solar
+    platformio_board: seeed_sensecap_solar
+  - id: sensecap-solar-p1-pro
+    status: supported
+    target: sensecap_solar
+    platformio_board: seeed_sensecap_solar
+  - id: lilygo-t-beam-sx1262
+    status: supported
+    target: lilygo_tbeam_SX1262
+    platformio_board: ttgo-t-beam
+  - id: lilygo-t-beam-1-2-sx1276
+    status: supported
+    target: lilygo_tbeam_SX1276
+    platformio_board: ttgo-t-beam
+  - id: lilygo-tbeam-supreme
+    status: supported
+    target: lilygo_tbeam_supreme_SX1262
+    platformio_board: t_beams3_supreme
+  - id: xiao-nrf52
+    status: supported
+    target: xiao_nrf52
+    platformio_board: seeed-xiao-afruitnrf52-nrf52840
+  - id: xiao-esp32s3
+    status: supported
+    target: xiao_s3_wio
+    platformio_board: seeed_xiao_esp32s3

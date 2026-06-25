@@ -29,6 +29,8 @@ community:
   facebook: https://www.facebook.com/groups/meshcorepolska
 
 analyzers:
+  - name: meshcorekrk.cma.pl (Kraków)
+    url: https://meshcorekrk.cma.pl/
   - name: jomesh.com
     url: https://jomesh.com
   - name: MeshCore PL Analyzer
@@ -45,5 +47,9 @@ resources:
       url: https://lorameshcore.pl/aktualnePresetyPolska/
     - name: Useful links
       url: https://lorameshcore.pl/przydatneLinki/
+    - name: MeshStats Polska
+      url: https://meshstats.pl/
+    - name: LoRaStats Warszawa map
+      url: https://lorastats.pl/Map
     - name: Contact
       url: https://lorameshcore.pl/kontakt/

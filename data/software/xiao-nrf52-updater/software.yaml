@@ -1,0 +1,59 @@
+name: XIAO nRF52 Updater
+kind: utility
+status: active
+maturity: stable
+description: >-
+  Standalone updater firmware for Seeed XIAO nRF52840 and RAK4631 boards that
+  flashes Nordic Legacy DFU firmware bundles to nearby nRF52 MeshCore nodes over
+  Bluetooth, including drone-assisted maintenance of hard-to-reach repeaters.
+
+maintainers:
+  - name: Rastislav Vysoky
+    url: https://github.com/recrof
+
+repository: https://github.com/recrof/xiao_nrf52_updater
+documentation: https://github.com/recrof/xiao_nrf52_updater#readme
+license_type: source-available
+
+languages:
+  - cpp
+
+platforms:
+  - nrf52
+interfaces:
+  - headless
+connections:
+  - ble
+  - usb
+capabilities:
+  - flashing
+  - firmware-update
+  - automation
+
+install:
+  - type: github-release
+    url: https://github.com/recrof/xiao_nrf52_updater/releases
+  - type: source
+    url: https://github.com/recrof/xiao_nrf52_updater
+    command: pio run -e xiao_nrf52840
+
+verification:
+  sourceAvailable: true
+  releasesAvailable: true
+  signedReleases: false
+  ciBuilds: true
+  hasDocumentation: true
+  lastChecked: 2026-06-25
+  notes:
+    - Supports Nordic Legacy DFU, including buttonless transition from application mode.
+    - Release builds target Seeed XIAO nRF52840 and RAK4631 with RAK15001 QSPI flash.
+    - The repository does not currently declare an SPDX license.
+
+tags:
+  - bluetooth-dfu
+  - nrf52
+  - drone
+  - unattended
+  - field-maintenance
+
+last_reviewed: 2026-06-25

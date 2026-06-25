@@ -1,0 +1,61 @@
+name: Python Nordic Legacy DFU Tool
+short_name: nrf_dfu_py
+kind: utility
+status: active
+maturity: stable
+description: >-
+  Cross-platform Python utility with graphical and command-line interfaces for
+  updating Nordic nRF51/nRF52 devices over Bluetooth using buttonless and Legacy
+  DFU, with configurable scanning, retries, packet acknowledgements, and MTU.
+
+maintainers:
+  - name: Rastislav Vysoky
+    url: https://github.com/recrof
+
+repository: https://github.com/recrof/nrf_dfu_py
+documentation: https://github.com/recrof/nrf_dfu_py#readme
+license_type: source-available
+
+languages:
+  - python
+
+platforms:
+  - linux
+  - macos
+  - windows
+interfaces:
+  - gui
+  - cli
+connections:
+  - ble
+capabilities:
+  - flashing
+  - firmware-update
+  - automation
+
+install:
+  - type: github-release
+    url: https://github.com/recrof/nrf_dfu_py/releases
+  - type: source
+    url: https://github.com/recrof/nrf_dfu_py
+    command: pip install bleak && python dfu_gui.py
+
+verification:
+  sourceAvailable: true
+  releasesAvailable: true
+  signedReleases: false
+  ciBuilds: true
+  hasDocumentation: true
+  lastChecked: 2026-06-25
+  notes:
+    - Supports Nordic Legacy DFU only; Secure DFU is not supported.
+    - CI publishes standalone GUI builds for Windows, Linux x64/ARM64, and macOS Intel/Apple Silicon.
+    - The repository does not currently declare an SPDX license.
+
+tags:
+  - bluetooth-dfu
+  - nrf52
+  - cross-platform
+  - desktop
+
+last_reviewed: 2026-06-25
