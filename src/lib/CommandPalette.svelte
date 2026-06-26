@@ -25,7 +25,8 @@
     Device: 'text-accent',
     Firmware: 'text-accent2',
     Vendor: 'text-warn',
-    Software: 'text-ok'
+    Software: 'text-ok',
+    Page: 'text-muted'
   };
 
   async function go(item) {
@@ -87,6 +88,14 @@
                 >
                   {#if item.type === 'Software'}
                     <SoftwareIcon src={item.image} name={item.title} kind={item.kind} class="h-9 w-9 rounded-md" iconClass="h-4 w-4" bg="bg-bg" />
+                  {:else if item.type === 'Page' && item.icon}
+                    {@const Icon = item.icon}
+                    <span
+                      class="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-edge bg-bg text-muted"
+                      aria-hidden="true"
+                    >
+                      <Icon class="h-4 w-4" />
+                    </span>
                   {:else if item.type === 'Network' && item.flag}
                     <!-- Networks show their primary country flag (square) as the avatar. -->
                     <span

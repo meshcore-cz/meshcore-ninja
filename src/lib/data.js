@@ -6,6 +6,8 @@ import * as countryFlags from 'country-flag-icons/string/3x2';
 import * as countryFlagsSquare from 'country-flag-icons/string/1x1';
 import { groupReleases } from '$lib/releases.js';
 import { richTextToPlain } from '$lib/richtext.js';
+import { COLLECTIONS } from '$lib/collections.js';
+import { TOOLS } from '$lib/tools.js';
 
 export { groupReleases } from '$lib/releases.js';
 
@@ -899,6 +901,27 @@ export const searchItems = [
       ...(s.platforms ?? []),
       ...(s.maintainers ?? []).map((m) => m.name)
     ]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase()
+  })),
+  // Static section & tool pages, so the palette can jump straight to them
+  // (e.g. "Repeater commands", "Frequency bands", "Compatibility matrix",
+  // "API status") rather than only data records.
+  ...Object.values(COLLECTIONS).map((c) => ({
+    type: 'Page',
+    title: c.label,
+    subtitle: c.blurb,
+    href: c.href,
+    icon: c.icon,
+    text: [c.label, c.id, c.blurb].filter(Boolean).join(' ').toLowerCase()
+  })),
+  ...Object.values(TOOLS).map((t) => ({
+    type: 'Page',
+    title: t.label,
+    href: t.href,
+    icon: t.icon,
+    text: [t.label, t.homeLabel, t.id.replace(/-/g, ' ')]
       .filter(Boolean)
       .join(' ')
       .toLowerCase()
