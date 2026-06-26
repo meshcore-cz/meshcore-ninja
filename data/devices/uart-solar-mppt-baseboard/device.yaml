@@ -1,0 +1,71 @@
+# Source: https://lectronz.com/products/solar-mppt-charger-for-meshtastic · https://pcb.uart.cz/
+name: μArt.cz Solar Mesh Baseboard
+vendorId: uart-cz
+kind: kit
+lifecycle: active
+familyId: uart-cz-solar-node
+variantOf: rak-4631
+official: false
+product_url: https://lectronz.com/products/solar-mppt-charger-for-meshtastic
+price:
+  amount: 55
+  currency: EUR
+  asOf: 2026-06
+description: >-
+  Bare 70 × 43 mm baseboard built around the RAK4630 (RAK4631-compatible
+  firmware) with an integrated MPPT solar charge controller. Solar input
+  7–30 V, supports 1S Li-Ion/Li-Pol/LiFePO4 and 1S/2S LTO batteries with a
+  3.3V buck/boost converter. No enclosure, panel, or battery included; meant
+  to be built into a custom off-grid Meshtastic/MeshCore/Reticulum node.
+roles:
+  - companion
+  - repeater
+  - room-server
+transports:
+  - ble
+  - usb
+hardware:
+  mcu:
+    model: nrf52840
+    flashMb: 1
+    ramKb: 256
+  radios:
+    - technology: lora
+      chip: sx1262
+      bands:
+        - '868'
+        - '915'
+      antenna: IPEX
+  display:
+    status: none
+  gnss:
+    status: none
+  power:
+    batterySupported: true
+    batteryBuiltIn: false
+    batteryChemistry: other
+    charging: true
+    solarInput: true
+    solarPanelBuiltIn: false
+  expansion:
+    - type: QWIIC/STEMMA
+      count: 1
+      interfaces:
+        - I2C
+  enclosure:
+    builtIn: false
+  physical:
+    dimensionsMm:
+      width: 70
+      height: 43
+interfaces:
+  usb:
+    connector: USB-C
+    capabilities:
+      - serial
+      - flashing
+  bluetooth:
+    version: '5.0'
+    ble: true
+  wifi:
+    status: none
