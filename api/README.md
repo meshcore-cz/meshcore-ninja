@@ -260,6 +260,41 @@ The `version` label can be stamped at build time:
 go build -ldflags "-X main.version=$(git describe --tags --always)" -o bin/meshcore-ninja-api .
 ```
 
+### Grafana dashboards
+
+Two ready-to-import dashboards live in [`grafana/`](grafana/):
+
+- **`meshcore-ninja-dashboard.json`** — *service health*: API performance
+  (rate/latency quantiles/status codes/response size/in-flight), ingest, analyzer
+  status & staleness, SQLite flush health, and Go runtime/process metrics.
+- **`meshcore-network-activity.json`** — *mesh data only*: packet throughput,
+  observations, payload-type mix (donut + stacked rate), a busiest-networks bar
+  gauge, a sortable per-network table (packets/s, observations/s, analyzers
+  connected, last-packet age), and data-freshness panels. No API/DB/runtime
+  noise — just the mesh.
+
+Each has `datasource` and `network` template variables (the activity one adds a
+`payload_type` filter too).
+
+Import it in Grafana via **Dashboards → New → Import → Upload JSON file**, then
+pick your Prometheus/VictoriaMetrics datasource when prompted. The dashboard has
+a `datasource` variable and a multi-select `network` filter, so it adapts to
+whichever backend and networks you point it at.
+
+#### Public / external sharing
+
+Grafana's **Share externally** (public dashboards) feature **does not support
+template variables** — a dashboard that uses them renders "No data" on every
+panel when shared. For that case use the variable-free variants:
+[`grafana/meshcore-ninja-dashboard-public.json`](grafana/meshcore-ninja-dashboard-public.json)
+and [`grafana/meshcore-network-activity-public.json`](grafana/meshcore-network-activity-public.json).
+
+They have the `datasource`/`network`/`payload_type` variables removed (panels show all networks),
+and uses the standard Grafana import input, so on **Import** Grafana prompts for
+the Prometheus/VictoriaMetrics datasource and bakes its real UID into the saved
+dashboard. After importing, open it and use **Share → Share externally** — the
+panels will resolve because there are no variables left to expand.
+
 ## Frontend wiring
 
 The static site polls this API when `PUBLIC_API_BASE` is set (e.g.
