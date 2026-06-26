@@ -1,0 +1,45 @@
+name: Bulgaria
+also_known_as:
+  - MeshCore Bulgaria
+short_name: MeshCore BG
+description: >-
+  Bulgarian MeshCore community for off-grid LoRa mesh messaging, coordinated
+  through meshcore.bg with active meshes in Sofia and Plovdiv plus a long-range
+  link to Craiova, Romania (~200 km). Runs the EU/UK (Narrow) preset on the
+  869.618 MHz band with 2-byte path hashes and loop detection enabled on
+  repeaters.
+scope: national
+status: active
+visibility: public
+area: area.geojson
+
+coverage:
+  countries:
+    - BG
+
+radio:
+  frequency: '868'
+  frequency_mhz: 869.618
+  bandwidth_khz: 62.5
+  spreading_factor: 8
+  coding_rate: 4/8
+  tx_power_dbm: 22
+  duty_cycle_pct: 10
+  path_hash_mode: 2-Byte
+  public_channel: Public
+  app_preset: EU/UK (Narrow)
+
+community:
+  website: https://www.meshcore.bg/
+  facebook: https://www.facebook.com/groups/1555471979162054
+  reddit: https://www.reddit.com/r/meshcore_bulgaria/
+
+resources:
+  getting_started: https://www.meshcore.bg/
+  links:
+    - name: Meshcore Bulgaria GitHub
+      url: https://github.com/kekelback/meshcore-bulgaria-site/
+    - name: Image hosting (pic.meshcore.bg)
+      url: https://pic.meshcore.bg/
+    - name: Line of sight calculation (trace.meshcore.bg)
+      url: https://trace.meshcore.bg/
