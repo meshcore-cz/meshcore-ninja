@@ -2,6 +2,7 @@
 name: Waveshare RP2040-LoRa
 vendorId: waveshare
 kind: product
+category: development-board
 lifecycle: active
 familyId: waveshare-waveshare-lora
 flasherListed: true

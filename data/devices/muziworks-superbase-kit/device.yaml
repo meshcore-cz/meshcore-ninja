@@ -2,6 +2,7 @@
 name: Muzi Works SuperBase Kit
 vendorId: muziworks
 kind: kit
+category: development-board
 lifecycle: active
 familyId: muziworks-superbase
 aliases:

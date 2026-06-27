@@ -3,6 +3,7 @@
 name: LilyGo T-Deck Pro
 vendorId: lilygo
 kind: product
+category: standalone
 lifecycle: active
 familyId: lilygo-t-deck
 revision: pro

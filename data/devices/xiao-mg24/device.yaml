@@ -2,6 +2,7 @@
 name: Seeed XIAO MG24 + SX1262
 vendorId: seeed
 kind: dev-board
+category: development-board
 lifecycle: active
 familyId: seeed-xiao-mg24-sx1262
 aliases:

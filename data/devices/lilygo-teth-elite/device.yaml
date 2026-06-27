@@ -2,6 +2,7 @@
 name: LilyGo T-ETH ELite
 vendorId: lilygo
 kind: product
+category: development-board
 lifecycle: active
 familyId: lilygo-t-eth-elite
 aliases:

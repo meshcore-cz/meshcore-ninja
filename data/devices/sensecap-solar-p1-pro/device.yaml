@@ -2,6 +2,7 @@
 name: Seeed Studio SenseCAP Solar Node P1-Pro
 vendorId: seeed
 kind: product
+category: repeater
 lifecycle: active
 familyId: seeed-sensecap-solar
 variantOf: sensecap-solar-p1

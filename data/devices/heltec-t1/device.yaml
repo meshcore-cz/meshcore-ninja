@@ -2,6 +2,7 @@
 name: Heltec Mesh Node T1
 vendorId: heltec
 kind: product
+category: development-board
 lifecycle: active
 familyId: heltec-mesh-node-t1
 product_url: https://heltec.org/

@@ -3,6 +3,7 @@
 name: Heltec V2
 vendorId: heltec
 kind: dev-board
+category: development-board
 lifecycle: discontinued
 familyId: heltec-wifi-lora-32
 revision: '2'

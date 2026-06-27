@@ -2,6 +2,7 @@
 name: Heltec T190
 vendorId: heltec
 kind: dev-board
+category: development-board
 lifecycle: active
 familyId: heltec-vision-master-t190
 aliases:

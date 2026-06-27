@@ -2,6 +2,7 @@
 name: Elecrow ThinkNode M3
 vendorId: elecrow
 kind: product
+category: tracker
 lifecycle: active
 familyId: elecrow-elecrow-thinknode-m3
 aliases:

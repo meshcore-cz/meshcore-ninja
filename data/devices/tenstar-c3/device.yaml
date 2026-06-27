@@ -3,6 +3,7 @@
 name: Tenstar C3
 vendorId: tenstar
 kind: product
+category: development-board
 lifecycle: active
 familyId: tenstar-tenstar-c3
 flasherListed: true

@@ -3,6 +3,7 @@
 name: LilyGo T-Display Pro
 vendorId: lilygo
 kind: product
+category: standalone
 lifecycle: active
 familyId: lilygo-t-display
 image: lilygo_tdisplay.svg

@@ -3,6 +3,7 @@
 name: RAK WisMesh Repeater Mini
 vendorId: rak
 kind: product
+category: repeater
 lifecycle: active
 familyId: rak-wismesh-repeater
 variantOf: rak-4631

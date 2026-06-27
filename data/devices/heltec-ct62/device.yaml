@@ -2,6 +2,7 @@
 name: Heltec CT62
 vendorId: heltec
 kind: product
+category: development-board
 lifecycle: active
 familyId: heltec-ct62
 aliases:

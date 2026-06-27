@@ -4,6 +4,7 @@
 name: Heltec Wireless Tracker v2
 vendorId: heltec
 kind: product
+category: development-board
 lifecycle: active
 familyId: heltec-wireless-tracker
 revision: '2'

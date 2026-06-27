@@ -3,6 +3,7 @@
 name: GAT-IoT GAT562 Mesh Tracker Pro
 vendorId: gatiot
 kind: product
+category: companion-radio
 lifecycle: active
 familyId: gatiot-gat562
 variantOf: gatiot-gat562

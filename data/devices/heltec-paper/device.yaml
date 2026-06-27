@@ -2,6 +2,7 @@
 name: Heltec Wireless Paper
 vendorId: heltec
 kind: dev-board
+category: development-board
 lifecycle: active
 familyId: heltec-wireless-paper
 aliases:

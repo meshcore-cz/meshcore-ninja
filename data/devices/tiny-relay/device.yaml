@@ -2,6 +2,7 @@
 name: Tiny Relay
 vendorId: yaoyao
 kind: product
+category: development-board
 lifecycle: active
 familyId: yaoyao-tiny-relay
 product_url: https://www.st.com/en/microcontrollers-microprocessors/stm32wle5cc.html

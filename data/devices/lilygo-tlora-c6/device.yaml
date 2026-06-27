@@ -4,6 +4,7 @@
 name: LilyGo T-LoRa C6
 vendorId: lilygo
 kind: product
+category: development-board
 lifecycle: active
 familyId: lilygo-t-lora-c6
 aliases:

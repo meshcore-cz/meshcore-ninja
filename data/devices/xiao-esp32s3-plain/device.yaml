@@ -3,6 +3,7 @@
 name: Seeed Studio XIAO ESP32S3
 vendorId: seeed
 kind: dev-board
+category: development-board
 lifecycle: active
 familyId: seeed-xiao
 flasherListed: true

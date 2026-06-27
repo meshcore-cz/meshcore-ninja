@@ -2,6 +2,7 @@
 name: Heltec T114
 vendorId: heltec
 kind: product
+category: development-board
 lifecycle: active
 familyId: heltec-t114
 aliases:

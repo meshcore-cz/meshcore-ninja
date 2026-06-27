@@ -1,6 +1,7 @@
 # Source: meshcore-dev/MeshCore variants/generic_espnow/platformio.ini
 name: Generic ESP-NOW Radio
 kind: generic-build
+category: development-board
 lifecycle: active
 familyId: generic-espnow
 flasherListed: true

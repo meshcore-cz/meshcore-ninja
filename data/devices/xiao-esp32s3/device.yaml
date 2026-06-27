@@ -3,6 +3,7 @@
 name: Seeed Studio Xiao S3 WIO
 vendorId: seeed
 kind: dev-board
+category: development-board
 lifecycle: active
 familyId: seeed-xiao-s3-wio
 image: xiao_esp32s3.svg

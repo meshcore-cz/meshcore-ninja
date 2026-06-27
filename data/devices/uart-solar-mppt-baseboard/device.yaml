@@ -2,6 +2,7 @@
 name: μArt.cz Solar Mesh Baseboard
 vendorId: uart-cz
 kind: kit
+category: development-board
 lifecycle: active
 familyId: uart-cz-solar-node
 variantOf: rak-4631

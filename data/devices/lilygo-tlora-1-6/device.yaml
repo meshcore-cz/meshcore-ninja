@@ -2,6 +2,7 @@
 name: LilyGo LoRa32 V2.1_1.6
 vendorId: lilygo
 kind: dev-board
+category: development-board
 lifecycle: active
 familyId: lilygo-lora32-1-1-6
 revision: '2'

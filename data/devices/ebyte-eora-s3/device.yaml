@@ -3,6 +3,7 @@
 name: Ebyte EoRa-S3-XXXTB Radio
 vendorId: ebyte
 kind: product
+category: development-board
 lifecycle: active
 familyId: ebyte-ebyte-eora-s3-xxxtb-radio
 aliases:

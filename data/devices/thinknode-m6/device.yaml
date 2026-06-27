@@ -2,6 +2,7 @@
 name: Elecrow ThinkNode M6
 vendorId: elecrow
 kind: product
+category: repeater
 lifecycle: active
 familyId: elecrow-elecrow-thinknode-m6
 refs:

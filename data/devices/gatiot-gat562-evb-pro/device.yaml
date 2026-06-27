@@ -4,6 +4,7 @@
 name: GAT-IoT GAT562 Mesh EVB Pro
 vendorId: gatiot
 kind: kit
+category: development-board
 lifecycle: active
 familyId: gatiot-gat562
 variantOf: gatiot-gat562

@@ -2,6 +2,7 @@
 name: LilyGo T3 S3 (SX126x)
 vendorId: lilygo
 kind: dev-board
+category: development-board
 lifecycle: active
 familyId: lilygo-t3-s3
 aliases:

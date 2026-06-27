@@ -2,6 +2,7 @@
 name: Heltec CubeCell HTCC-AB02
 vendorId: heltec
 kind: dev-board
+category: development-board
 lifecycle: active
 familyId: heltec-cubecell
 aliases:

@@ -4,6 +4,7 @@
 name: RPI Pico 2040 + WaveShare SX1262
 vendorId: raspberry
 kind: kit
+category: development-board
 lifecycle: active
 familyId: raspberry-rpi-pico-2040-waveshare
 image: rpi_picow.svg

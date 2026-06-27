@@ -377,9 +377,14 @@ function buildSitemap(root, { devices, firmwares, vendors, networks, software, g
   const prefix = `${SITE_ORIGIN}${BASE_PATH}`;
 
   // Filtered list views are prerendered as their own pages (one per software
-  // kind / print type), so include them for indexing. The firmwares list filters
-  // by scope client-side, so it's a single page.
+  // kind / firmware scope / device category / print type), so index them.
   const softwareKinds = [...new Set(software.map((s) => s.kind))].filter(Boolean);
+  const deviceCategories = [...new Set(devices.map((d) => d.category))].filter((c) =>
+    ['development-board', 'companion-radio', 'standalone', 'tracker', 'repeater', 'other'].includes(c)
+  );
+  const firmwareScopes = [...new Set(firmwares.map((f) => f.scope))].filter((s) =>
+    ['universal', 'platform-specific', 'function-specific', 'device-specific'].includes(s)
+  );
   const printTypes = [
     ...new Set(devices.flatMap((d) => (d.prints ?? []).map((p) => p.type ?? 'case')))
   ].filter((t) => ['enclosure', 'case', 'accessory'].includes(t));
@@ -387,11 +392,13 @@ function buildSitemap(root, { devices, firmwares, vendors, networks, software, g
   const paths = [
     '/',
     '/devices/',
+    ...deviceCategories.map((c) => `/devices/${c}/`),
     '/vendors/',
     '/networks/',
     '/software/',
     ...softwareKinds.map((k) => `/software/${k}/`),
     '/firmwares/',
+    ...firmwareScopes.map((s) => `/firmwares/${s}/`),
     '/prints/',
     ...printTypes.map((t) => `/prints/${t}/`),
     '/languages/',

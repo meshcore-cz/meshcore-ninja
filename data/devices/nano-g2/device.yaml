@@ -3,6 +3,7 @@
 name: UnitEng Nano G2 Ultra
 vendorId: uniteng
 kind: product
+category: companion-radio
 lifecycle: active
 familyId: uniteng-nano-g2-ultra
 image: nano_g2.svg

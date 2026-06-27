@@ -3,6 +3,7 @@
 name: Raspberry Pi Pico2 W + Waveshare SX1262
 vendorId: raspberry
 kind: kit
+category: development-board
 lifecycle: active
 familyId: raspberry-pi-pico2-w-waveshare-sx1262
 flasherListed: true

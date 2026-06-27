@@ -3,6 +3,7 @@
 name: LilyGo T5 E-Paper S3 Pro (H752-XX)
 vendorId: lilygo
 kind: product
+category: standalone
 lifecycle: active
 familyId: lilygo-t5-s3
 image: lilygo_t5_pro.svg

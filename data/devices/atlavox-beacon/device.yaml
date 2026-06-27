@@ -2,6 +2,7 @@
 name: Atlavox Beacon Solar
 vendorId: atlavox
 kind: product
+category: repeater
 lifecycle: active
 familyId: atlavox-beacon
 variantOf: rak-4631

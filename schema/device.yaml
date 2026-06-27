@@ -6,6 +6,7 @@ type: object
 additionalProperties: false
 required:
   - name
+  - category
   - hardware
 properties:
   name:
@@ -34,6 +35,18 @@ properties:
       - module
       - kit
       - generic-build
+  category:
+    description: >-
+      Primary use-class the device list is grouped/filtered by — what the board
+      is *for*, which `kind` alone doesn't capture (a solar repeater and a bare
+      dev board can share specs). Authored explicitly per device.
+    enum:
+      - development-board
+      - companion-radio
+      - standalone
+      - tracker
+      - repeater
+      - other
   lifecycle:
     description: Where the product sits in its sales lifecycle.
     enum:

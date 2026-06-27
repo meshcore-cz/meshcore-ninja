@@ -3,6 +3,7 @@
 name: Muzi Works R1 Neo
 vendorId: muziworks
 kind: product
+category: companion-radio
 lifecycle: active
 familyId: muziworks-muzi-works-r1-neo
 aliases:

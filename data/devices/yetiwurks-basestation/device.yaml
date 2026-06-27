@@ -2,6 +2,7 @@
 name: Yeti Wurks Base Station
 vendorId: yetiwurks
 kind: product
+category: repeater
 lifecycle: active
 familyId: yetiwurks-basestation
 variantOf: rak-4631

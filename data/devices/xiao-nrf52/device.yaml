@@ -4,6 +4,7 @@
 name: Seeed Studio Xiao nRF52 WIO
 vendorId: seeed
 kind: dev-board
+category: development-board
 lifecycle: active
 familyId: seeed-xiao-wio
 aliases:

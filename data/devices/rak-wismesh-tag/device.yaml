@@ -2,6 +2,7 @@
 name: RAK WisMesh Tag
 vendorId: rak
 kind: product
+category: tracker
 lifecycle: active
 familyId: rak-wismesh
 aliases:

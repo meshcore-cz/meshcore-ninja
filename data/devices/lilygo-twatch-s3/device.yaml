@@ -3,6 +3,7 @@
 name: LilyGo T-Watch S3
 vendorId: lilygo
 kind: product
+category: other
 lifecycle: active
 familyId: lilygo-t-watch-s3
 aliases:

@@ -2,6 +2,7 @@
 name: Seeed XIAO nRF54L15 + SX1262
 vendorId: seeed
 kind: dev-board
+category: development-board
 lifecycle: unknown
 familyId: seeed-xiao-nrf54l15-sx1262
 flasherListed: false

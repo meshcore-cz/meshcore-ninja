@@ -4,6 +4,7 @@ refs:
   mesh-sh-device: lilygo-t-echo
 vendorId: lilygo
 kind: product
+category: companion-radio
 lifecycle: active
 familyId: lilygo-t-echo
 aliases:

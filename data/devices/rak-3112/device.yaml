@@ -3,6 +3,7 @@
 name: RAK WisBlock 3112
 vendorId: rak
 kind: product
+category: development-board
 lifecycle: active
 familyId: rak-wisblock
 aliases:

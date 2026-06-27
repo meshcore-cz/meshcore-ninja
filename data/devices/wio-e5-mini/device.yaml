@@ -3,6 +3,7 @@
 name: Seeed Studio Wio-E5 mini
 vendorId: seeed
 kind: product
+category: development-board
 lifecycle: active
 familyId: seeed-wio-e5-mini
 flasherListed: true

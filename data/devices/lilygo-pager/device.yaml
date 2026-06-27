@@ -2,6 +2,7 @@
 name: LilyGo T-Lora Pager
 vendorId: lilygo
 kind: product
+category: standalone
 lifecycle: active
 familyId: lilygo-t-lora-pager
 aliases:

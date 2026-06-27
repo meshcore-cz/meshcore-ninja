@@ -2,6 +2,7 @@
 name: LilyGo T-Beam 1.2 (SX1276)
 vendorId: lilygo
 kind: product
+category: development-board
 lifecycle: active
 familyId: lilygo-t-beam
 revision: '1.2'

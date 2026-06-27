@@ -84,6 +84,11 @@
       }))
       .filter((g) => g.items.length)
   );
+
+  // A search query collapses the per-kind sections into a single flat,
+  // star-ranked grid of matches; without one the grouped view stays.
+  let collapsed = $derived(query.trim().length > 0);
+  let flatSorted = $derived([...filtered].sort((a, b) => softwareStars(b) - softwareStars(a)));
 </script>
 
 <PageHeader collection="software" subtitleClass="max-w-[75ch]">
@@ -91,16 +96,8 @@
   management, utilities, bots and libraries. Filter by kind or search.
 </PageHeader>
 
-<!-- Search -->
-<input
-  type="search"
-  placeholder="Search software, tags, languages, maintainers…"
-  bind:value={query}
-  class="mb-3 w-full rounded-lg border border-edge bg-bg px-3 py-2.5 text-[0.95rem] outline-none focus:border-transparent focus:ring-2 focus:ring-accent"
-/>
-
 <!-- Kind filter — links so each view is its own prerendered route. -->
-<div class="mb-7 flex flex-wrap gap-1.5">
+<div class="mb-3 flex flex-wrap gap-1.5">
   <a
     href="{base}/software/"
     class="rounded-md border px-2.5 py-1 text-[0.78rem] font-medium transition {activeKind === 'all'
@@ -117,17 +114,17 @@
   {/each}
 </div>
 
-{#if groups.length}
-  {#each groups as g (g.kind)}
-    <section class="mb-9">
-      <h2 class="mb-3 flex items-baseline gap-2 border-b border-edge pb-1.5 text-[1.1rem] font-semibold">
-        {g.meta.label}
-        <span class="text-[0.85rem] font-normal text-dim">{g.items.length}</span>
-      </h2>
-      <div class="grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(280px,1fr))]">
-        {#each g.items as s (s.id)}
-          {@const licensing = licenseType(s)}
-          {@const isLibrary = s.kind === 'library'}
+<!-- Search -->
+<input
+  type="search"
+  placeholder="Search software, tags, languages, maintainers…"
+  bind:value={query}
+  class="mb-7 w-full rounded-lg border border-edge bg-bg px-3 py-2.5 text-[0.95rem] outline-none focus:border-transparent focus:ring-2 focus:ring-accent"
+/>
+
+{#snippet swCard(s)}
+  {@const licensing = licenseType(s)}
+  {@const isLibrary = s.kind === 'library'}
           <Card href="{base}/software/{s.id}/" class="flex flex-col p-4">
             <div class="flex items-start justify-between gap-2">
               <span class="flex min-w-0 gap-2">
@@ -224,10 +221,28 @@
               </div>
             {/if}
           </Card>
-        {/each}
-      </div>
+{/snippet}
+
+{#snippet cardGrid(items)}
+  <div class="grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(280px,1fr))]">
+    {#each items as s (s.id)}
+      {@render swCard(s)}
+    {/each}
+  </div>
+{/snippet}
+
+{#if !filtered.length}
+  <p class="text-dim">No software matches these filters.</p>
+{:else if collapsed}
+  {@render cardGrid(flatSorted)}
+{:else}
+  {#each groups as g (g.kind)}
+    <section class="mb-9">
+      <h2 class="mb-3 flex items-baseline gap-2 border-b border-edge pb-1.5 text-[1.1rem] font-semibold">
+        {g.meta.label}
+        <span class="text-[0.85rem] font-normal text-dim">{g.items.length}</span>
+      </h2>
+      {@render cardGrid(g.items)}
     </section>
   {/each}
-{:else}
-  <p class="text-dim">No software matches these filters.</p>
 {/if}

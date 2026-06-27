@@ -3,6 +3,7 @@
 name: GAT-IoT GAT562 Mesh Watch13
 vendorId: gatiot
 kind: product
+category: other
 lifecycle: active
 familyId: gatiot-gat562
 variantOf: gatiot-gat562

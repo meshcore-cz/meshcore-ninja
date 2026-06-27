@@ -2,6 +2,7 @@
 name: μArt.cz Solar Node Station
 vendorId: uart-cz
 kind: product
+category: repeater
 lifecycle: discontinued
 familyId: uart-cz-solar-node
 variantOf: rak-4631

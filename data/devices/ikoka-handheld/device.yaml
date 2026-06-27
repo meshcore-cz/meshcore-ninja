@@ -3,6 +3,7 @@
 name: Ikoka Handheld nRF
 vendorId: ikoka
 kind: product
+category: development-board
 lifecycle: active
 familyId: ikoka-handheld-nrf
 flasherListed: true

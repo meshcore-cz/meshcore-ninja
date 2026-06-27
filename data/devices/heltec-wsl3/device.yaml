@@ -4,6 +4,7 @@
 name: Heltec WSL3
 vendorId: heltec
 kind: product
+category: development-board
 lifecycle: active
 familyId: heltec-wsl3
 image: heltec_wsl3.svg

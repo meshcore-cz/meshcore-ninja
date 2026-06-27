@@ -4,6 +4,7 @@
 name: Ikoka Nano
 vendorId: ikoka
 kind: product
+category: development-board
 lifecycle: active
 familyId: ikoka-nano
 image: ikoka_nano.svg

@@ -3,6 +3,7 @@
 name: Seeed Studio Xiao C3
 vendorId: seeed
 kind: dev-board
+category: development-board
 lifecycle: active
 familyId: seeed-xiao-c3
 aliases:

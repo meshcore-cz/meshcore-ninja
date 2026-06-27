@@ -4,6 +4,7 @@
 name: MinewSemi ME25LS01
 vendorId: minewsemi
 kind: product
+category: development-board
 lifecycle: active
 familyId: minewsemi-minewsemi-me25ls01
 product_url: https://en.minewsemi.com/lora-module/lr1110-nrf52840-me25LS01

@@ -2,6 +2,7 @@
 name: Seeed Studio Wio Tracker L1 Pro
 vendorId: seeed
 kind: product
+category: companion-radio
 lifecycle: active
 familyId: seeed-wio-tracker-l1
 variantOf: wio-tracker-l1

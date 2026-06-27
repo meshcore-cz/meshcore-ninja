@@ -2,6 +2,7 @@
 name: Heltec V4 + Expansion Kit (Touch)
 vendorId: heltec
 kind: kit
+category: companion-radio
 lifecycle: active
 familyId: heltec-wifi-lora-32
 revision: '4'

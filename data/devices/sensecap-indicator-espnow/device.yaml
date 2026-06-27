@@ -3,6 +3,7 @@
 name: Seeed Studio SenseCAP Indicator ESP-NOW
 vendorId: seeed
 kind: product
+category: other
 lifecycle: active
 familyId: seeed-sensecap-indicator-esp-now
 flasherListed: true

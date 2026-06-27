@@ -3,6 +3,7 @@
 name: RAK 3x72
 vendorId: rak
 kind: product
+category: development-board
 lifecycle: active
 familyId: rak-3x72
 product_url: https://store.rakwireless.com/products/wisduo-lpwan-module-rak3172

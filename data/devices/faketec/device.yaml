@@ -2,6 +2,7 @@
 name: ProMicro nrf52 (faketec)
 vendorId: promicro
 kind: dev-board
+category: development-board
 lifecycle: active
 familyId: promicro-nrf52
 aliases:

@@ -3,6 +3,7 @@
 name: Heltec V4
 vendorId: heltec
 kind: dev-board
+category: development-board
 lifecycle: active
 familyId: heltec-wifi-lora-32
 revision: '4.3'

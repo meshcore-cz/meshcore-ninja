@@ -17,7 +17,9 @@
   import { browser } from '$app/environment';
   import { onMount } from 'svelte';
 
-  let { firmwares } = $props();
+  // `activeScope` comes from the route (/firmwares/ or /firmwares/<scope>/) so
+  // each scope view is its own prerendered, indexable page.
+  let { firmwares, activeScope = 'all' } = $props();
 
   // The scope axis is the primary grouping, rendered top to bottom in this order.
   const SCOPE_ORDER = ['universal', 'platform-specific', 'function-specific', 'device-specific'];
@@ -60,7 +62,6 @@
   const FACETS = [
     { id: 'type', label: 'Type', primary: true, get: (f) => (f.type ? [f.type] : []), fmt: (v) => TYPE_META[v]?.label ?? humanize(v) },
     { id: 'roles', label: 'Roles', primary: true, get: (f) => f.roles ?? [], fmt: (v) => ROLE_LABELS[v] ?? humanize(v) },
-    { id: 'scope', label: 'Scope', get: (f) => (f.scope ? [f.scope] : []), fmt: (v) => SCOPE_LABELS[v] ?? humanize(v) },
     { id: 'transports', label: 'Link', get: (f) => capsOn(f.capabilities?.transports), fmt: (v) => TRANSPORT_LABELS[v] ?? humanize(v) },
     { id: 'group', label: 'Group', get: (f) => (f.scopeGroup ? [f.scopeGroup] : []) },
     { id: 'license', label: 'License', get: (f) => { const l = licenseType(f); return l ? [l] : []; }, fmt: (v) => LICENSE_TYPE_META[v]?.label ?? humanize(v) },
@@ -89,7 +90,16 @@
     for (const v of values) if (v != null && v !== '') m.set(v, (m.get(v) ?? 0) + 1);
     return [...m.entries()].sort((a, b) => b[1] - a[1] || String(a[0]).localeCompare(String(b[0])));
   }
-  let facetOptions = $derived(Object.fromEntries(FACETS.map((f) => [f.id, tally(firmwares.flatMap(f.get))])));
+  // The routed scope is the primary filter: facet options, their counts and the
+  // available toggles all reflect only the firmwares in the active scope, so the
+  // panel never offers a filter that can't match.
+  let scopeBase = $derived(
+    activeScope === 'all'
+      ? firmwares
+      : firmwares.filter((fw) => (fw.scope ?? 'device-specific') === activeScope)
+  );
+  let facetOptions = $derived(Object.fromEntries(FACETS.map((f) => [f.id, tally(scopeBase.flatMap(f.get))])));
+  let availableToggles = $derived(new Set(TOGGLES.filter((t) => scopeBase.some(t.test)).map((t) => t.id)));
 
   // --- Filter state (mirrored to / from the URL). Starts at defaults so the
   // first client render matches the prerendered HTML; the URL is read in onMount,
@@ -136,6 +146,7 @@
 
   let filtered = $derived(
     firmwares.filter((fw) => {
+      if (activeScope !== 'all' && (fw.scope ?? 'device-specific') !== activeScope) return false;
       if (query.trim()) {
         const q = query.toLowerCase();
         const hit =
@@ -160,8 +171,9 @@
 
   const primaryFacets = FACETS.filter((f) => f.primary);
   const advancedFacets = FACETS.filter((f) => !f.primary);
-  const primaryToggles = TOGGLES.filter((t) => t.primary);
-  const advancedToggles = TOGGLES.filter((t) => !t.primary);
+  // Only toggles that can match something in the active scope are offered.
+  let primaryToggles = $derived(TOGGLES.filter((t) => t.primary && availableToggles.has(t.id)));
+  let advancedToggles = $derived(TOGGLES.filter((t) => !t.primary && availableToggles.has(t.id)));
   const rowLabel = 'w-14 shrink-0 pt-1 text-[0.7rem] tracking-wide text-dim uppercase';
 
   $effect(() => {
@@ -208,6 +220,24 @@
   <a class="text-accent2 hover:underline" href="{base}/devices/">devices</a> they run on.
 </PageHeader>
 
+<!-- Scope category — links so each view is its own prerendered, indexable route. -->
+<div class="mb-3 flex flex-wrap gap-1.5">
+  <a
+    href="{base}/firmwares/"
+    class="rounded-md border px-2.5 py-1 text-[0.78rem] font-medium transition {activeScope === 'all'
+      ? 'border-accent bg-accent/15 text-accent'
+      : 'border-edge text-dim hover:text-ink'}"
+  >All <span class="text-dim">({firmwares.length})</span></a>
+  {#each SCOPE_ORDER as s (s)}
+    <a
+      href="{base}/firmwares/{s}/"
+      class="rounded-md border px-2.5 py-1 text-[0.78rem] font-medium transition {activeScope === s
+        ? 'border-accent bg-accent/15 text-accent'
+        : 'border-edge text-dim hover:text-ink'}"
+    >{SCOPE_LABELS[s]}</a>
+  {/each}
+</div>
+
 <input
   type="search"
   placeholder="Search firmwares, features, maintainers…"
@@ -215,7 +245,7 @@
   class="w-full rounded-lg border border-edge bg-bg px-3 py-2.5 text-[0.95rem] outline-none focus:border-transparent focus:ring-2 focus:ring-accent"
 />
 
-<!-- Faceted filters — Scope first, then roles/type/link; the rest are Advanced. -->
+<!-- Faceted filters — Type & Roles open; the rest under Advanced. -->
 <div class="mt-4 space-y-3 rounded-xl border border-edge bg-elev p-4">
   {#each primaryFacets as f (f.id)}
     {#if facetOptions[f.id].length}
@@ -271,14 +301,16 @@
           {/if}
         {/each}
 
-        <div class="flex flex-wrap items-start gap-x-3 gap-y-2">
-          <span class={rowLabel}>Has</span>
-          <div class="flex flex-1 flex-wrap gap-1.5">
-            {#each advancedToggles as t (t.id)}
-              <Chip pressed={toggles[t.id]} onPressedChange={() => (toggles[t.id] = !toggles[t.id])}>{t.label}</Chip>
-            {/each}
+        {#if advancedToggles.length}
+          <div class="flex flex-wrap items-start gap-x-3 gap-y-2">
+            <span class={rowLabel}>Has</span>
+            <div class="flex flex-1 flex-wrap gap-1.5">
+              {#each advancedToggles as t (t.id)}
+                <Chip pressed={toggles[t.id]} onPressedChange={() => (toggles[t.id] = !toggles[t.id])}>{t.label}</Chip>
+              {/each}
+            </div>
           </div>
-        </div>
+        {/if}
       </div>
     </Collapsible.Content>
   </Collapsible.Root>

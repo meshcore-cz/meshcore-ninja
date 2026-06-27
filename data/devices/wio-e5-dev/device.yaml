@@ -3,6 +3,7 @@
 name: Seeed Studio Wio-E5 Dev Board
 vendorId: seeed
 kind: dev-board
+category: development-board
 lifecycle: active
 familyId: seeed-wio-e5-dev-board
 flasherListed: true

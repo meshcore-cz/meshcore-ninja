@@ -2,6 +2,7 @@
 name: LilyGo T-Watch Ultra
 vendorId: lilygo
 kind: product
+category: other
 lifecycle: active
 familyId: lilygo-t-watch-ultra
 aliases:

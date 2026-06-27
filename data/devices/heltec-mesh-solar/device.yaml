@@ -1,13 +1,14 @@
 # Source: https://heltec.org/project/meshsolar/
 # Source: https://docs.heltec.org/en/node/meshsolar/index.html
-name: Heltec MeshSolar / MeshTower
+name: Heltec MeshSolar
 vendorId: heltec
 kind: product
+category: development-board
 lifecycle: active
 familyId: heltec-meshsolar-meshtower
 aliases:
   - Heltec Mesh Solar
-  - Heltec MeshTower
+  - MeshSolar
 image: heltec_mesh_solar.svg
 flasherListed: true
 product_url: https://heltec.org/project/meshsolar/
@@ -19,10 +20,10 @@ price:
   currency: USD
   asOf: 2026-06
 description: >-
-  Outdoor solar-ready power and communication platform combining a BMS board
-  with an BLE + LoRa control board. Built for long-lived mesh deployments with
-  solar charging, interchangeable battery chemistry support, and optional
-  GNSS/display expansion.
+  Outdoor solar-ready power and communication baseboard combining a BMS board
+  with a BLE + LoRa control board. The platform behind the MeshTower nodes —
+  built for long-lived mesh deployments with solar charging, interchangeable
+  battery chemistry support, and optional GNSS/display expansion.
 roles:
   - companion
   - repeater

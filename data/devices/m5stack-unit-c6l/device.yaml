@@ -3,6 +3,7 @@
 name: M5Stack Unit C6L
 vendorId: m5stack
 kind: product
+category: development-board
 lifecycle: active
 familyId: m5stack-m5stack-unit-c6l
 flasherListed: true

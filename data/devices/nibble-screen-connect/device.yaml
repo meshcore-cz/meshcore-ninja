@@ -3,6 +3,7 @@
 name: Nibble Screen Connect
 vendorId: nibble
 kind: product
+category: development-board
 lifecycle: active
 familyId: nibble-nibble-screen-connect
 flasherListed: true

@@ -3,6 +3,7 @@
 name: M5Stack Cardputer-ADV + Cap LoRa-1262
 vendorId: m5stack
 kind: product
+category: standalone
 lifecycle: active
 familyId: m5stack-cardputer
 flasherListed: false

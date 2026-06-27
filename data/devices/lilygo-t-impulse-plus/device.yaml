@@ -3,6 +3,7 @@
 name: LilyGo T-Impulse Plus
 vendorId: lilygo
 kind: product
+category: other
 lifecycle: active
 familyId: lilygo-t-impulse
 product_url: https://www.lilygo.cc/

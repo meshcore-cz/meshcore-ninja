@@ -2,6 +2,7 @@
 name: LilyGo T-Beam Supreme (SX1262)
 vendorId: lilygo
 kind: product
+category: development-board
 lifecycle: active
 familyId: lilygo-t-beam
 revision: supreme

@@ -3,6 +3,7 @@
 name: Muzi Works Base Uno
 vendorId: muziworks
 kind: dev-board
+category: development-board
 lifecycle: active
 familyId: muziworks-base
 aliases:

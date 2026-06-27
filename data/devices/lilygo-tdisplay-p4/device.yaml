@@ -2,6 +2,7 @@
 name: LilyGo T-Display P4
 vendorId: lilygo
 kind: product
+category: standalone
 lifecycle: active
 familyId: lilygo-t-display-p4
 aliases:

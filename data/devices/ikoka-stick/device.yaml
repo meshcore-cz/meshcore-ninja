@@ -3,6 +3,7 @@
 name: Ikoka Stick
 vendorId: ikoka
 kind: product
+category: development-board
 lifecycle: active
 familyId: ikoka-stick
 image: ikoka_stick.svg

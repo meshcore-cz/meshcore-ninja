@@ -3,6 +3,7 @@
 name: RAK WisMesh 1W Booster (3401 + 13302)
 vendorId: rak
 kind: kit
+category: development-board
 lifecycle: active
 familyId: rak-wisblock
 aliases:

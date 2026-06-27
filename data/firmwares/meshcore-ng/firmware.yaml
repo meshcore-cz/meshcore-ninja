@@ -112,6 +112,11 @@ devices:
     status: supported
     target: heltec_mesh_solar
     platformio_board: heltec_mesh_solar
+  - id: heltec-meshtower
+    status: supported
+    target: heltec_mesh_solar
+    platformio_board: heltec_mesh_solar
+    notes: Same MeshSolar baseboard; uses the heltec_mesh_solar build.
   - id: heltec-t096
     status: supported
     target: heltec_t096

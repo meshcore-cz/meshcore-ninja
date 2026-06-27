@@ -2,6 +2,7 @@
 # Source: https://github.com/chrismyers2000/MeshAdventurer/blob/main/PCB/V1.3/BOM_MeshAdventurer_V1.3.csv
 name: MeshAdventurer
 kind: dev-board
+category: development-board
 lifecycle: active
 familyId: meshadventurer
 aliases:

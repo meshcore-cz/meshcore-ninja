@@ -2,6 +2,7 @@
 name: Seeed Studio Wio Tracker L1
 vendorId: seeed
 kind: product
+category: development-board
 lifecycle: active
 familyId: seeed-wio-tracker-l1
 flasherListed: true

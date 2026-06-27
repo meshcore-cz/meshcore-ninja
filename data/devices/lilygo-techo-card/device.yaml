@@ -2,6 +2,7 @@
 name: LilyGo T-Echo Card
 vendorId: lilygo
 kind: product
+category: tracker
 lifecycle: active
 familyId: lilygo-t-echo-card
 aliases:

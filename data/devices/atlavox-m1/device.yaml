@@ -2,6 +2,7 @@
 name: Atlavox M1
 vendorId: atlavox
 kind: product
+category: companion-radio
 lifecycle: active
 familyId: atlavox-m1
 variantOf: rak-4631

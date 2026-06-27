@@ -3,6 +3,7 @@
 name: UnitEng Station G3 ESP32
 vendorId: uniteng
 kind: product
+category: repeater
 lifecycle: active
 familyId: uniteng-station-g3
 description: >-

@@ -3,6 +3,7 @@
 name: UnitEng Station G2
 vendorId: uniteng
 kind: product
+category: repeater
 lifecycle: active
 familyId: uniteng-station-g2
 image: station_g2.svg

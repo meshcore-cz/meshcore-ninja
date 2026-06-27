@@ -3,6 +3,7 @@
 name: Heltec MeshTower V2
 vendorId: heltec
 kind: product
+category: repeater
 lifecycle: active
 familyId: heltec-meshsolar-meshtower
 aliases:

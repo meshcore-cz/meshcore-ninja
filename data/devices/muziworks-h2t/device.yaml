@@ -3,6 +3,7 @@
 name: Muzi Works H2T
 vendorId: muziworks
 kind: product
+category: companion-radio
 lifecycle: active
 familyId: muziworks-h2t
 variantOf: heltec-t114

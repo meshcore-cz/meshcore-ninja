@@ -1,0 +1,66 @@
+# Source: https://heltec.org/project/meshtower/
+# Source: https://docs.heltec.org/en/node/meshtower/index.html
+name: Heltec MeshTower V1
+vendorId: heltec
+kind: product
+category: repeater
+lifecycle: active
+familyId: heltec-meshsolar-meshtower
+aliases:
+  - Heltec MeshTower
+  - MeshTower
+  - MeshTower V1
+image: heltec_meshtower.svg
+flasherListed: true
+product_url: https://heltec.org/project/meshtower/
+description: >-
+  Outdoor solar repeater node built on the Heltec MeshSolar baseboard — a BMS
+  board paired with a BLE + LoRa control board for long-lived, off-grid mesh
+  coverage. The first-generation MeshTower, since succeeded by MeshTower V2.
+roles:
+  - companion
+  - repeater
+  - room-server
+transports:
+  - ble
+  - usb
+hardware:
+  mcu:
+    model: nrf52
+    # Source: https://mesh-sn.de/en/devices/details/heltec-mesh-solar
+    ramKb: 256
+  radios:
+    - technology: lora
+      chip: sx1262
+      bands:
+        - '868'
+        - '915'
+      antenna: IPEX-1.0
+  display:
+    status: none
+  gnss:
+    status: none
+  leds:
+    status: present
+    description: Status LEDs
+  power:
+    batterySupported: true
+    batteryBuiltIn: false
+    batteryConnector: JST LiPo + Solar
+    charging: true
+    solarInput: true
+    batteryChemistry: li-po
+    consumptionIdleMa: 8
+    consumptionTxMa: 85
+interfaces:
+  usb:
+    connector: USB-C
+    capabilities:
+      - power
+      - serial
+      - flashing
+  bluetooth:
+    version: '5.0'
+    ble: true
+  wifi:
+    status: none

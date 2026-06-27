@@ -1,6 +1,7 @@
 # Source: meshcore-dev/MeshCore variants/generic-e22/platformio.ini
 name: Generic E22 SX126x
 kind: generic-build
+category: development-board
 lifecycle: active
 familyId: generic-e22
 flasherListed: true

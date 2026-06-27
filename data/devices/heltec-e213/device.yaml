@@ -3,6 +3,7 @@
 name: Heltec Vision Master E213
 vendorId: heltec
 kind: dev-board
+category: development-board
 lifecycle: active
 familyId: heltec-vision-master-e213
 aliases:

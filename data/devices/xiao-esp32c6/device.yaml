@@ -3,6 +3,7 @@
 name: Seeed Studio Xiao C6
 vendorId: seeed
 kind: dev-board
+category: development-board
 lifecycle: unknown
 familyId: seeed-xiao-c6
 image: xiao_esp32c6.svg

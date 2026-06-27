@@ -3,6 +3,7 @@
 name: Elecrow ThinkNode M2 Mini
 vendorId: elecrow
 kind: product
+category: companion-radio
 lifecycle: active
 familyId: elecrow-elecrow-thinknode-m2
 aliases:
