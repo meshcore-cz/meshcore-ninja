@@ -375,9 +375,18 @@ export function resolveWikilink(target, label) {
 }
 
 /** Flatten a rich-text description to a single plain line for SEO meta / card
- * clamps, resolving wikilinks to their entity names. */
+ * clamps, resolving wikilinks to their entity names. Memoized: the same
+ * (already locale-resolved) source string is parsed once, then reused — list
+ * cards call this on every render/keystroke, so the cache keeps markdown
+ * parsing off the hot path. */
+const plainCache = new Map();
 export function descriptionToPlain(text) {
-  return richTextToPlain(text, (target, label) => resolveWikilink(target, label).text);
+  if (!text) return '';
+  const hit = plainCache.get(text);
+  if (hit !== undefined) return hit;
+  const out = richTextToPlain(text, (target, label) => resolveWikilink(target, label).text);
+  plainCache.set(text, out);
+  return out;
 }
 
 /**

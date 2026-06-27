@@ -1,30 +1,16 @@
 <script>
-  // Renders an inlined Devicon SVG (devicon library) at a given size.
-  import { deviconSvg } from '$lib/devicon.js';
+  // Renders a Devicon as a sprite reference (see icon-sprite.js / IconSprite).
+  // Previously inlined the raw SVG via `{@html}`, which re-parsed an SVG string
+  // for every instance — the dominant per-card render cost on list pages.
+  //
+  // `mono` flattens the icon to `currentColor`; the matching sprite symbol has
+  // its baked fills stripped, so the host `fill` wins.
+  import SpriteIcon from '$lib/SpriteIcon.svelte';
+  import { hasDeviconSymbol } from '$lib/icon-sprite.js';
 
-  // `mono` flattens the icon to the current text colour. Devicon's baked-in
-  // `fill="#…"` are presentation attributes, so a stylesheet rule wins over them
-  // — no SVG string processing needed. Use with the monochrome `-plain` variants.
   let { icon, size = 16, mono = false, class: className = '' } = $props();
-  let svg = $derived(deviconSvg(icon));
 </script>
 
-{#if svg}
-  <span
-    class="devicon inline-flex shrink-0 items-center justify-center {mono ? 'devicon-mono' : ''} {className}"
-    style="width: {size}px; height: {size}px"
-    aria-hidden="true"
-  >{@html svg}</span>
+{#if hasDeviconSymbol(icon)}
+  <SpriteIcon id={`dev-${icon}`} {size} {mono} class={className} />
 {/if}
-
-<style>
-  .devicon :global(svg) {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-  .devicon-mono :global(svg),
-  .devicon-mono :global(svg *) {
-    fill: currentColor;
-  }
-</style>

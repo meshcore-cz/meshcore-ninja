@@ -1,6 +1,7 @@
 <script>
   import { Pagination } from 'bits-ui';
-  import { ChevronLeft, ChevronRight } from '@lucide/svelte';
+  import ChevronLeft from '@lucide/svelte/icons/chevron-left';
+  import ChevronRight from '@lucide/svelte/icons/chevron-right';
   import { m } from '$lib/paraglide/messages.js';
 
   /**

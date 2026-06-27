@@ -13,6 +13,8 @@
   import { searchOpen } from '$lib/search.js';
   import { Tooltip } from 'bits-ui';
   import CommandPalette from '$lib/CommandPalette.svelte';
+  import IconSprite from '$lib/IconSprite.svelte';
+  import NavProgress from '$lib/NavProgress.svelte';
   import Button from '$lib/Button.svelte';
   import LocaleSwitcher from '$lib/LocaleSwitcher.svelte';
   import LocaleBanner from '$lib/LocaleBanner.svelte';
@@ -126,6 +128,9 @@
 </svelte:head>
 
 <svelte:window {onkeydown} />
+
+<IconSprite />
+<NavProgress />
 
 <Tooltip.Provider delayDuration={250} disableHoverableContent>
 <div class="flex min-h-screen flex-col">

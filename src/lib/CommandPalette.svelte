@@ -3,7 +3,7 @@
   import { tick } from 'svelte';
   import { goto } from '$app/navigation';
   import { Command, Dialog } from 'bits-ui';
-  import { Search } from '@lucide/svelte';
+  import Search from '@lucide/svelte/icons/search';
   import Avatar from '$lib/Avatar.svelte';
   import SoftwareIcon from '$lib/SoftwareIcon.svelte';
   import { searchAtlas } from '$lib/data.js';

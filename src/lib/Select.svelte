@@ -1,6 +1,7 @@
 <script>
   import { Select } from 'bits-ui';
-  import { Check, ChevronDown } from '@lucide/svelte';
+  import Check from '@lucide/svelte/icons/check';
+  import ChevronDown from '@lucide/svelte/icons/chevron-down';
 
   /**
    * Reusable single-select built on bits-ui, themed to the Atlas design tokens.

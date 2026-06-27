@@ -3,7 +3,8 @@
   // language's own name (endonym). Changing the value triggers a full-page
   // navigation so the URL-based locale strategy re-resolves (see i18n.js).
   import { Select } from 'bits-ui';
-  import { Check, ChevronDown } from '@lucide/svelte';
+  import Check from '@lucide/svelte/icons/check';
+  import ChevronDown from '@lucide/svelte/icons/chevron-down';
   import { page } from '$app/stores';
   import { href, routePath, locales, getLocale } from '$lib/i18n.js';
   import { LOCALE_META } from '$lib/locales.js';
