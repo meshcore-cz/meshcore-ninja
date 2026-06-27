@@ -1,5 +1,8 @@
 import { networks, devices, firmwares, software, vendors, contributors } from '$lib/data.js';
 
+export const prerender = true;
+export const csr = false;
+
 export function load() {
   return {
     counts: {

@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 import { buildData } from './scripts/build-data.js';
 import { buildParaglideUrlPatterns } from './scripts/route-slugs.js';
+import { buildPwaShortcuts } from './scripts/pwa-shortcuts.js';
 
 const projectRoot = fileURLToPath(new URL('.', import.meta.url));
 
@@ -94,7 +95,8 @@ export default defineConfig({
             type: 'image/png',
             purpose: 'maskable'
           }
-        ]
+        ],
+        shortcuts: buildPwaShortcuts(BASE_PATH, pwaStartUrl)
       }
     })
   ],
