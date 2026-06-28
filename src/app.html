@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="%lang%">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%sveltekit.assets%/favicon.ico" sizes="any" />
@@ -14,14 +14,33 @@
     <!-- Set the theme before first paint to avoid a flash of the wrong mode. -->
     <script>
       (function () {
+        // Keep elev hex values in sync with src/lib/theme-chrome.js
+        var elev = { dark: '#161b22', light: '#f6f8fa' };
         try {
           var t = localStorage.getItem('theme');
           if (t !== 'light' && t !== 'dark') {
             t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
           }
           document.documentElement.setAttribute('data-theme', t);
+          var c = elev[t] || elev.dark;
+          var themeColor = document.createElement('meta');
+          themeColor.name = 'theme-color';
+          themeColor.content = c;
+          document.head.appendChild(themeColor);
+          var statusBar = document.createElement('meta');
+          statusBar.name = 'apple-mobile-web-app-status-bar-style';
+          statusBar.content = t === 'light' ? 'default' : 'black';
+          document.head.appendChild(statusBar);
         } catch (e) {
           document.documentElement.setAttribute('data-theme', 'dark');
+          var themeColor = document.createElement('meta');
+          themeColor.name = 'theme-color';
+          themeColor.content = elev.dark;
+          document.head.appendChild(themeColor);
+          var statusBar = document.createElement('meta');
+          statusBar.name = 'apple-mobile-web-app-status-bar-style';
+          statusBar.content = 'black';
+          document.head.appendChild(statusBar);
         }
       })();
     </script>
