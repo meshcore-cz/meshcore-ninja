@@ -1,0 +1,49 @@
+name: MeshCore Catalunya
+also_known_as:
+- MeshCoreCat
+- MeshCore Catalonia
+short_name: MeshCoreCat
+description: MeshCore community in Catalonia. Off-grid mesh network running on 868
+  MHz LoRa radios, with a live map, CoreScope analyzer, hardware guides and resources
+  for joining the network.
+scope: regional
+status: active
+visibility: public
+area: area.geojson
+coverage:
+  countries:
+  - ES
+regions:
+- code: es
+  name: Spain
+- code: es-ct
+  name: Catalonia
+  parent: es
+radios:
+- name: EU Catalunya
+  frequency: '868'
+  frequency_mhz: 869.618
+  bandwidth_khz: 62.5
+  spreading_factor: 7
+  coding_rate: 4/8
+  tx_power_dbm: 22
+  public_channel: Public
+community:
+  website: https://docs.livemap-meshcorecat.com/
+  discord: https://discord.gg/RNEzhszyQ
+  telegram: https://t.me/mcoreXAT
+maps:
+- name: Mapa en viu
+  url: https://mapa.livemap-meshcorecat.com
+analyzers:
+- name: MeshCore Catalunya CoreScope
+  url: https://analyzer.livemap-meshcorecat.com/
+resources:
+  getting_started: https://docs.livemap-meshcorecat.com/unir-mhi/
+  links:
+  - name: Web principal
+    url: https://livemap-meshcorecat.com/
+  - name: Hardware
+    url: https://docs.livemap-meshcorecat.com/hardware/
+  - name: Configuració de ràdio
+    url: https://docs.livemap-meshcorecat.com/configuracio-radio/

@@ -1,0 +1,46 @@
+name: Upstate Mesh
+also_known_as:
+- UpstateMesh
+short_name: Upstate Mesh
+description: Mesh communication community group for New York's Capital District (Albany,
+  Schenectady, Troy, Saratoga) and beyond. Supports both Meshtastic and MeshCore.
+scope: regional
+status: active
+visibility: public
+area: area.geojson
+coverage:
+  countries:
+  - US
+regions:
+- code: us
+  name: United States
+- code: us-ny
+  name: New York
+  parent: us
+- code: us-ny-capital-district
+  name: Capital District
+  parent: us-ny
+radio:
+  frequency: '915'
+  frequency_mhz: 910.525
+  bandwidth_khz: 62.5
+  spreading_factor: 7
+  coding_rate: 4/8
+  public_channel: Public
+community:
+  website: https://www.upst8me.sh/
+  discord: https://discord.gg/FvajRmXEsb
+maps:
+- name: Meshview - Upstate Mesh
+  url: http://mqtt.upstatemesh.org/map
+resources:
+  getting_started: https://www.upst8me.sh/join
+  links:
+  - name: Learn about mesh networking
+    url: https://www.upst8me.sh/learn
+  - name: Bluesky
+    url: https://bsky.app/profile/upstatemesh.bsky.social
+  - name: Instagram
+    url: https://www.instagram.com/upstatemesh/
+  - name: GitHub
+    url: https://github.com/upstate-mesh/mesh-station
