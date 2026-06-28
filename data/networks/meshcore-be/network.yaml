@@ -1,10 +1,9 @@
-name: ON8AR
+name: Belgium
 also_known_as:
-  - ON8AR MeshCore Belgium
   - MeshCore Belgium
   - MeshCore Belgie
   - RRY MeshCore Belgium
-short_name: ON8AR
+  - ON8AR
 description: >-
   Belgian MeshCore hub and CoreScope environment operated by ON8AR, showing live
   Belgian MeshCore traffic, nodes, observers and packet statistics while linking
@@ -41,14 +40,10 @@ radio:
   public_channel: Public
 
 community:
-  website: https://on8ar.eu/
+  website: https://meshcore.radio-actief.be/
   facebook: https://www.facebook.com/meshcoreBE
 
 maps:
-  - name: CoreScope live map
-    url: https://analyzer.on8ar.eu/#/live
-  - name: CoreScope network map
-    url: https://analyzer.on8ar.eu/#/map
   - name: Belgian MeshCore map
     url: https://meshcore.radio-actief.be/meshcore-kaart-belgie/
 
