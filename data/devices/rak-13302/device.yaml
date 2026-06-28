@@ -23,7 +23,8 @@ product_url: https://docs.rakwireless.com/product-categories/wisblock/rak13302/o
 description: >-
   WisBlock 1 W LoRa booster kit pairing the RAK3401 carrier with the RAK13302
   LPWAN module and SKY66122 RF amplifier. The kit is aimed at longer-range
-  LoRa operation in the 902-928 MHz band.
+  LoRa operation and is available in both 868 MHz (EU) and 902-928 MHz (US/AU)
+  band variants.
 roles:
   - companion
   - repeater
@@ -41,6 +42,7 @@ hardware:
     - technology: lora
       chip: sx1262
       bands:
+        - '868'
         - '915'
         - '920'
         - '923'
