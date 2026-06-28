@@ -1,7 +1,77 @@
 source: github
 repo: Meshcore-Portugal/lusofw
-updatedAt: '2026-06-27T19:24:15.868Z'
+updatedAt: '2026-06-28T04:04:39.784Z'
 releases:
+  - version: v2026.6.1-rc3-851d8ce
+    name: v2026.6.1-rc3-851d8ce
+    datetime: '2026-06-27T23:31:38Z'
+    url: https://github.com/Meshcore-Portugal/lusofw/releases/tag/v2026.6.1-rc3-851d8ce
+    prerelease: true
+    notes: >-
+      Automated dev prerelease of dev@851d8ce for v2026.6.1-rc3.
+
+
+
+      Based on MeshCore v1.16.0
+
+      main@e8d3c53ba1ea863937081cd0caad759b832f3028
+
+
+      ### Features
+
+
+      - Added SHTC3 sensor support and updated the PlatformIO build flags.
+
+      - Dropped stale packets from the TX queue to prevent late or duplicate delivery.
+
+      - Enabled loop detection at the minimum sensitivity setting.
+
+      - Reverted the airtime factor to 50% to address issues related to internationalization.
+
+      - Set the repeater advert path hash size to 2 bytes.
+
+      - Disabled probabilistic reduction for adverts.
+
+      - Added battery percentage to the repeater home screen.
+
+
+      ### Client
+
+
+      - Rendered the T114 boot logo as a true-color RGB image at its native panel resolution
+      (192×54).
+
+      - Switched the T114 ST7789 font to DejaVu Sans UI.
+
+      - Shrunk the T114 battery indicator icon to 16×8 logical pixels.
+
+      - The path hash mode defaults to 2 bytes.
+
+
+      ### Security
+
+
+      - Fixed network time replay vulnerability; reject time-source timestamps not newer than the
+      last accepted one.
+
+      - Enforce initial sync (forward-only) vs maintenance sync (±60s), replacing the symmetric ±30s
+      logic that allowed backward clock moves.
+
+
+      ### Improvements
+
+
+      - Updated MeshCore website links and logo placement across the UI and splash screens.
+
+
+      ### KTLO
+
+
+      - Added a `build_upload.sh` wrapper to compile and upload firmware in a single command.
+
+      - Increased the GitHub Actions parallel job limit and updated the PlatformIO dependencies.
+
+      - Removed the `ENABLE_CONSENSUS_TIME_SYNC` feature from the codebase.
   - version: v2026.6.1-rc2-7342246
     name: v2026.6.1-rc2-7342246
     datetime: '2026-06-27T18:32:39Z'
