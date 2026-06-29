@@ -7,6 +7,7 @@ import { extractTranslatableFields, resourceKey } from '../../src/lib/catalog-i1
 import { COMMAND_GROUPS, COMMAND_FLAGS } from '../../src/lib/repeaterCommands.js';
 import { createTranslationProvider } from './provider.js';
 import { logTranslatedField, logTranslateSummary } from './log.js';
+import { LOCALE_META } from '../../src/lib/locales.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '../..');
 
@@ -60,7 +61,7 @@ function writeTranslationSource(locale, kind, id, resource, fields, resourceFrom
  */
 export function resolveTargetLocales(requestedLocale, { baseLocale, locales }) {
   if (!requestedLocale) {
-    return locales.filter((l) => l !== baseLocale);
+    return locales.filter((l) => l !== baseLocale && !LOCALE_META[l]?.hidden);
   }
   if (requestedLocale === baseLocale) {
     throw new Error(`target locale must not be the base locale (${baseLocale})`);
