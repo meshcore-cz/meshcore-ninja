@@ -130,7 +130,7 @@
   );
 
   let description = $derived(
-    clampDescription(descriptionToPlain(s.description) || `${s.name} — a MeshCore ${meta?.singular ?? 'software'}.`)
+    clampDescription(descriptionToPlain(s.description) || m.sw_meta_desc({ name: s.name, kind: softwareKindLabel(s.kind) }))
   );
 </script>
 

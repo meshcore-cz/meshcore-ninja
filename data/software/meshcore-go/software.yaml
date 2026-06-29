@@ -1,23 +1,26 @@
 name: meshcore-go
+short_name: meshcore-go
 kind: library
 status: active
 maturity: alpha
 description: >-
-  Transport-independent Go SDK for MeshCore companion radios, with high-level
-  messaging, contacts, channels, discovery, repeater administration and raw
-  protocol access over serial, BLE and TCP. It also includes the mc terminal
-  client and an optional multi-session backend.
+  Pure Go implementation of the MeshCore protocol. Provides encode/decode for
+  all protocol payload types, cryptography, identity/key management, the
+  companion protocol (frame layer, commands/responses, push notifications),
+  serial/TCP transports, a high-level client, hardware modem abstraction with
+  KISS framing, and a node runtime with routing and peer management.
 
 maintainers:
-  - name: burningtree
-    url: http://github.com/burningtree
+  - name: meshcore-go
+    url: https://github.com/meshcore-go
 
-repository: https://github.com/meshcore-cz/meshcore-go
-documentation: https://pkg.go.dev/github.com/meshcore-cz/meshcore-go
+repository: https://github.com/meshcore-go/meshcore-go
+website: https://github.com/meshcore-go/meshcore-go
+documentation: https://pkg.go.dev/github.com/meshcore-go/meshcore-go
 license: MIT
 
-latest_version: v0.5.1
-released: 2026-06-19
+latest_version: v1.0.9
+released: 2026-06-28
 
 languages:
   - go
@@ -25,19 +28,21 @@ platforms:
   - linux
   - macos
   - windows
+  - esp32
 interfaces:
   - api
   - cli
-  - tui
   - headless
 connections:
   - ble
   - serial
   - usb
   - tcp
+  - websocket
 node_roles:
   - companion
   - repeater
+  - room-server
 capabilities:
   - messaging
   - contacts
@@ -52,42 +57,38 @@ capabilities:
 
 install:
   - type: go-install
-    package: github.com/meshcore-cz/meshcore-go
-    url: https://pkg.go.dev/github.com/meshcore-cz/meshcore-go
-    command: go get github.com/meshcore-cz/meshcore-go
-  - type: homebrew
-    package: meshcore-cz/tap/mc
-    url: https://github.com/meshcore-cz/homebrew-tap
-    command: brew install meshcore-cz/tap/mc
+    package: github.com/meshcore-go/meshcore-go
+    url: https://pkg.go.dev/github.com/meshcore-go/meshcore-go
+    command: go get github.com/meshcore-go/meshcore-go
   - type: github-release
-    url: https://github.com/meshcore-cz/meshcore-go/releases
+    url: https://github.com/meshcore-go/meshcore-go/releases
   - type: source
-    url: https://github.com/meshcore-cz/meshcore-go
+    url: https://github.com/meshcore-go/meshcore-go
 
 popularity:
-  githubStars: 1
-  githubForks: 0
+  githubStars: 11
+  githubForks: 2
   githubWatchers: 0
-  githubOpenIssues: 0
-  githubContributors: 1
-  latestReleaseDownloads: 3
-  lastChecked: 2026-06-24
+  githubOpenIssues: 1
+  githubContributors: 0
+  latestReleaseDownloads: 0
+  lastChecked: 2026-06-29
 
 verification:
   sourceAvailable: true
   releasesAvailable: true
   signedReleases: false
   ciBuilds: true
-  hasDocumentation: false
-  lastChecked: 2026-06-24
+  hasDocumentation: true
+  lastChecked: 2026-06-29
   notes:
-    - Public APIs may change before the first stable release.
-    - No repository license file or SPDX license declaration was present when reviewed.
+    - Multi-module Go workspace with companion, hardware and transport submodules.
 
 tags:
   - sdk
   - protocol
-  - terminal
-  - daemon
+  - go
+  - node-runtime
+  - companion-client
 
-last_reviewed: 2026-06-24
+last_reviewed: 2026-06-29

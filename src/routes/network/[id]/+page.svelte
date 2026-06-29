@@ -115,9 +115,7 @@
   let networkDescription = $derived(
     clampDescription(
       descriptionToPlain(n.description) ||
-        `${n.name} — ${NETWORK_SCOPE_META[n.scope]?.label ?? n.scope ?? ''} MeshCore network${
-          networkBandLabel(n) ? ` on ${networkBandLabel(n)}` : ''
-        }.`
+        m.nd_meta_desc({ name: n.name, scope: networkScopeLabel(n.scope) })
     )
   );
   let networkJsonLd = $derived({

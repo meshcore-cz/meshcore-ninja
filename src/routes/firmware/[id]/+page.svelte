@@ -119,7 +119,11 @@
   let fwDescription = $derived(
     clampDescription(
       descriptionToPlain(fw.description) ||
-        `${fw.name} — ${TYPE_META[fw.type]?.label ?? fw.type} MeshCore firmware${fw.maintainer ? ` by ${fw.maintainer}` : ''}, supporting ${pluralize(data.devices.length, 'device')}.`
+        m.fw_meta_desc({
+          name: fw.name,
+          type: firmwareTypeLabel(fw.type),
+          devices: m.count_device({ count: data.devices.length })
+        })
     )
   );
   let fwJsonLd = $derived({

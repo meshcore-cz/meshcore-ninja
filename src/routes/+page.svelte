@@ -29,14 +29,13 @@
     pull_request: link(`${REPO_URL}/pulls`, m.home_wip_pull_request(), true)
   });
 
-  const homeJsonLd = {
+  let homeJsonLd = $derived({
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: SITE_NAME,
     url: absUrl('/'),
-    description:
-      'An open catalog of the MeshCore ecosystem — networks, software, devices and firmwares.'
-  };
+    description: m.home_seo_desc()
+  });
 
   // The primary collections, in headline order. `n` is read from the
   // build-time counts so the numbers track the dataset automatically.
@@ -66,7 +65,7 @@
 </script>
 
 <Seo
-  description="An open catalog of the MeshCore ecosystem — the regional networks people run, the LoRa devices that join them, the firmwares that power them, and the software that connects it all."
+  description={m.home_seo_desc()}
   jsonLd={homeJsonLd}
 />
 

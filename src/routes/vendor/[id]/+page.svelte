@@ -4,7 +4,6 @@
   import { m } from '$lib/paraglide/messages.js';
   import RecordFooter from '$lib/RecordFooter.svelte';
   import BackLink from '$lib/BackLink.svelte';
-  import { pluralize } from '$lib/format.js';
   import { deviceMcuLabel, deviceRadioLabel, resolveRefs, descriptionToPlain } from '$lib/data.js';
   import { clampDescription, abs, absUrl, ogImageFor } from '$lib/seo.js';
   import Seo from '$lib/Seo.svelte';
@@ -15,7 +14,7 @@
   let vendorDescription = $derived(
     clampDescription(
       descriptionToPlain(v.description) ||
-        `${v.name}${v.country ? ` (${v.country})` : ''} — ${pluralize(data.devices.length, 'MeshCore-compatible device')}.`
+        m.vd_meta_desc({ name: v.name, devices: m.count_meshcore_device({ count: data.devices.length }) })
     )
   );
   let vendorJsonLd = $derived({
