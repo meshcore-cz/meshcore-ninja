@@ -14,8 +14,8 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  test:
-    name: Validate data & build
+  build:
+    name: Build site for Pages
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -35,36 +35,12 @@ jobs:
           key: og-${{ hashFiles('data/devices/**', 'data/vendors/**', 'data/firmwares/**', 'scripts/build-og.js') }}
           restore-keys: |
             og-
-      # Validate every YAML record against the JSON Schemas + referential checks.
-      - name: Validate data
-        run: npm test
-      # Ensure the static site builds (also regenerates data.json + OG cards via prebuild).
-      - name: Build
-        run: npm run build
-
-  build:
-    name: Build site for Pages
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 24
-          cache: npm
-      - run: npm ci
-      - name: Cache OG cards
-        uses: actions/cache@v5
-        with:
-          path: |
-            static/og
-            .cache/og
-          key: og-${{ hashFiles('data/devices/**', 'data/vendors/**', 'data/firmwares/**', 'scripts/build-og.js') }}
-          restore-keys: |
-            og-
       - name: Configure Pages
         id: pages
         uses: actions/configure-pages@v6
+      # Validate every YAML record against the JSON Schemas + referential checks.
+      - name: Validate data
+        run: npm run validate
       # base_path is "/<repo>" for project sites, "" for user/org root sites —
       # svelte.config.js reads it via process.env.BASE_PATH.
       - name: Build
