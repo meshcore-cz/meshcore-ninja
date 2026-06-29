@@ -2,6 +2,7 @@ package main
 
 import (
 	"sort"
+	"strings"
 	"sync"
 )
 
@@ -254,6 +255,38 @@ func advertViews(adverts []AdvertObservation) []AdvertView {
 	return out
 }
 
+// nodeView renders one overview row as its JSON view, including the rolling
+// latest-adverts list. Caller holds the lock.
+func nodeView(n *NodeRecord) NodeView {
+	return NodeView{
+		PubKey:        n.PubKey,
+		Name:          n.Name,
+		Type:          n.NodeType,
+		TypeName:      nodeTypeName(n.NodeType),
+		HasGPS:        n.HasGPS,
+		Lat:           n.Lat,
+		Lon:           n.Lon,
+		FirstAdvertAt: n.FirstAdvertAt,
+		LastAdvertAt:  n.LastAdvertAt,
+		AdvertCount:   n.AdvertCount,
+		Networks:      append([]string(nil), n.Networks...),
+		ObserverName:  n.ObserverName,
+		LatestAdverts: advertViews(n.LatestAdverts),
+	}
+}
+
+// GetView returns the full API view for one node by pubkey, including its rolling
+// latest-adverts list. ok is false when the node has never been heard.
+func (r *NodeRegistry) GetView(pubkey string) (NodeView, bool) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	n := r.nodes[pubkey]
+	if n == nil {
+		return NodeView{}, false
+	}
+	return nodeView(n), true
+}
+
 // Snapshot returns the node overview (most recent advert first), each node
 // carrying its network set and rolling latest-adverts list, ready for JSON.
 func (r *NodeRegistry) Snapshot() []NodeView {
@@ -262,8 +295,92 @@ func (r *NodeRegistry) Snapshot() []NodeView {
 
 	nodes := make([]NodeView, 0, len(r.nodes))
 	for _, n := range r.nodes {
-		networks := append([]string(nil), n.Networks...)
-		nodes = append(nodes, NodeView{
+		nodes = append(nodes, nodeView(n))
+	}
+	sort.Slice(nodes, func(i, j int) bool {
+		if nodes[i].LastAdvertAt != nodes[j].LastAdvertAt {
+			return nodes[i].LastAdvertAt > nodes[j].LastAdvertAt
+		}
+		return nodes[i].PubKey < nodes[j].PubKey
+	})
+	return nodes
+}
+
+// SearchResult is one directory hit: the node overview without the heavy rolling
+// advert list, so a result set of many nodes stays small.
+type SearchResult struct {
+	PubKey        string   `json:"pubkey"`
+	Name          string   `json:"name"`
+	Type          byte     `json:"type"`
+	TypeName      string   `json:"typeName"`
+	HasGPS        bool     `json:"hasGps"`
+	Lat           float64  `json:"lat,omitempty"`
+	Lon           float64  `json:"lon,omitempty"`
+	FirstAdvertAt int64    `json:"firstAdvertAt"`
+	LastAdvertAt  int64    `json:"lastAdvertAt"`
+	AdvertCount   uint64   `json:"advertCount"`
+	Networks      []string `json:"networks"`
+}
+
+// searchRank scores how well a node matches the query for ordering: lower is
+// better. With no query every node ranks equally (browse mode) and recency
+// decides. Exact and prefix name matches beat substring and pubkey-prefix hits.
+func searchRank(n *NodeRecord, q string) int {
+	if q == "" {
+		return 0
+	}
+	name := strings.ToLower(n.Name)
+	switch {
+	case name == q:
+		return 0
+	case strings.HasPrefix(name, q):
+		return 1
+	case strings.HasPrefix(n.PubKey, q):
+		return 2
+	default:
+		return 3 // substring match (matches() already confirmed it hit)
+	}
+}
+
+// Search returns the directory hits for the given filters, ranked by relevance
+// then recency. Unlike MapQuery it includes nodes without GPS, so the directory
+// can find every node — not just the mappable ones. total is the full match
+// count before the limit; capped is true when the limit truncated it.
+func (r *NodeRegistry) Search(p MapParams, limit int) (results []SearchResult, total int, capped bool) {
+	q := strings.ToLower(strings.TrimSpace(p.Q))
+	r.mu.Lock()
+	type ranked struct {
+		n    *NodeRecord
+		rank int
+	}
+	hits := make([]ranked, 0, 64)
+	for _, n := range r.nodes {
+		if !p.matches(n) {
+			continue
+		}
+		hits = append(hits, ranked{n, searchRank(n, q)})
+	}
+	r.mu.Unlock()
+
+	sort.Slice(hits, func(i, j int) bool {
+		if hits[i].rank != hits[j].rank {
+			return hits[i].rank < hits[j].rank
+		}
+		if hits[i].n.LastAdvertAt != hits[j].n.LastAdvertAt {
+			return hits[i].n.LastAdvertAt > hits[j].n.LastAdvertAt
+		}
+		return hits[i].n.PubKey < hits[j].n.PubKey
+	})
+
+	total = len(hits)
+	if limit > 0 && len(hits) > limit {
+		hits = hits[:limit]
+		capped = true
+	}
+	results = make([]SearchResult, 0, len(hits))
+	for _, h := range hits {
+		n := h.n
+		results = append(results, SearchResult{
 			PubKey:        n.PubKey,
 			Name:          n.Name,
 			Type:          n.NodeType,
@@ -274,18 +391,10 @@ func (r *NodeRegistry) Snapshot() []NodeView {
 			FirstAdvertAt: n.FirstAdvertAt,
 			LastAdvertAt:  n.LastAdvertAt,
 			AdvertCount:   n.AdvertCount,
-			Networks:      networks,
-			ObserverName:  n.ObserverName,
-			LatestAdverts: advertViews(n.LatestAdverts),
+			Networks:      append([]string(nil), n.Networks...),
 		})
 	}
-	sort.Slice(nodes, func(i, j int) bool {
-		if nodes[i].LastAdvertAt != nodes[j].LastAdvertAt {
-			return nodes[i].LastAdvertAt > nodes[j].LastAdvertAt
-		}
-		return nodes[i].PubKey < nodes[j].PubKey
-	})
-	return nodes
+	return results, total, capped
 }
 
 // Export captures the node overview rows for persistence. The rolling

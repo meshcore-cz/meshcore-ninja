@@ -483,6 +483,45 @@ func (d *DB) LoadRecentAdverts(perNode int) (map[string][]AdvertObservation, err
 	return out, rows.Err()
 }
 
+// AdvertsForNode returns one node's adverts from the append-only history table,
+// newest first, for the directory's per-node advert history. It pages with a
+// keyset cursor: when before > 0 only adverts with a smaller row id are returned,
+// so the caller fetches older pages by passing back the nextBefore it received.
+// nextBefore is the smallest id in the returned batch (0 when none), suitable as
+// the cursor for the next page; it is only meaningful when len(out) == limit.
+func (d *DB) AdvertsForNode(pubkey string, limit int, before int64) (out []AdvertObservation, nextBefore int64, err error) {
+	q := `SELECT id, pubkey, name, node_type, has_gps, lat, lon, advert_time, received_at, network_id, observer_id, observer_name
+		FROM adverts WHERE pubkey = ?`
+	args := []any{pubkey}
+	if before > 0 {
+		q += ` AND id < ?`
+		args = append(args, before)
+	}
+	q += ` ORDER BY id DESC LIMIT ?`
+	args = append(args, limit)
+
+	rows, err := d.db.Query(q, args...)
+	if err != nil {
+		return nil, 0, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var (
+			id     int64
+			a      AdvertObservation
+			hasGPS int
+		)
+		if err := rows.Scan(&id, &a.PubKey, &a.Name, &a.NodeType, &hasGPS, &a.Lat, &a.Lon, &a.AdvertTime, &a.At, &a.NetworkID, &a.ObserverID, &a.ObserverName); err != nil {
+			return nil, 0, err
+		}
+		a.HasGPS = hasGPS != 0
+		out = append(out, a)
+		nextBefore = id // rows are id-descending, so the last scanned id is the smallest
+	}
+	return out, nextBefore, rows.Err()
+}
+
 // SaveImportedNodes mirrors the external directory into the imported_nodes table
 // in one transaction, upserting every node by public key. This table is kept
 // entirely separate from the live `nodes` registry.

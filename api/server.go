@@ -15,13 +15,14 @@ type Server struct {
 	observers   *ObserverRegistry
 	links       *LinkRegistry
 	imported    *ImportRegistry
+	db          *DB // optional; enables the per-node advert history endpoint
 	metrics     *Metrics
 	hub         *Hub
 	allowOrigin string
 }
 
-func NewServer(store *Store, nodes *NodeRegistry, observers *ObserverRegistry, links *LinkRegistry, imported *ImportRegistry, metrics *Metrics, hub *Hub, allowOrigin string) *Server {
-	return &Server{store: store, nodes: nodes, observers: observers, links: links, imported: imported, metrics: metrics, hub: hub, allowOrigin: allowOrigin}
+func NewServer(store *Store, nodes *NodeRegistry, observers *ObserverRegistry, links *LinkRegistry, imported *ImportRegistry, db *DB, metrics *Metrics, hub *Hub, allowOrigin string) *Server {
+	return &Server{store: store, nodes: nodes, observers: observers, links: links, imported: imported, db: db, metrics: metrics, hub: hub, allowOrigin: allowOrigin}
 }
 
 func (s *Server) Handler() http.Handler {
@@ -33,6 +34,7 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("/api/networks/", s.instrument("/api/networks/:id", s.handleNetworkDetail))
 	mux.HandleFunc("/api/nodes", s.instrument("/api/nodes", s.handleNodes))
 	mux.HandleFunc("/api/nodes/", s.instrument("/api/nodes/:pubkey", s.handleNodeSub))
+	mux.HandleFunc("/api/search", s.instrument("/api/search", s.handleSearch))
 	mux.HandleFunc("/api/map", s.instrument("/api/map", s.handleMap))
 	mux.HandleFunc("/api/route", s.instrument("/api/route", s.handleRoute))
 	mux.HandleFunc("/api/observers", s.instrument("/api/observers", s.handleObservers))
@@ -246,16 +248,159 @@ type linkView struct {
 	Networks       []string         `json:"networks"`
 }
 
-// handleNodeSub routes /api/nodes/{pubkey}/links (the only sub-resource today).
+// handleNodeSub routes the per-node resources:
+//
+//	GET /api/nodes/{pubkey}          node detail (overview + rolling adverts)
+//	GET /api/nodes/{pubkey}/adverts  full advert history (paginated)
+//	GET /api/nodes/{pubkey}/links    observed links
 func (s *Server) handleNodeSub(w http.ResponseWriter, r *http.Request) {
 	rest := strings.TrimPrefix(r.URL.Path, "/api/nodes/")
 	pubkey, sub, _ := strings.Cut(rest, "/")
 	sub = strings.Trim(sub, "/")
-	if sub == "links" {
+	switch sub {
+	case "":
+		s.handleNodeDetail(w, r, pubkey)
+	case "adverts":
+		s.handleNodeAdverts(w, r, pubkey)
+	case "links":
 		s.handleNodeLinks(w, r, pubkey)
+	default:
+		writeJSON(w, http.StatusNotFound, map[string]string{"error": "not found"})
+	}
+}
+
+// handleNodeDetail serves one node's overview row and its rolling latest-adverts
+// list — the directory profile's primary fetch, avoiding the multi-MB /api/nodes
+// download.
+func (s *Server) handleNodeDetail(w http.ResponseWriter, r *http.Request, rawPub string) {
+	node, ok := normalizePub(rawPub)
+	if !ok {
+		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid pubkey"})
 		return
 	}
-	writeJSON(w, http.StatusNotFound, map[string]string{"error": "not found"})
+	view, found := s.nodes.GetView(hex.EncodeToString(node[:]))
+	if !found {
+		writeJSON(w, http.StatusNotFound, map[string]string{"error": "unknown node"})
+		return
+	}
+	w.Header().Set("Cache-Control", "public, max-age=15")
+	writeJSON(w, http.StatusOK, view)
+}
+
+// advert history endpoint defaults: 50 adverts per page, hard-capped at 500.
+const (
+	defaultAdvertsLimit = 50
+	maxAdvertsLimit     = 500
+)
+
+// handleNodeAdverts serves one node's full advert history from the append-only
+// history table, newest first:
+//
+//	GET /api/nodes/{pubkey}/adverts?limit=&before=
+//
+// before is the keyset cursor returned as nextBefore by the previous page (omit
+// for the newest page). When the database is disabled the in-memory rolling list
+// is served instead, so the endpoint still works (just without deep history).
+func (s *Server) handleNodeAdverts(w http.ResponseWriter, r *http.Request, rawPub string) {
+	node, ok := normalizePub(rawPub)
+	if !ok {
+		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid pubkey"})
+		return
+	}
+	pubHex := hex.EncodeToString(node[:])
+
+	qv := r.URL.Query()
+	limit := atoiDefault(qv.Get("limit"), defaultAdvertsLimit)
+	if limit <= 0 {
+		limit = defaultAdvertsLimit
+	}
+	if limit > maxAdvertsLimit {
+		limit = maxAdvertsLimit
+	}
+	before := int64(atoiDefault(qv.Get("before"), 0))
+
+	// No database: fall back to the in-memory rolling list (no pagination).
+	if s.db == nil {
+		view, found := s.nodes.GetView(pubHex)
+		if !found {
+			writeJSON(w, http.StatusNotFound, map[string]string{"error": "unknown node"})
+			return
+		}
+		adverts := view.LatestAdverts
+		if len(adverts) > limit {
+			adverts = adverts[:limit]
+		}
+		writeJSON(w, http.StatusOK, map[string]any{
+			"node":     pubHex,
+			"adverts":  adverts,
+			"returned": len(adverts),
+			"hasMore":  false,
+		})
+		return
+	}
+
+	rows, nextBefore, err := s.db.AdvertsForNode(pubHex, limit, before)
+	if err != nil {
+		writeJSON(w, http.StatusInternalServerError, map[string]string{"error": "query failed"})
+		return
+	}
+	adverts := advertViews(rows)
+	hasMore := len(rows) == limit
+	out := map[string]any{
+		"node":     pubHex,
+		"adverts":  adverts,
+		"returned": len(adverts),
+		"hasMore":  hasMore,
+	}
+	if hasMore {
+		out["nextBefore"] = nextBefore
+	}
+	w.Header().Set("Cache-Control", "public, max-age=15")
+	writeJSON(w, http.StatusOK, out)
+}
+
+// search endpoint defaults: 50 results returned by default, hard-capped at 200.
+const (
+	defaultSearchLimit = 50
+	maxSearchLimit     = 200
+)
+
+// handleSearch serves the directory's main query against the node registry:
+//
+//	GET /api/search?q=&types=&networks=&active=&since=&limit=
+//
+// Unlike /api/map it includes nodes without GPS, so every observed node is
+// findable. Results are ranked by relevance (exact/prefix name, then pubkey
+// prefix, then substring) and recency, and carry no per-node advert list to keep
+// the payload small.
+func (s *Server) handleSearch(w http.ResponseWriter, r *http.Request) {
+	qv := r.URL.Query()
+	p := MapParams{
+		Types:    parseByteSet(qv.Get("types")),
+		Networks: parseStringSet(qv.Get("networks")),
+		Q:        strings.TrimSpace(qv.Get("q")),
+	}
+	if since := qv.Get("since"); since != "" {
+		p.Since = int64(atoiDefault(since, 0))
+	} else if d, ok := parseActive(qv.Get("active")); ok {
+		p.Since = nowUnix() - int64(d.Seconds())
+	}
+	limit := atoiDefault(qv.Get("limit"), defaultSearchLimit)
+	if limit <= 0 {
+		limit = defaultSearchLimit
+	}
+	if limit > maxSearchLimit {
+		limit = maxSearchLimit
+	}
+
+	results, total, capped := s.nodes.Search(p, limit)
+	w.Header().Set("Cache-Control", "public, max-age=15")
+	writeJSON(w, http.StatusOK, map[string]any{
+		"results":  results,
+		"returned": len(results),
+		"total":    total,
+		"capped":   capped,
+	})
 }
 
 // handleNodeLinks serves the observed links for one node:

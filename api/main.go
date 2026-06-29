@@ -272,7 +272,7 @@ func main() {
 
 	srv := &http.Server{
 		Addr:         *addr,
-		Handler:      NewServer(store, registry, observers, links, imported, metrics, hub, *allowOrigin).Handler(),
+		Handler:      NewServer(store, registry, observers, links, imported, db, metrics, hub, *allowOrigin).Handler(),
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 15 * time.Second,
 	}
