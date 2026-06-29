@@ -38,7 +38,7 @@ maps:
   url: https://www.stmesh.net/stmesh/stmeshtastic.html
 - name: STMeshCore Map
   url: https://www.stmesh.net/stmesh/stmeshcore.html
-analyzers:
+#analyzers:
 # needs login
 #- name: STMesh CoreScope
 #  url: https://corescope.stmesh.net/
