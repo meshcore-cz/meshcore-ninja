@@ -3,7 +3,7 @@
 name: Zindello UltraPeaterZero
 vendorId: zindello
 kind: kit
-category: repeater
+category: development-board
 lifecycle: active
 familyId: zindello-ultrapeaterzero
 aliases:

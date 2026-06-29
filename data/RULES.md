@@ -105,6 +105,25 @@ unique (`Heltec V3`, `LilyGo T-Deck`, `Heltec T190`).
 - **`kind`**: `dev-board` for bare development boards; `product` for finished
   handhelds/enclosed products; `kit` for bundled kits (see `heltec-v4-exp`).
 
+### Category
+
+`category` answers "what is this board *for*?" — it drives filtering on the
+device list. Pick the value that best describes the device as purchased/built.
+
+| Value | Meaning | Examples |
+|-------|---------|---------|
+| `development-board` | Requires assembly, a host system, or non-trivial configuration before it does anything useful. Includes bare dev boards, HATs/shields, base boards that need an MCU, and kits sold as build projects. | Heltec V3, PiMesh-1W (needs a Pi), Photon-1W (needs a Xiao MCU), Zindello UltraPeater (kit) |
+| `companion-radio` | A radio module or board whose primary role is to connect to a phone/tablet as a MeshCore BLE/USB companion. No host computer required to relay — the phone *is* the host. | Ebyte E22P, Seeed Wio-SX1262, HopeRF RFM95 |
+| `standalone` | A complete, self-contained device that runs MeshCore without any host. Plug in power and it works — no assembly, no MCU to add. | EtherMesh-1W is **not** this — it needs Ethernet config. A fully enclosed repeater with fixed firmware would be. |
+| `repeater` | A finished, dedicated repeater — sold or built specifically for that role, not a general-purpose board that can be flashed as one. | A sealed outdoor repeater node sold ready-to-deploy |
+| `tracker` | A device built primarily for GPS position tracking and telemetry. | SenseCAP T1000-E, Wio Tracker L1 |
+| `other` | Doesn't fit any of the above. Use sparingly. | |
+
+**Common mistakes:**
+- Do **not** use `companion-radio` for Raspberry Pi HATs — those need a Pi host running software; `development-board` is correct.
+- Do **not** use `repeater` for kits or dev boards that can run repeater firmware — use `development-board` and set `roles: [repeater]` instead.
+- Do **not** use `standalone` unless the device works out of the box with no host, no assembly, and no MCU to add.
+
 ### Description
 
 Keep **`description` short** — one or two sentences (~200–350 characters), like
