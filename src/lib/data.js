@@ -1044,6 +1044,14 @@ export function networkRadioLabel(radio) {
   return bandLabel(band);
 }
 
+/** MeshCore app coding-rate label (denominator only), e.g. "4/5" → "5". */
+export function codingRateLabel(value) {
+  if (value == null || value === '') return null;
+  const s = String(value).trim();
+  const slash = s.indexOf('/');
+  return slash >= 0 ? s.slice(slash + 1) : s;
+}
+
 /** Inline SVG markup for a 3:2 country flag, or null. Case-insensitive. */
 export function countryFlagSvg(code) {
   if (!code) return null;

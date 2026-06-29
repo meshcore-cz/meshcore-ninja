@@ -6,6 +6,7 @@
     networkScopeLabel,
     networkFlags,
     networkRadioSettings,
+    codingRateLabel,
     networkBands,
     bandLabel,
     isAppPresetNetwork
@@ -50,7 +51,10 @@
     frequency: (n) => networkRadioSettings(n)[0]?.frequency_mhz ?? null,
     sf: (n) => networkRadioSettings(n)[0]?.spreading_factor ?? null,
     bw: (n) => networkRadioSettings(n)[0]?.bandwidth_khz ?? null,
-    cr: (n) => networkRadioSettings(n)[0]?.coding_rate ?? '',
+    cr: (n) => {
+      const label = codingRateLabel(networkRadioSettings(n)[0]?.coding_rate);
+      return label != null ? Number(label) : null;
+    },
     live: (n) => liveById[n.id]?.pktPerMin ?? null,
     nodes: (n) => liveById[n.id]?.nodes ?? null,
     observers: (n) => liveById[n.id]?.observers ?? null
@@ -303,7 +307,7 @@
         <td class="{bc} px-3.5 py-2 font-mono text-[0.8rem] tabular-nums whitespace-nowrap">{radioFreq(r)}</td>
         <td class="{bc} px-3.5 py-2 font-mono text-[0.8rem] tabular-nums text-dim">{r?.spreading_factor != null ? `SF${r.spreading_factor}` : '—'}</td>
         <td class="{bc} px-3.5 py-2 font-mono text-[0.8rem] tabular-nums whitespace-nowrap text-dim">{r?.bandwidth_khz != null ? `${r.bandwidth_khz} kHz` : '—'}</td>
-        <td class="{bc} px-3.5 py-2 font-mono text-[0.8rem] tabular-nums text-dim">{r?.coding_rate ?? '—'}</td>
+        <td class="{bc} px-3.5 py-2 font-mono text-[0.8rem] tabular-nums text-dim">{codingRateLabel(r?.coding_rate) ?? '—'}</td>
         {#if LIVE_ENABLED && i === 0}
           <td rowspan={rows} class="border-b border-edge px-3.5 py-2.5 text-right align-middle font-mono text-[0.82rem] tabular-nums whitespace-nowrap">
             {#if live}

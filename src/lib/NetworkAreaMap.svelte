@@ -3,7 +3,14 @@
   import { href } from '$lib/i18n.js';
   import { m } from '$lib/paraglide/messages.js';
   import { onMount } from 'svelte';
-  import { networkBands, bandLabel, bandColor, networkScopeLabel, networkStatusLabel } from '$lib/data.js';
+  import {
+    networkBands,
+    bandLabel,
+    bandColor,
+    codingRateLabel,
+    networkScopeLabel,
+    networkStatusLabel
+  } from '$lib/data.js';
   import { LIVE_ENABLED, fmtRate } from '$lib/pulse.js';
   import { ToggleGroup } from 'bits-ui';
   import Button from '$lib/Button.svelte';
@@ -259,7 +266,13 @@
         const band = r.frequency != null ? String(r.frequency) : null;
         const c = bandColors.get(band) ?? NO_BAND_COLOR;
         const label = escapeHtml(bandLabel(band) ?? band ?? '—');
-        const detail = [fmtMhz(r.frequency_mhz), r.spreading_factor ? `SF${r.spreading_factor}` : '', r.bandwidth_khz ? `${r.bandwidth_khz}kHz` : '']
+        const cr = codingRateLabel(r.coding_rate);
+        const detail = [
+          fmtMhz(r.frequency_mhz),
+          r.spreading_factor ? `SF${r.spreading_factor}` : '',
+          r.bandwidth_khz ? `${r.bandwidth_khz}kHz` : '',
+          cr ? `CR${cr}` : ''
+        ]
           .filter(Boolean)
           .join(' · ');
         return `<div class="mc-radio"><span class="mc-band" style="color:${c};background:color-mix(in srgb, ${c} 18%, transparent);border-color:color-mix(in srgb, ${c} 42%, transparent)">${label}</span><span class="mc-detail">${escapeHtml(detail)}</span></div>`;
