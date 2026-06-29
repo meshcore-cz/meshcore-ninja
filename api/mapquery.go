@@ -24,15 +24,26 @@ const allNodesLimit = 200000
 // filters mean "no filter": empty Types/Networks match every node, Since 0 keeps
 // all ages, and an empty Q disables search.
 type MapParams struct {
-	BBox     [4]float64      // west, south, east, north (degrees); ignored when Q is set
-	HasBBox  bool            // false = whole world
-	Zoom     int             // map zoom level
-	Types    map[byte]bool   // allowed node types (empty = all)
-	Networks map[string]bool // allowed network IDs (empty = all)
-	Since    int64           // keep nodes with LastAdvertAt >= Since (0 = all)
-	Q        string          // name substring (case-insensitive) or pubkey hex prefix
-	Limit    int             // max individual node features (<=0 = default)
-	All      bool            // return every matching node (no bbox, no clustering)
+	BBox        [4]float64      // west, south, east, north (degrees); ignored when Q is set
+	HasBBox     bool            // false = whole world
+	Zoom        int             // map zoom level
+	Types       map[byte]bool   // allowed node types (empty = all)
+	Networks    map[string]bool // allowed network IDs (empty = all)
+	Countries   map[string]bool // allowed coverage countries via network metadata
+	Regions     map[string]bool // allowed radio regions via network metadata
+	Since       int64           // keep nodes with LastAdvertAt >= Since (0 = all)
+	OlderThan   int64           // keep nodes with LastAdvertAt <= OlderThan (0 = disabled)
+	HasLocation *bool           // nil = any, true = GPS only, false = no GPS only
+	HasName     *bool           // nil = any, true = named only, false = unnamed only
+	Sources     map[string]bool // advert/corescope live rows or map imports
+	NearLat     float64
+	NearLon     float64
+	RadiusKM    float64
+	HasNear     bool
+	Sort        string
+	Q           string // name substring (case-insensitive) or pubkey hex prefix
+	Limit       int    // max individual node features (<=0 = default)
+	All         bool   // return every matching node (no bbox, no clustering)
 }
 
 // --- query-param parsing (used by the HTTP handler) ---
@@ -165,14 +176,34 @@ func importedFeature(n *ImportedNode) geoFeature {
 // filters. Imported nodes carry no network membership, so a network filter
 // excludes them entirely.
 func (p MapParams) matchesImported(n *ImportedNode) bool {
+	if len(p.Sources) > 0 && !p.Sources["map"] {
+		return false
+	}
 	if len(p.Types) > 0 && !p.Types[byte(n.Type)] {
 		return false
 	}
 	if p.Since > 0 && n.lastAdvertUnix() < p.Since {
 		return false
 	}
+	if p.OlderThan > 0 && n.lastAdvertUnix() > p.OlderThan {
+		return false
+	}
+	if p.HasLocation != nil && n.hasCoords() != *p.HasLocation {
+		return false
+	}
+	if p.HasName != nil && (strings.TrimSpace(n.AdvName) != "") != *p.HasName {
+		return false
+	}
 	if len(p.Networks) > 0 {
 		return false
+	}
+	if len(p.Countries) > 0 || len(p.Regions) > 0 {
+		return false
+	}
+	if p.HasNear {
+		if !n.hasCoords() || haversineKM(p.NearLat, p.NearLon, n.AdvLat, n.AdvLon) > p.RadiusKM {
+			return false
+		}
 	}
 	if p.Q != "" {
 		q := strings.ToLower(p.Q)
@@ -191,10 +222,22 @@ func (n *ImportedNode) hasCoords() bool {
 
 // matches reports whether a node passes the (non-spatial) filters.
 func (p MapParams) matches(n *NodeRecord) bool {
+	if len(p.Sources) > 0 && !p.Sources["advert"] && !p.Sources["corescope"] {
+		return false
+	}
 	if len(p.Types) > 0 && !p.Types[n.NodeType] {
 		return false
 	}
 	if p.Since > 0 && n.LastAdvertAt < p.Since {
+		return false
+	}
+	if p.OlderThan > 0 && n.LastAdvertAt > p.OlderThan {
+		return false
+	}
+	if p.HasLocation != nil && n.HasGPS != *p.HasLocation {
+		return false
+	}
+	if p.HasName != nil && (strings.TrimSpace(n.Name) != "") != *p.HasName {
 		return false
 	}
 	if len(p.Networks) > 0 {
@@ -209,6 +252,11 @@ func (p MapParams) matches(n *NodeRecord) bool {
 			return false
 		}
 	}
+	if p.HasNear {
+		if !n.HasGPS || haversineKM(p.NearLat, p.NearLon, n.Lat, n.Lon) > p.RadiusKM {
+			return false
+		}
+	}
 	if p.Q != "" {
 		q := strings.ToLower(p.Q)
 		if !strings.Contains(strings.ToLower(n.Name), q) && !strings.HasPrefix(n.PubKey, q) {
@@ -216,6 +264,17 @@ func (p MapParams) matches(n *NodeRecord) bool {
 		}
 	}
 	return true
+}
+
+func haversineKM(lat1, lon1, lat2, lon2 float64) float64 {
+	const earthKM = 6371.0088
+	toRad := func(v float64) float64 { return v * math.Pi / 180 }
+	dLat := toRad(lat2 - lat1)
+	dLon := toRad(lon2 - lon1)
+	lat1 = toRad(lat1)
+	lat2 = toRad(lat2)
+	a := math.Sin(dLat/2)*math.Sin(dLat/2) + math.Cos(lat1)*math.Cos(lat2)*math.Sin(dLon/2)*math.Sin(dLon/2)
+	return earthKM * 2 * math.Atan2(math.Sqrt(a), math.Sqrt(1-a))
 }
 
 func (p MapParams) inBBox(lon, lat float64) bool {

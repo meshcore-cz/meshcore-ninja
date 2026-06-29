@@ -44,6 +44,8 @@ func (a *AnalyzerState) status() (connected bool, since int64, lastErr string) {
 type NetworkState struct {
 	ID        string
 	Name      string
+	Countries []string
+	Regions   []string
 	Counter   *Counter // deduplicated across all analyzers in this network
 	Analyzers []*AnalyzerState
 }
@@ -59,7 +61,13 @@ type Store struct {
 func NewStore(configs []NetworkConfig) *Store {
 	s := &Store{byID: make(map[string]*NetworkState)}
 	for _, nc := range configs {
-		ns := &NetworkState{ID: nc.ID, Name: nc.Name, Counter: newCounter()}
+		ns := &NetworkState{
+			ID:        nc.ID,
+			Name:      nc.Name,
+			Countries: append([]string(nil), nc.Countries...),
+			Regions:   append([]string(nil), nc.Regions...),
+			Counter:   newCounter(),
+		}
 		for _, ac := range nc.Analyzers {
 			ns.Analyzers = append(ns.Analyzers, &AnalyzerState{
 				Name:    ac.Name,

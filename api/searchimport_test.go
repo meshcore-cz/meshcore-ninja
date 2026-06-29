@@ -1,6 +1,10 @@
 package main
 
-import "testing"
+import (
+	"net/http"
+	"net/http/httptest"
+	"testing"
+)
 
 // TestMergedSearchIncludesImported confirms /api/search surfaces directory-only
 // nodes, dedupes them against live ones (live wins), and tags each hit's source.
@@ -51,6 +55,63 @@ func TestMergedSearchQueryMatchesImportedName(t *testing.T) {
 	}
 	if results[0].Source != "map" {
 		t.Errorf("source = %q, want map", results[0].Source)
+	}
+}
+
+func TestSearchFiltersSourceNearAndSort(t *testing.T) {
+	r := newTestRegistry()
+	ir := newImportRegistry()
+	ir.Replace([]*ImportedNode{importedNode("ee01", "Berlin Imported", 2, 52.52, 13.40)})
+	s := &Server{nodes: r, imported: ir}
+
+	results, total, _ := s.mergedSearch(MapParams{
+		Types:    map[byte]bool{2: true},
+		Sources:  map[string]bool{"advert": true},
+		HasNear:  true,
+		NearLat:  50.08,
+		NearLon:  14.42,
+		RadiusKM: 20,
+		Sort:     "distance",
+	}, 50)
+	if total != 1 || len(results) != 1 || results[0].PubKey != "aa01" {
+		t.Fatalf("got %+v (total %d), want only nearby live repeater aa01", results, total)
+	}
+	if results[0].DistanceKM != 0 {
+		t.Fatalf("distanceKm = %f, want 0 for exact coordinate match", results[0].DistanceKM)
+	}
+}
+
+func TestSearchOptionsAndValidation(t *testing.T) {
+	s := &Server{
+		store: NewStore([]NetworkConfig{{
+			ID:        "meshcore-cz",
+			Name:      "MeshCore CZ",
+			Countries: []string{"CZ"},
+			Regions:   []string{"EU868"},
+			Analyzers: []AnalyzerConfig{{Name: "a", URL: "http://example.test"}},
+		}}),
+		nodes: newTestRegistry(),
+	}
+
+	req := httptest.NewRequest(http.MethodGet, "/api/search/options", nil)
+	rr := httptest.NewRecorder()
+	s.handleSearchOptions(rr, req)
+	if rr.Code != http.StatusOK {
+		t.Fatalf("options status = %d, want 200", rr.Code)
+	}
+
+	req = httptest.NewRequest(http.MethodGet, "/api/search?type=spaceship", nil)
+	rr = httptest.NewRecorder()
+	s.handleSearch(rr, req)
+	if rr.Code != http.StatusBadRequest {
+		t.Fatalf("bad type status = %d, want 400", rr.Code)
+	}
+
+	req = httptest.NewRequest(http.MethodGet, "/api/search?country=CZ&type=repeater", nil)
+	rr = httptest.NewRecorder()
+	s.handleSearch(rr, req)
+	if rr.Code != http.StatusOK {
+		t.Fatalf("valid country status = %d, want 200", rr.Code)
 	}
 }
 

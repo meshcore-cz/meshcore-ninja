@@ -335,6 +335,7 @@ type SearchResult struct {
 	LastAdvertAt  int64    `json:"lastAdvertAt"`
 	AdvertCount   uint64   `json:"advertCount"`
 	Networks      []string `json:"networks"`
+	DistanceKM    float64  `json:"distanceKm,omitempty"`
 	// Source is "live" (observed by our analyzers) or "map" (only known from the
 	// mirrored map.meshcore.io directory). Lets the UI flag directory-only hits.
 	Source string `json:"source,omitempty"`

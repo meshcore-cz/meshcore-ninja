@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -36,6 +37,7 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("/api/networks/", s.instrument("/api/networks/:id", s.handleNetworkDetail))
 	mux.HandleFunc("/api/nodes", s.instrument("/api/nodes", s.handleNodes))
 	mux.HandleFunc("/api/nodes/", s.instrument("/api/nodes/:pubkey", s.handleNodeSub))
+	mux.HandleFunc("/api/search/options", s.instrument("/api/search/options", s.handleSearchOptions))
 	mux.HandleFunc("/api/search", s.instrument("/api/search", s.handleSearch))
 	mux.HandleFunc("/api/map", s.instrument("/api/map", s.handleMap))
 	mux.HandleFunc("/api/route", s.instrument("/api/route", s.handleRoute))
@@ -538,6 +540,263 @@ const (
 	maxSearchLimit     = 200
 )
 
+type searchOptionValue struct {
+	Value string `json:"value"`
+	Label string `json:"label"`
+}
+
+type searchOptionCommand struct {
+	Key         string              `json:"key"`
+	Label       string              `json:"label"`
+	Description string              `json:"description,omitempty"`
+	Values      []searchOptionValue `json:"values,omitempty"`
+	Placeholder string              `json:"placeholder,omitempty"`
+}
+
+func (s *Server) searchOptions() []searchOptionCommand {
+	countries := map[string]bool{}
+	regions := map[string]bool{}
+	if s.store != nil {
+		for _, ns := range s.store.Networks {
+			for _, cc := range ns.Countries {
+				countries[cc] = true
+			}
+			for _, r := range ns.Regions {
+				regions[r] = true
+			}
+		}
+	}
+	countryValues := make([]searchOptionValue, 0, len(countries))
+	for cc := range countries {
+		countryValues = append(countryValues, searchOptionValue{Value: cc, Label: cc})
+	}
+	sort.Slice(countryValues, func(i, j int) bool { return countryValues[i].Value < countryValues[j].Value })
+	regionValues := make([]searchOptionValue, 0, len(regions))
+	for r := range regions {
+		regionValues = append(regionValues, searchOptionValue{Value: r, Label: r})
+	}
+	sort.Slice(regionValues, func(i, j int) bool { return regionValues[i].Value < regionValues[j].Value })
+
+	return []searchOptionCommand{
+		{Key: "type", Label: "Type", Values: []searchOptionValue{{"repeater", "Repeater"}, {"companion", "Companion"}, {"room", "Room"}}},
+		{Key: "country", Label: "Country", Values: countryValues, Placeholder: "CZ"},
+		{Key: "region", Label: "Region", Values: regionValues, Placeholder: "EU868"},
+		{Key: "seen", Label: "Seen", Values: []searchOptionValue{{"<24h", "Last 24 hours"}, {"<7d", "Last 7 days"}, {">30d", "Older than 30 days"}}},
+		{Key: "has", Label: "Has", Values: []searchOptionValue{{"location", "Location"}, {"name", "Name"}}},
+		{Key: "source", Label: "Source", Values: []searchOptionValue{{"advert", "Advert"}, {"map", "Map"}, {"corescope", "CoreScope"}}},
+		{Key: "near", Label: "Near", Placeholder: "50.0755,14.4378"},
+		{Key: "radius", Label: "Radius", Placeholder: "25"},
+		{Key: "sort", Label: "Sort", Values: []searchOptionValue{{"recent", "Recent"}, {"name", "Name"}, {"distance", "Distance"}}},
+	}
+}
+
+func (s *Server) handleSearchOptions(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Cache-Control", "public, max-age=300")
+	writeJSON(w, http.StatusOK, map[string]any{"commands": s.searchOptions()})
+}
+
+func addSet(dst map[string]bool, values []string) map[string]bool {
+	for _, v := range values {
+		for _, part := range strings.Split(v, ",") {
+			part = strings.TrimSpace(part)
+			if part == "" {
+				continue
+			}
+			if dst == nil {
+				dst = map[string]bool{}
+			}
+			dst[part] = true
+		}
+	}
+	return dst
+}
+
+func (s *Server) expandNetworkMetadata(p *MapParams) {
+	if len(p.Countries) == 0 && len(p.Regions) == 0 {
+		return
+	}
+	if s.store == nil {
+		p.Networks = map[string]bool{"__no_matching_network__": true}
+		return
+	}
+	metaNetworks := map[string]bool{}
+	for _, ns := range s.store.Networks {
+		countryOK := len(p.Countries) == 0
+		for _, cc := range ns.Countries {
+			if p.Countries[cc] {
+				countryOK = true
+				break
+			}
+		}
+		regionOK := len(p.Regions) == 0
+		for _, r := range ns.Regions {
+			if p.Regions[r] {
+				regionOK = true
+				break
+			}
+		}
+		if countryOK && regionOK {
+			metaNetworks[ns.ID] = true
+		}
+	}
+	if p.Networks == nil {
+		p.Networks = metaNetworks
+		return
+	}
+	for id := range p.Networks {
+		if !metaNetworks[id] {
+			delete(p.Networks, id)
+		}
+	}
+}
+
+func (s *Server) supportedSearchMeta() (map[string]bool, map[string]bool) {
+	countries, regions := map[string]bool{}, map[string]bool{}
+	if s.store == nil {
+		return countries, regions
+	}
+	for _, ns := range s.store.Networks {
+		for _, cc := range ns.Countries {
+			countries[cc] = true
+		}
+		for _, r := range ns.Regions {
+			regions[r] = true
+		}
+	}
+	return countries, regions
+}
+
+func parseSearchParams(s *Server, r *http.Request) (MapParams, int, string) {
+	qv := r.URL.Query()
+	p := MapParams{
+		Types:    parseByteSet(qv.Get("types")),
+		Networks: parseStringSet(qv.Get("networks")),
+		Q:        strings.TrimSpace(qv.Get("q")),
+		Sort:     strings.TrimSpace(qv.Get("sort")),
+	}
+
+	for _, typ := range qv["type"] {
+		for _, v := range strings.Split(typ, ",") {
+			switch strings.ToLower(strings.TrimSpace(v)) {
+			case "":
+			case "companion", "chat":
+				if p.Types == nil {
+					p.Types = map[byte]bool{}
+				}
+				p.Types[1] = true
+			case "repeater":
+				if p.Types == nil {
+					p.Types = map[byte]bool{}
+				}
+				p.Types[2] = true
+			case "room":
+				if p.Types == nil {
+					p.Types = map[byte]bool{}
+				}
+				p.Types[3] = true
+			default:
+				return p, 0, "unsupported type"
+			}
+		}
+	}
+
+	p.Countries = addSet(p.Countries, qv["country"])
+	supportedCountries, supportedRegions := s.supportedSearchMeta()
+	for cc := range p.Countries {
+		if len(cc) != 2 || strings.ToUpper(cc) != cc {
+			return p, 0, "unsupported country"
+		}
+		if len(supportedCountries) > 0 && !supportedCountries[cc] {
+			return p, 0, "unsupported country"
+		}
+	}
+	p.Regions = addSet(p.Regions, qv["region"])
+	for r := range p.Regions {
+		if r == "" || strings.ToUpper(r) != r {
+			return p, 0, "unsupported region"
+		}
+		if len(supportedRegions) > 0 && !supportedRegions[r] {
+			return p, 0, "unsupported region"
+		}
+	}
+	s.expandNetworkMetadata(&p)
+
+	if since := qv.Get("since"); since != "" {
+		p.Since = int64(atoiDefault(since, 0))
+	} else if d, ok := parseActive(qv.Get("active")); ok {
+		p.Since = nowUnix() - int64(d.Seconds())
+	}
+	for _, seen := range qv["seen"] {
+		switch strings.TrimSpace(seen) {
+		case "", "all":
+		case "<24h":
+			p.Since = nowUnix() - int64((24 * time.Hour).Seconds())
+		case "<7d":
+			p.Since = nowUnix() - int64((7 * 24 * time.Hour).Seconds())
+		case ">30d":
+			p.OlderThan = nowUnix() - int64((30 * 24 * time.Hour).Seconds())
+		default:
+			return p, 0, "unsupported seen"
+		}
+	}
+
+	for _, has := range qv["has"] {
+		switch strings.TrimSpace(has) {
+		case "":
+		case "location":
+			v := true
+			p.HasLocation = &v
+		case "name":
+			v := true
+			p.HasName = &v
+		default:
+			return p, 0, "unsupported has"
+		}
+	}
+
+	p.Sources = addSet(p.Sources, qv["source"])
+	for src := range p.Sources {
+		if src != "advert" && src != "map" && src != "corescope" {
+			return p, 0, "unsupported source"
+		}
+	}
+
+	if near := strings.TrimSpace(qv.Get("near")); near != "" {
+		parts := strings.Split(near, ",")
+		if len(parts) != 2 {
+			return p, 0, "invalid near"
+		}
+		lat, err1 := strconv.ParseFloat(strings.TrimSpace(parts[0]), 64)
+		lon, err2 := strconv.ParseFloat(strings.TrimSpace(parts[1]), 64)
+		if err1 != nil || err2 != nil || lat < -90 || lat > 90 || lon < -180 || lon > 180 {
+			return p, 0, "invalid near"
+		}
+		radius, err := strconv.ParseFloat(strings.TrimSpace(qv.Get("radius")), 64)
+		if err != nil || radius <= 0 || radius > 20000 {
+			return p, 0, "invalid radius"
+		}
+		p.NearLat, p.NearLon, p.RadiusKM, p.HasNear = lat, lon, radius, true
+	}
+	switch p.Sort {
+	case "", "recent", "name":
+	case "distance":
+		if !p.HasNear {
+			return p, 0, "sort distance requires near"
+		}
+	default:
+		return p, 0, "unsupported sort"
+	}
+
+	limit := atoiDefault(qv.Get("limit"), defaultSearchLimit)
+	if limit <= 0 {
+		limit = defaultSearchLimit
+	}
+	if limit > maxSearchLimit {
+		limit = maxSearchLimit
+	}
+	return p, limit, ""
+}
+
 // handleSearch serves the directory's main query against the node registry:
 //
 //	GET /api/search?q=&types=&networks=&active=&since=&limit=
@@ -547,23 +806,10 @@ const (
 // prefix, then substring) and recency, and carry no per-node advert list to keep
 // the payload small.
 func (s *Server) handleSearch(w http.ResponseWriter, r *http.Request) {
-	qv := r.URL.Query()
-	p := MapParams{
-		Types:    parseByteSet(qv.Get("types")),
-		Networks: parseStringSet(qv.Get("networks")),
-		Q:        strings.TrimSpace(qv.Get("q")),
-	}
-	if since := qv.Get("since"); since != "" {
-		p.Since = int64(atoiDefault(since, 0))
-	} else if d, ok := parseActive(qv.Get("active")); ok {
-		p.Since = nowUnix() - int64(d.Seconds())
-	}
-	limit := atoiDefault(qv.Get("limit"), defaultSearchLimit)
-	if limit <= 0 {
-		limit = defaultSearchLimit
-	}
-	if limit > maxSearchLimit {
-		limit = maxSearchLimit
+	p, limit, bad := parseSearchParams(s, r)
+	if bad != "" {
+		writeJSON(w, http.StatusBadRequest, map[string]string{"error": bad})
+		return
 	}
 
 	started := time.Now()
@@ -597,6 +843,9 @@ func (s *Server) mergedSearch(p MapParams, limit int) (results []SearchResult, t
 	all := make([]scored, 0, len(live))
 	seen := make(map[string]bool, len(live))
 	for _, r := range live {
+		if p.HasNear && r.HasGPS {
+			r.DistanceKM = haversineKM(p.NearLat, p.NearLon, r.Lat, r.Lon)
+		}
 		seen[r.PubKey] = true
 		all = append(all, scored{r, rankMatch(r.Name, r.PubKey, q)})
 	}
@@ -606,12 +855,32 @@ func (s *Server) mergedSearch(p MapParams, limit int) (results []SearchResult, t
 			if seen[in.PublicKey] || !p.matchesImported(in) {
 				continue
 			}
+			r := importedSearchResult(in)
+			if p.HasNear && r.HasGPS {
+				r.DistanceKM = haversineKM(p.NearLat, p.NearLon, r.Lat, r.Lon)
+			}
 			seen[in.PublicKey] = true
-			all = append(all, scored{importedSearchResult(in), rankMatch(in.AdvName, in.PublicKey, q)})
+			all = append(all, scored{r, rankMatch(in.AdvName, in.PublicKey, q)})
 		}
 	}
 
 	sort.Slice(all, func(i, j int) bool {
+		switch p.Sort {
+		case "name":
+			ni, nj := strings.ToLower(all[i].r.Name), strings.ToLower(all[j].r.Name)
+			if ni != nj {
+				return ni < nj
+			}
+			return all[i].r.PubKey < all[j].r.PubKey
+		case "distance":
+			if all[i].r.DistanceKM != all[j].r.DistanceKM {
+				return all[i].r.DistanceKM < all[j].r.DistanceKM
+			}
+			if all[i].rank != all[j].rank {
+				return all[i].rank < all[j].rank
+			}
+			return all[i].r.PubKey < all[j].r.PubKey
+		}
 		if all[i].rank != all[j].rank {
 			return all[i].rank < all[j].rank
 		}
