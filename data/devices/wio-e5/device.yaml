@@ -1,0 +1,42 @@
+# Source: https://wiki.seeedstudio.com/LoRa-E5_STM32WLE5JC_Module/
+# Source: https://www.seeedstudio.com/LoRa-E5-Wireless-Module-p-4745.html
+name: Wio-E5
+vendorId: seeed
+kind: module
+moduleType: system
+category: module
+lifecycle: active
+product_url: https://www.seeedstudio.com/LoRa-E5-Wireless-Module-p-4745.html
+price:
+  amount: 6
+  currency: USD
+  asOf: 2026-06
+aliases:
+  - LoRa-E5
+  - Wio-E5 Module
+  - STM32WLE5JC Module
+description: >-
+  Ultra-compact 12×12 mm LoRa module built on the STM32WLE5JC, which integrates
+  an ARM Cortex-M4 MCU and SX126x-compatible radio in a single chip. SMT stamp
+  package with UART and SPI interfaces. Supports EU868, US915, and other global
+  LoRaWAN bands at up to 22 dBm.
+image: wio-e5.svg
+hardware:
+  mcu:
+    model: stm32wl
+    flashMb: 0.25
+    ramKb: 64
+  radios:
+    - technology: lora
+      chip: stm32wl
+      txPowerDbm: 22
+      bands:
+        - "433"
+        - "868"
+        - "915"
+      antenna: SMT
+  physical:
+    dimensionsMm:
+      width: 12
+      height: 12
+      depth: 2.5
