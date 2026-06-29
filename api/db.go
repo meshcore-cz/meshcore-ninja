@@ -56,6 +56,7 @@ CREATE TABLE IF NOT EXISTS adverts (
 	advert_time   INTEGER NOT NULL DEFAULT 0,
 	received_at   INTEGER NOT NULL DEFAULT 0,
 	network_id    TEXT    NOT NULL DEFAULT '',
+	analyzer_name TEXT    NOT NULL DEFAULT '',
 	observer_id   TEXT    NOT NULL DEFAULT '',
 	observer_name TEXT    NOT NULL DEFAULT ''
 );
@@ -131,6 +132,10 @@ func OpenDB(path string) (*DB, error) {
 	if err := ensureColumn(sdb, "adverts", "raw_hex", "TEXT NOT NULL DEFAULT ''"); err != nil {
 		_ = sdb.Close()
 		return nil, fmt.Errorf("migrate adverts.raw_hex: %w", err)
+	}
+	if err := ensureColumn(sdb, "adverts", "analyzer_name", "TEXT NOT NULL DEFAULT ''"); err != nil {
+		_ = sdb.Close()
+		return nil, fmt.Errorf("migrate adverts.analyzer_name: %w", err)
 	}
 	return &DB{db: sdb}, nil
 }
@@ -313,15 +318,15 @@ func (d *DB) AppendAdverts(adverts []AdvertObservation) error {
 	defer tx.Rollback()
 
 	stmt, err := tx.Prepare(`
-		INSERT INTO adverts (hash, raw_hex, pubkey, name, node_type, has_gps, lat, lon, advert_time, received_at, network_id, observer_id, observer_name)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+		INSERT INTO adverts (hash, raw_hex, pubkey, name, node_type, has_gps, lat, lon, advert_time, received_at, network_id, analyzer_name, observer_id, observer_name)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
 	if err != nil {
 		return err
 	}
 	defer stmt.Close()
 
 	for _, a := range adverts {
-		if _, err := stmt.Exec(a.Hash, a.RawHex, a.PubKey, a.Name, a.NodeType, b2i(a.HasGPS), a.Lat, a.Lon, a.AdvertTime, a.At, a.NetworkID, a.ObserverID, a.ObserverName); err != nil {
+		if _, err := stmt.Exec(a.Hash, a.RawHex, a.PubKey, a.Name, a.NodeType, b2i(a.HasGPS), a.Lat, a.Lon, a.AdvertTime, a.At, a.NetworkID, a.AnalyzerName, a.ObserverID, a.ObserverName); err != nil {
 			return err
 		}
 	}
@@ -494,7 +499,7 @@ func (d *DB) SaveObservers(observers []ObserverRecord, now int64) error {
 // newest-first. This turns a ~75s full-table window scan into a sub-second load.
 func (d *DB) LoadRecentAdverts(perNode int) (map[string][]AdvertObservation, error) {
 	rows, err := d.db.Query(`
-		SELECT a.hash, a.raw_hex, a.pubkey, a.name, a.node_type, a.has_gps, a.lat, a.lon, a.advert_time, a.received_at, a.network_id, a.observer_id, a.observer_name
+		SELECT a.hash, a.raw_hex, a.pubkey, a.name, a.node_type, a.has_gps, a.lat, a.lon, a.advert_time, a.received_at, a.network_id, a.analyzer_name, a.observer_id, a.observer_name
 		FROM adverts a
 		JOIN (
 			SELECT id FROM (
@@ -513,7 +518,7 @@ func (d *DB) LoadRecentAdverts(perNode int) (map[string][]AdvertObservation, err
 			a      AdvertObservation
 			hasGPS int
 		)
-		if err := rows.Scan(&a.Hash, &a.RawHex, &a.PubKey, &a.Name, &a.NodeType, &hasGPS, &a.Lat, &a.Lon, &a.AdvertTime, &a.At, &a.NetworkID, &a.ObserverID, &a.ObserverName); err != nil {
+		if err := rows.Scan(&a.Hash, &a.RawHex, &a.PubKey, &a.Name, &a.NodeType, &hasGPS, &a.Lat, &a.Lon, &a.AdvertTime, &a.At, &a.NetworkID, &a.AnalyzerName, &a.ObserverID, &a.ObserverName); err != nil {
 			return nil, err
 		}
 		a.HasGPS = hasGPS != 0
@@ -529,7 +534,7 @@ func (d *DB) LoadRecentAdverts(perNode int) (map[string][]AdvertObservation, err
 // nextBefore is the smallest id in the returned batch (0 when none), suitable as
 // the cursor for the next page; it is only meaningful when len(out) == limit.
 func (d *DB) AdvertsForNode(pubkey string, limit int, before int64) (out []AdvertObservation, nextBefore int64, err error) {
-	q := `SELECT id, hash, raw_hex, pubkey, name, node_type, has_gps, lat, lon, advert_time, received_at, network_id, observer_id, observer_name
+	q := `SELECT id, hash, raw_hex, pubkey, name, node_type, has_gps, lat, lon, advert_time, received_at, network_id, analyzer_name, observer_id, observer_name
 		FROM adverts WHERE pubkey = ?`
 	args := []any{pubkey}
 	if before > 0 {
@@ -551,7 +556,7 @@ func (d *DB) AdvertsForNode(pubkey string, limit int, before int64) (out []Adver
 			a      AdvertObservation
 			hasGPS int
 		)
-		if err := rows.Scan(&id, &a.Hash, &a.RawHex, &a.PubKey, &a.Name, &a.NodeType, &hasGPS, &a.Lat, &a.Lon, &a.AdvertTime, &a.At, &a.NetworkID, &a.ObserverID, &a.ObserverName); err != nil {
+		if err := rows.Scan(&id, &a.Hash, &a.RawHex, &a.PubKey, &a.Name, &a.NodeType, &hasGPS, &a.Lat, &a.Lon, &a.AdvertTime, &a.At, &a.NetworkID, &a.AnalyzerName, &a.ObserverID, &a.ObserverName); err != nil {
 			return nil, 0, err
 		}
 		a.HasGPS = hasGPS != 0

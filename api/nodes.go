@@ -36,6 +36,7 @@ type AdvertObservation struct {
 	AdvertTime   int64   // the advert's own broadcast timestamp (unix seconds)
 	At           int64   // when we received it (unix seconds)
 	NetworkID    string  // network the advert was heard on
+	AnalyzerName string  // analyzer that reported it
 	ObserverID   string  // observer that reported it
 	ObserverName string
 }
@@ -220,6 +221,7 @@ type AdvertView struct {
 	AdvertTime   int64   `json:"advertTime"`
 	At           int64   `json:"at"`
 	NetworkID    string  `json:"networkId"`
+	AnalyzerName string  `json:"analyzerName,omitempty"`
 	ObserverID   string  `json:"observerId,omitempty"`
 	ObserverName string  `json:"observerName,omitempty"`
 }
@@ -255,6 +257,7 @@ func advertViews(adverts []AdvertObservation) []AdvertView {
 			AdvertTime:   a.AdvertTime,
 			At:           a.At,
 			NetworkID:    a.NetworkID,
+			AnalyzerName: a.AnalyzerName,
 			ObserverID:   a.ObserverID,
 			ObserverName: a.ObserverName,
 		})

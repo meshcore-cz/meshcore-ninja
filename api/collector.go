@@ -251,6 +251,7 @@ func (c *Collector) collectAdvert(p wsPacket, hash string, now int64) {
 		AdvertTime:   adv.Timestamp.Unix(),
 		At:           now,
 		NetworkID:    c.net.ID,
+		AnalyzerName: c.az.Name,
 		ObserverID:   p.ObserverID,
 		ObserverName: p.ObserverName,
 	})
