@@ -1,7 +1,27 @@
 source: github
 repo: ALLFATHER-BV/wadamesh
-updatedAt: '2026-07-01T09:53:18.581Z'
+updatedAt: '2026-07-01T16:28:31.017Z'
 releases:
+  - version: beta_24
+    name: wadamesh beta_24
+    datetime: '2026-07-01T12:50:16Z'
+    url: https://github.com/ALLFATHER-BV/wadamesh/releases/tag/beta_24
+    prerelease: true
+    notes: >-
+      **wadamesh beta_24, test build.** Opt in via **Settings > About > "Get test builds (beta)"**,
+      or the flasher's Beta toggle.
+
+
+      ## Fixed
+
+
+      - **Signal probe now reads a real signal to your nearest repeater.** It sends the standard
+      mesh node-discovery request that repeaters actually answer, instead of the trace packet from
+      the previous test builds that they ignored, so the signal reading updates again. This is the
+      same request the Ultra and KiekR apps use. Thanks to **Tarmo** for decoding the exact packet.
+
+
+      Everything from the stable beta_21 and the earlier test builds is included.
   - version: beta_23
     name: wadamesh beta_23 (test)
     datetime: '2026-07-01T08:17:34Z'
@@ -1171,11 +1191,3 @@ releases:
     notes: >-
       Touch firmware **beta_4** for the LilyGo T-Deck and Heltec V4 + TFT. Built by CI from
       `7b7ea17031e0d24f2045158bf3744fd9bac1f2b2`.
-  - version: beta_3
-    name: wadamesh beta_3
-    datetime: '2026-06-13T21:17:35Z'
-    url: https://github.com/ALLFATHER-BV/wadamesh/releases/tag/beta_3
-    prerelease: false
-    notes: >-
-      Touch firmware **beta_3** for the LilyGo T-Deck and Heltec V4 + TFT. Built by CI from
-      `058721fdbc572b4332ad55df12c750331d38aa9a`.
