@@ -1,7 +1,54 @@
 source: github
 repo: ALLFATHER-BV/wadamesh
-updatedAt: '2026-07-01T16:28:31.017Z'
+updatedAt: '2026-07-01T21:44:16.305Z'
 releases:
+  - version: beta_25
+    name: wadamesh beta_25 (test)
+    datetime: '2026-07-01T21:34:02Z'
+    url: https://github.com/ALLFATHER-BV/wadamesh/releases/tag/beta_25
+    prerelease: true
+    notes: >-
+      **wadamesh beta_25** is a test-channel build. Opt in on-device with **Settings > About > "Get
+      test builds"**, or use the Beta toggle on
+      [flasher.wadamesh.com](https://flasher.wadamesh.com).
+
+
+      ### Fixed
+
+      - **Contacts show up right away.** A node you discover (even while you're on another screen,
+      or one the phone app adds over Bluetooth) now appears in your contact list immediately,
+      instead of only after you change the sort. Thanks to **@1nerdherder** for the report (#73).
+
+      - **Manual telemetry / status requests work first-try** (no more tapping "Request" twice).
+      Thanks to **@Vybo** (Dan Vybiral) for the fix (#81).
+
+      - Emoji picker and quick-chat replies: pressing **Esc or the red X closes the popup**, not the
+      whole chat.
+
+      - **Lock screen:** you can unlock again after the screen wakes from an incoming message.
+
+
+      ### New
+
+      - **"Advertise on boot"** toggle in the Advertise app (off by default): opt in to send one
+      advert at power-on so peers refresh your details after a reflash (#76).
+
+
+      ### Tanmatsu (ESP32-P4)
+
+      - **Wi-Fi map tiles now work:** they download and display, cached to the microSD card.
+
+      - **Contacts and message history survive a reboot:** moved to the microSD card, so keep a card
+      inserted. Identity and radio settings stay on internal storage.
+
+      - Fixed the crash that stopped the app from booting.
+
+      - Popups fit the screen and scroll; keyboard navigation stays inside an open popup; 2000
+      contacts; "Large" UI size by default.
+
+
+      Everything from stable **beta_21** and the earlier test builds is included. Install the
+      app-only `.bin` via the Launcher, or the `-merged.bin` at 0x0 with a flasher.
   - version: beta_24
     name: wadamesh beta_24
     datetime: '2026-07-01T12:50:16Z'
@@ -1183,11 +1230,3 @@ releases:
 
       - Full-screen settings pages with a clear X to close, a subtle new-message chip, and a
       **full-page Signal view** with a live readout and manual refresh.
-  - version: beta_4
-    name: wadamesh beta_4
-    datetime: '2026-06-14T15:29:19Z'
-    url: https://github.com/ALLFATHER-BV/wadamesh/releases/tag/beta_4
-    prerelease: false
-    notes: >-
-      Touch firmware **beta_4** for the LilyGo T-Deck and Heltec V4 + TFT. Built by CI from
-      `7b7ea17031e0d24f2045158bf3744fd9bac1f2b2`.
