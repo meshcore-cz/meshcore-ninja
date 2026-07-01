@@ -6,6 +6,9 @@ description: >-
   with a CoreScope analyzer.
 scope: regional
 status: active
+part_of:
+  - australia
+  - australia-narrow
 visibility: public
 area: area.geojson
 

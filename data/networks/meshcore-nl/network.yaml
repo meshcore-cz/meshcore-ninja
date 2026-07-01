@@ -8,6 +8,8 @@ description: >-
   regional repeater scopes and an active citizen-led community.
 scope: national
 status: active
+part_of:
+  - eu-uk-narrow
 visibility: public
 area: area.geojson
 

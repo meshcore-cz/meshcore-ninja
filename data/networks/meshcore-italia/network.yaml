@@ -9,6 +9,8 @@ description: >-
   non-centralised infrastructure coordinated by the meshcoreitalia community.
 scope: national
 status: active
+part_of:
+  - eu-uk-narrow
 visibility: public
 
 area: area.geojson

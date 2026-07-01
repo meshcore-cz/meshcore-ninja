@@ -9,6 +9,8 @@ description: >-
   recurring meetings and Discord coordination.
 scope: regional
 status: active
+part_of:
+  - usa-canada-recommended
 visibility: public
 area: area.geojson
 

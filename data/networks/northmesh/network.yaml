@@ -7,6 +7,9 @@ description: >-
   tracking repeaters, packet activity, RF coverage, and MQTT-connected nodes.
 scope: regional
 status: active
+part_of:
+  - meshcore-uk
+  - eu-uk-deprecated
 visibility: public
 area: area.geojson
 

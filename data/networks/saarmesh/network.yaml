@@ -12,6 +12,10 @@ description: >-
   community support.
 scope: regional
 status: active
+part_of:
+  - saarland-luxembourg-mesh
+  - meshcore-de
+  - eu-uk-narrow
 visibility: public
 area: area.geojson
 

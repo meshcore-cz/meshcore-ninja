@@ -13,6 +13,8 @@ description: >-
   shared configuration standards, maps, analyzers and Discord coordination.
 scope: national
 status: active
+part_of:
+  - usa-canada-recommended
 visibility: public
 area: area.geojson
 

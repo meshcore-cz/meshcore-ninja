@@ -7,6 +7,8 @@ description: >-
   with a public CoreScope analyzer in the LAX metro region.
 scope: regional
 status: active
+part_of:
+  - west-coast-mesh
 visibility: public
 area: area.geojson
 

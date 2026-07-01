@@ -3,6 +3,11 @@ short_name: Mesh Dunkerquois
 description: MeshCore community around Dunkirk and the northern France/Belgium coast.
 scope: regional
 status: active
+part_of:
+  - meshcore-fr
+  - meshcore-be
+  - eu-uk-narrow
+  - eu-uk-deprecated
 visibility: public
 area: area.geojson
 coverage:

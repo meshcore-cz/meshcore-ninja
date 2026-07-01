@@ -9,6 +9,9 @@ description: >-
   without internet or cellular networks.
 scope: regional
 status: active
+part_of:
+  - meshcore-de
+  - eu-uk-narrow
 visibility: public
 area: area.geojson
 

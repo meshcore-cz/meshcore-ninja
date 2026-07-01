@@ -9,6 +9,8 @@ description: >-
   channels and an Interstate 5 corridor between regional clusters.
 scope: regional
 status: active
+part_of:
+  - west-coast-mesh
 visibility: public
 area: area.geojson
 

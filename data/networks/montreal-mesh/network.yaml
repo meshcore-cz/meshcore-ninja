@@ -15,6 +15,9 @@ description: >-
   goals covering Laval, Longueuil and the wider Greater Montréal area.
 scope: regional
 status: active
+part_of:
+  - meshcore-ca
+  - usa-canada-recommended
 visibility: public
 area: area.geojson
 

@@ -7,6 +7,8 @@ description: >-
   Icelandic MeshCore community building off-grid mesh communication across Iceland.
 scope: national
 status: active
+part_of:
+  - eu-uk-narrow
 visibility: public
 area: area.geojson
 

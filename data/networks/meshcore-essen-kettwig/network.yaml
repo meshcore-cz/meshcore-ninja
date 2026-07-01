@@ -13,6 +13,10 @@ description: >-
   protection alerts over MeshCore.
 scope: local
 status: active
+part_of:
+  - ruhr-meshcore
+  - meshcore-de
+  - eu-uk-narrow
 visibility: public
 area: area.geojson
 

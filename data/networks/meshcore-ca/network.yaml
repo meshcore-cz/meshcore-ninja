@@ -8,6 +8,8 @@ description: >-
   with Discord, forum, MQTT brokers, CoreScope analyzer and live map services.
 scope: national
 status: active
+part_of:
+  - usa-canada-recommended
 visibility: public
 area: area.geojson
 

@@ -6,6 +6,8 @@ description: >-
   coverage maps and support for Romanians getting started with MeshCore.
 scope: local
 status: active
+part_of:
+  - eu-uk-narrow
 visibility: public
 
 coverage:

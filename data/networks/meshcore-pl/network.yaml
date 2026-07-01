@@ -8,6 +8,8 @@ description: >-
   setup guides, repeater guidance, analyzer documentation and community links.
 scope: national
 status: active
+part_of:
+  - eu-uk-narrow
 visibility: public
 area: area.geojson
 

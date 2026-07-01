@@ -7,6 +7,10 @@ description: >-
   support and meetups.
 scope: local
 status: active
+part_of:
+  - meshcore-de
+  - eu-uk-narrow
+  - eu-uk-deprecated
 visibility: public
 
 coverage:

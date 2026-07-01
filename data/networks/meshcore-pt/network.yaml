@@ -8,6 +8,8 @@ description: >-
   radio settings, local hardware guides, map tools and LusoApp resources.
 scope: national
 status: active
+part_of:
+  - eu-uk-narrow
 visibility: public
 area: area.geojson
 

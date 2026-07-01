@@ -9,6 +9,10 @@ description: >-
   Narrow for EastMesh links south toward Canberra and beyond.
 scope: regional
 status: active
+part_of:
+  - australia
+  - australia-mid
+  - australia-narrow
 visibility: public
 area: area.geojson
 

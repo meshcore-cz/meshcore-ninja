@@ -7,6 +7,8 @@ description: >-
   the USA/Canada 915 MHz preset with the #nodakmesh public channel.
 scope: regional
 status: active
+part_of:
+  - usa-canada-recommended
 visibility: public
 
 coverage:

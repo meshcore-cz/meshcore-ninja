@@ -6,6 +6,9 @@ description: >-
   Most active statewide traffic runs on MeshCore using the USA/Canada preset.
 scope: regional
 status: active
+part_of:
+  - new-england-mesh
+  - usa-canada-recommended
 visibility: public
 
 coverage:

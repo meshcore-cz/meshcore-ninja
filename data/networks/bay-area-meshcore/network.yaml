@@ -8,6 +8,8 @@ description: >-
   915 MHz band with a CoreScope analyzer and Discord community.
 scope: regional
 status: active
+part_of:
+  - west-coast-mesh
 visibility: public
 area: area.geojson
 

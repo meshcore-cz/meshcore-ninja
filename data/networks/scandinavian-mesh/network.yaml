@@ -6,6 +6,10 @@ description: >-
   Narrow preset on the 868 MHz band with a dedicated CoreScope analyzer.
 scope: regional
 status: active
+part_of:
+  - meshat-se
+  - meshcore-dk
+  - eu-uk-narrow
 visibility: public
 area: area.geojson
 

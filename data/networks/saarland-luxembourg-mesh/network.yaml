@@ -7,6 +7,10 @@ description: >-
   analyzer.
 scope: regional
 status: active
+part_of:
+  - meshcore-de
+  - meshcore-lu
+  - eu-uk-narrow
 visibility: public
 area: area.geojson
 

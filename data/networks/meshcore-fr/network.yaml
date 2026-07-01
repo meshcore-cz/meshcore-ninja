@@ -8,6 +8,8 @@ description: >-
   guidance, Discord coordination and local Lyon and Lorient/Ouest activity.
 scope: national
 status: active
+part_of:
+  - eu-uk-narrow
 visibility: public
 area: area.geojson
 

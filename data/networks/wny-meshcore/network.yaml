@@ -8,6 +8,8 @@ description: >-
   repeaters across the Buffalo-Rochester corridor and public setup guides.
 scope: regional
 status: active
+part_of:
+  - usa-canada-recommended
 visibility: public
 area: area.geojson
 

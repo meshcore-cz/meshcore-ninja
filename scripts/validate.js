@@ -200,7 +200,15 @@ for (const r of [...vendors, ...devices, ...firmwares, ...networks, ...software]
 // A network's radio.frequency / radios[].frequency must be a band key registered
 // in globals.frequency (it's how compatible devices are matched).
 const frequencyKeys = new Set(Object.keys(globalsData?.frequency ?? {}));
+const networkIds = new Set(networks.map((n) => n.id));
 for (const n of networks) {
+  for (const parentId of n.data.part_of ?? []) {
+    if (parentId === n.id) {
+      err(n.where, 'part_of must not include this network itself');
+    } else if (!networkIds.has(parentId)) {
+      err(n.where, `part_of "${parentId}" has no data/networks/ entry`);
+    }
+  }
   const radios = Array.isArray(n.data.radios) && n.data.radios.length ? n.data.radios : [n.data.radio].filter(Boolean);
   for (const [index, radio] of radios.entries()) {
     const band = radio?.frequency;

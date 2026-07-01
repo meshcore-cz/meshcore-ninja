@@ -7,6 +7,10 @@ description: >-
   on the USA/Canada 915 MHz preset serving Seattle, Tacoma and surrounding areas.
 scope: local
 status: active
+part_of:
+  - cascadia-mesh
+  - west-coast-mesh
+  - usa-canada-recommended
 visibility: public
 
 coverage:

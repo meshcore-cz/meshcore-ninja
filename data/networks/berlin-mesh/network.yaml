@@ -6,6 +6,9 @@ description: >-
   using EU/UK Narrow settings on 869.618 MHz.
 scope: regional
 status: active
+part_of:
+  - meshcore-de
+  - eu-uk-narrow
 visibility: public
 area: area.geojson
 

@@ -6,6 +6,8 @@ description: Mesh communication community group for New York's Capital District 
   Schenectady, Troy, Saratoga) and beyond. Supports both Meshtastic and MeshCore.
 scope: regional
 status: active
+part_of:
+  - usa-canada-recommended
 visibility: public
 area: area.geojson
 coverage:

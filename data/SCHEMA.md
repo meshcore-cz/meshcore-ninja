@@ -303,6 +303,7 @@ the device catalog — networks never list devices themselves.
 | `description`    | no       | string | One short paragraph. |
 | `scope`          | no       | enum   | `general` (a standard preset/region, not a community) \| `national` \| `regional` \| `local` \| `experimental`. |
 | `status`         | no       | enum   | `active` \| `planned` \| `dormant` \| `inactive`. |
+| `part_of`        | no       | list   | Parent network IDs this network belongs to; use for subnetworks, regional communities under a national/general preset, or multiple umbrellas. |
 | `visibility`     | no       | enum   | `public` \| `private`. |
 | `coverage`       | no       | object | `countries` — list of ISO-3166 alpha-2 codes (e.g. `CZ`). |
 | `area`           | no       | string | GeoJSON filename in the same directory, usually `area.geojson`; shown on the Networks map. |

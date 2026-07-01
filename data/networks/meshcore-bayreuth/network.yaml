@@ -7,6 +7,9 @@ description: >-
   the EU/UK Narrow preset.
 scope: local
 status: active
+part_of:
+  - meshcore-de
+  - eu-uk-narrow
 visibility: public
 area: area.geojson
 

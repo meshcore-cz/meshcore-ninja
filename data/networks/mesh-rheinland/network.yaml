@@ -9,6 +9,9 @@ description: >-
   analyzer, and WhatsApp coordination.
 scope: regional
 status: active
+part_of:
+  - meshcore-de
+  - eu-uk-narrow
 visibility: public
 area: area.geojson
 

@@ -5,6 +5,8 @@ description: Community network of MeshCore, Meshtastic, Reticulum and LoRa enthu
   with a CoreScope-backed analyzer, live map, getting-started guides and Discord coordination.
 scope: local
 status: active
+part_of:
+  - usa-canada-recommended
 visibility: public
 area: area.geojson
 coverage:

@@ -7,6 +7,8 @@ description: >-
   preset with a live CoreScope map and regional repeater coverage.
 scope: national
 status: active
+part_of:
+  - eu-uk-narrow
 visibility: public
 area: area.geojson
 

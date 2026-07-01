@@ -13,6 +13,8 @@ description: >-
   Discord coordination.
 scope: local
 status: active
+part_of:
+  - usa-canada-recommended
 visibility: public
 area: area.geojson
 

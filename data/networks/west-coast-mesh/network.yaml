@@ -7,6 +7,8 @@ description: >-
   activities and IoT sensor networks on the US 915 MHz band.
 scope: regional
 status: active
+part_of:
+  - usa-canada-recommended
 visibility: public
 
 coverage:

@@ -7,6 +7,10 @@ description: >-
   EU/UK Narrow preset on the 868 MHz band.
 scope: regional
 status: active
+part_of:
+  - mesh-rheinland
+  - meshcore-de
+  - eu-uk-narrow
 visibility: public
 area: area.geojson
 

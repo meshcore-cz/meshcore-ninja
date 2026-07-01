@@ -8,6 +8,10 @@ description: >-
   Australia radio profiles, maps, observers, repeaters and Discord coordination.
 scope: regional
 status: active
+part_of:
+  - australia
+  - australia-mid
+  - australia-narrow
 visibility: public
 area: area.geojson
 

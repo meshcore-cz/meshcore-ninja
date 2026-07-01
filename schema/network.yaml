@@ -49,6 +49,17 @@ properties:
       Superseded by a newer preset/configuration. Deprecated networks are kept
       for reference but hidden from the coverage map and listed separately from
       active networks.
+  part_of:
+    description: >-
+      Parent network IDs this network belongs to. Use this for subnetworks,
+      regional communities that operate under a broader national/general preset,
+      or local meshes that are part of multiple umbrellas.
+    type: array
+    minItems: 1
+    uniqueItems: true
+    items:
+      type: string
+      pattern: ^[a-z0-9-]+$
   visibility:
     description: Whether the network is openly joinable (`public`) or closed/invite-only (`private`).
     type: string

@@ -7,6 +7,10 @@ description: >-
   Discord, CoreScope instance and EastMesh firmware builds.
 scope: regional
 status: active
+part_of:
+  - australia
+  - australia-narrow
+  - australia-mid
 visibility: public
 area: area.geojson
 

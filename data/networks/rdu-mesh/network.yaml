@@ -14,6 +14,8 @@ description: >-
   Triangle service area.
 scope: regional
 status: active
+part_of:
+  - usa-canada-recommended
 visibility: public
 area: area.geojson
 

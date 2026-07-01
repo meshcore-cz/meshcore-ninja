@@ -9,6 +9,8 @@ description: >-
   guidance, repeater setup notes, component build guides and public map links.
 scope: national
 status: active
+part_of:
+  - eu-uk-narrow
 visibility: public
 area: area.geojson
 

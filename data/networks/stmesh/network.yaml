@@ -7,6 +7,8 @@ description: Community-built LoRa mesh networks across New York's Southern Tier,
   covering both Meshtastic and MeshCore deployments.
 scope: regional
 status: active
+part_of:
+  - usa-canada-recommended
 visibility: public
 area: area.geojson
 coverage:

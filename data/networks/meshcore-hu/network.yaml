@@ -8,6 +8,8 @@ description: >-
   EU/UK Narrow radio settings for the national 868 MHz mesh.
 scope: national
 status: active
+part_of:
+  - eu-uk-narrow
 visibility: public
 area: area.geojson
 

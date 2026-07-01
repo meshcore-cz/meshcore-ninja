@@ -8,6 +8,8 @@ description: MeshCore community in Catalonia. Off-grid mesh network running on 8
   for joining the network.
 scope: regional
 status: active
+part_of:
+  - eu-uk-narrow
 visibility: public
 area: area.geojson
 coverage:

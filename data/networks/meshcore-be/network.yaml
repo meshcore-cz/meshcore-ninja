@@ -10,6 +10,8 @@ description: >-
   into the wider Radio-Actief / RRY Belgian MeshCore community.
 scope: regional
 status: active
+part_of:
+  - eu-uk-narrow
 visibility: public
 area: area.geojson
 

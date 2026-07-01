@@ -6,6 +6,10 @@ description: MeshCore community network serving the Salish Sea region of southwe
   British Columbia and surrounding areas.
 scope: regional
 status: active
+part_of:
+  - cascadia-mesh
+  - meshcore-ca
+  - usa-canada-recommended
 visibility: public
 area: area.geojson
 coverage:

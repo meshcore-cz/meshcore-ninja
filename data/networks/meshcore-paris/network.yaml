@@ -7,6 +7,9 @@ description: >-
   building a long-range offline LoRa mesh across the metropolitan area.
 scope: regional
 status: active
+part_of:
+  - meshcore-fr
+  - eu-uk-narrow
 visibility: public
 area: area.geojson
 

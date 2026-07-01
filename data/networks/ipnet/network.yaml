@@ -9,6 +9,9 @@ description: >-
   and operator views.
 scope: local
 status: active
+part_of:
+  - meshcore-uk
+  - eu-uk-narrow
 visibility: public
 area: area.geojson
 

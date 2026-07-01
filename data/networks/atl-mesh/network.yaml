@@ -7,6 +7,8 @@ description: >-
   communication across the city and surrounding counties.
 scope: regional
 status: active
+part_of:
+  - georgia-mesh
 visibility: public
 area: area.geojson
 

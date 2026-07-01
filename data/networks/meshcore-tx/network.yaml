@@ -8,6 +8,8 @@ description: >-
   Meshtastic and one for running concurrent networks or new meshes.
 scope: regional
 status: active
+part_of:
+  - usa-canada-recommended
 visibility: public
 area: area.geojson
 

@@ -5,6 +5,8 @@
 name: 'Australia: QLD'
 scope: general
 status: active
+part_of:
+  - australia
 description: 'Official MeshCore app radio preset — 923.125MHz / SF8 / BW62.5 / CR5.'
 area: area.geojson
 coverage:

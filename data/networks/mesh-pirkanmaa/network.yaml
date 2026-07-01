@@ -9,6 +9,9 @@ description: >-
   Narrow preset on 869.618 MHz and publishes local mapping and chat resources.
 scope: regional
 status: active
+part_of:
+  - meshcore-fi
+  - eu-uk-narrow
 visibility: public
 area: area.geojson
 

@@ -9,6 +9,9 @@ description: >-
   coverage tools and local MQTT/observer resources for the BDL region.
 scope: regional
 status: active
+part_of:
+  - new-england-mesh
+  - usa-canada-recommended
 visibility: public
 area: area.geojson
 

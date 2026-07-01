@@ -5,6 +5,8 @@ short_name: FLMesh
 description: Florida-wide MeshCore community network built by amateur radio operators and off-grid communications enthusiasts across the Sunshine State.
 scope: regional
 status: active
+part_of:
+  - usa-canada-recommended
 visibility: public
 coverage:
   countries:

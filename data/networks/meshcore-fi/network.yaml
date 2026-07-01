@@ -6,6 +6,8 @@ description: >-
   MeshCore community in Finland, monitored through a public CoreScope analyzer.
 scope: national
 status: active
+part_of:
+  - eu-uk-narrow
 visibility: public
 area: area.geojson
 

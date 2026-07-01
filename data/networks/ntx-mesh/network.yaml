@@ -8,6 +8,9 @@ description: >-
   using the standard USA/Canada preset on 910.525 MHz.
 scope: regional
 status: active
+part_of:
+  - meshcore-tx
+  - usa-canada-recommended
 visibility: public
 area: area.geojson
 

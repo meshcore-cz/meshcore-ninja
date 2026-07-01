@@ -6,6 +6,9 @@ description: >-
   910.525 MHz (62.5 kHz / SF7 / CR4/5) with a CoreScope analyzer.
 scope: regional
 status: active
+part_of:
+  - new-england-mesh
+  - usa-canada-recommended
 visibility: public
 area: area.geojson
 

@@ -8,6 +8,8 @@ description: >-
   coordination spaces for MeshCore users.
 scope: national
 status: active
+part_of:
+  - eu-uk-narrow
 visibility: public
 area: area.geojson
 
