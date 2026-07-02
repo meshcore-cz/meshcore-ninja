@@ -8,11 +8,9 @@
     networkRadioSettings,
     codingRateLabel,
     networkBands,
-    bandLabel,
-    isAppPresetNetwork
+    bandLabel
   } from '$lib/data.js';
   import NetworkAreaMap from '$lib/NetworkAreaMap.svelte';
-  import AppPresetBadge from '$lib/AppPresetBadge.svelte';
   import Seo from '$lib/Seo.svelte';
   import PageHeader from '$lib/PageHeader.svelte';
   import ToolLink from '$lib/ToolLink.svelte';
@@ -56,12 +54,15 @@
       return label != null ? Number(label) : null;
     },
     live: (n) => liveById[n.id]?.pktPerMin ?? null,
+    totalNodes: (n) => liveById[n.id]?.totalNodes ?? null,
     nodes: (n) => liveById[n.id]?.nodes ?? null,
     observers: (n) => liveById[n.id]?.observers ?? null
   };
 
-  // Default to largest coverage area first, matching the page's prior ordering.
-  let sortKey = $state('area');
+  // Default to most total nodes first when live data is available; otherwise fall
+  // back to largest coverage area (the prior ordering, and the only signal on the
+  // static site with no API).
+  let sortKey = $state(LIVE_ENABLED ? 'totalNodes' : 'area');
   let sortDir = $state('desc');
 
   function toggleSort(key) {
@@ -182,6 +183,7 @@
 
 <PageHeader collection="networks">
   {#snippet actions()}
+    <ToolLink id="network-rank" />
     <ToolLink id="bands" />
   {/snippet}
   {m.networks_intro()}
@@ -291,9 +293,6 @@
               {#if n.short_name && n.short_name !== n.name}
                 <span class="font-mono text-[0.74rem] text-dim">{n.short_name}</span>
               {/if}
-              {#if isAppPresetNetwork(n)}
-                <AppPresetBadge />
-              {/if}
             </a>
           </td>
           <td rowspan={rows} class="border-b border-edge px-3.5 py-2.5 align-middle">
@@ -304,11 +303,14 @@
             {/if}
           </td>
         {/if}
-        <td class="{bc} px-3.5 py-2 font-mono text-[0.8rem] tabular-nums whitespace-nowrap">{radioFreq(r)}</td>
-        <td class="{bc} px-3.5 py-2 font-mono text-[0.8rem] tabular-nums text-dim">{r?.spreading_factor != null ? `SF${r.spreading_factor}` : '—'}</td>
-        <td class="{bc} px-3.5 py-2 font-mono text-[0.8rem] tabular-nums whitespace-nowrap text-dim">{r?.bandwidth_khz != null ? `${r.bandwidth_khz} kHz` : '—'}</td>
-        <td class="{bc} px-3.5 py-2 font-mono text-[0.8rem] tabular-nums text-dim">{codingRateLabel(r?.coding_rate) ?? '—'}</td>
+        <td class="{bc} px-2.5 py-1.5 font-mono text-[0.72rem] tabular-nums whitespace-nowrap text-dim">{radioFreq(r)}</td>
+        <td class="{bc} px-2.5 py-1.5 font-mono text-[0.72rem] tabular-nums text-dim">{r?.spreading_factor != null ? `SF${r.spreading_factor}` : '—'}</td>
+        <td class="{bc} px-2.5 py-1.5 font-mono text-[0.72rem] tabular-nums whitespace-nowrap text-dim">{r?.bandwidth_khz != null ? `${r.bandwidth_khz} kHz` : '—'}</td>
+        <td class="{bc} px-2.5 py-1.5 font-mono text-[0.72rem] tabular-nums text-dim">{codingRateLabel(r?.coding_rate) ?? '—'}</td>
         {#if LIVE_ENABLED && i === 0}
+          <td rowspan={rows} class="border-b border-edge px-3.5 py-2.5 text-right align-middle font-mono text-[0.85rem] font-semibold tabular-nums whitespace-nowrap">
+            {#if live}{(live.totalNodes ?? 0).toLocaleString()}{:else}<span class="text-dim">—</span>{/if}
+          </td>
           <td rowspan={rows} class="border-b border-edge px-3.5 py-2.5 text-right align-middle font-mono text-[0.82rem] tabular-nums whitespace-nowrap">
             {#if live}
               <span
@@ -342,6 +344,7 @@
           {@render sortTh('bw', 'BW')}
           {@render sortTh('cr', 'CR')}
           {#if LIVE_ENABLED}
+            {@render sortTh('totalNodes', m.networks_col_total_nodes(), true, m.networks_live_total_nodes_title())}
             {@render sortTh('live', 'pkt/m', true, m.networks_live_pktm_title())}
             {@render sortTh('nodes', m.networks_col_nodes(), true, m.networks_live_nodes_title())}
             {@render sortTh('observers', m.networks_col_observers(), true, m.networks_live_observers_title())}
@@ -374,6 +377,7 @@
             <th class="border-b border-edge px-3.5 py-2.5">BW</th>
             <th class="border-b border-edge px-3.5 py-2.5">CR</th>
             {#if LIVE_ENABLED}
+              <th class="border-b border-edge px-3.5 py-2.5 text-right">{m.networks_col_total_nodes()}</th>
               <th class="border-b border-edge px-3.5 py-2.5 text-right">pkt/m</th>
               <th class="border-b border-edge px-3.5 py-2.5 text-right">{m.networks_col_nodes()}</th>
               <th class="border-b border-edge px-3.5 py-2.5 text-right">{m.networks_col_observers()}</th>

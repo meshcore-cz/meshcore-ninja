@@ -1,10 +1,5 @@
 import { error } from '@sveltejs/kit';
-import {
-  networks,
-  getNetwork,
-  devicesForNetwork,
-  devicesIncompatibleWithNetwork
-} from '$lib/data.js';
+import { networks, getNetwork, devicesForNetwork } from '$lib/data.js';
 
 export function entries() {
   return networks.map((n) => ({ id: n.id }));
@@ -23,7 +18,6 @@ export function load({ params }) {
     network,
     parentNetworks,
     subnetworks,
-    devices: devicesForNetwork(network),
-    incompatibleDevices: devicesIncompatibleWithNetwork(network)
+    devices: devicesForNetwork(network)
   };
 }

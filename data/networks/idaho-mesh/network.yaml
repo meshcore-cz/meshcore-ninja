@@ -34,11 +34,3 @@ radio:
 community:
   website: https://idahomesh.org
   discord: https://discord.gg/8mKr4RCznS
-
-maps:
-  - name: MeshCore Network Map
-    url: https://meshcore.co.uk/map.html
-
-analyzers:
-  - name: analyzer.letsmesh.net
-    url: https://analyzer.letsmesh.net

@@ -3,7 +3,7 @@
 // the sprite, not a per-icon Svelte component.
 import { m } from '$lib/paraglide/messages.js';
 
-/** @typedef {'repeater-commands' | 'matrix' | 'device-rank' | 'compare' | 'compare-firmwares' | 'releases' | 'languages' | 'vendor-countries' | 'bands' | 'prints' | 'gallery' | 'schemas' | 'bundle' | 'status' | 'about'} ToolId */
+/** @typedef {'repeater-commands' | 'matrix' | 'device-rank' | 'network-rank' | 'compare' | 'compare-firmwares' | 'releases' | 'languages' | 'vendor-countries' | 'bands' | 'prints' | 'gallery' | 'schemas' | 'bundle' | 'status' | 'about'} ToolId */
 
 /** @type {Record<ToolId, { id: ToolId, label: string, href: string, icon: string, home?: boolean, homeLabel?: string }>} */
 export const TOOLS = {
@@ -55,6 +55,13 @@ export const TOOLS = {
     label: 'Device ranking',
     href: '/device-rank/',
     icon: 'trophy',
+    home: true
+  },
+  'network-rank': {
+    id: 'network-rank',
+    label: 'Network ranking',
+    href: '/network-rank/',
+    icon: 'medal',
     home: true
   },
   compare: {
@@ -116,7 +123,7 @@ export const TOOLS = {
 
 /** Related tool shortcuts shown in each collection page header. */
 export const COLLECTION_TOOL_IDS = {
-  networks: ['bands'],
+  networks: ['network-rank', 'bands'],
   firmwares: ['releases', 'matrix'],
   devices: ['device-rank', 'gallery'],
   software: ['releases', 'languages'],
@@ -129,6 +136,7 @@ export const HOME_TOOL_IDS = [
   'bands',
   'matrix',
   'device-rank',
+  'network-rank',
   'releases',
   'prints',
   'gallery',

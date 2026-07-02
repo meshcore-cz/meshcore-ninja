@@ -36,6 +36,7 @@ import images from "lucide-static/icons/images.svg?raw";
 import info from "lucide-static/icons/info.svg?raw";
 import keyboard from "lucide-static/icons/keyboard.svg?raw";
 import library from "lucide-static/icons/library.svg?raw";
+import medal from "lucide-static/icons/medal.svg?raw";
 import monitor from "lucide-static/icons/monitor.svg?raw";
 import network from "lucide-static/icons/network.svg?raw";
 import puzzle from "lucide-static/icons/puzzle.svg?raw";
@@ -83,6 +84,7 @@ const RAW = new Map([
   ["info", info],
   ["keyboard", keyboard],
   ["library", library],
+  ["medal", medal],
   ["monitor", monitor],
   ["network", network],
   ["puzzle", puzzle],

@@ -13,11 +13,9 @@
     codingRateLabel,
     networkScopeLabel,
     networkStatusLabel,
-    bandLabel,
     networkRadioSettings,
+    networkBands,
     networkRegions,
-    deviceMcuLabel,
-    deviceRadioLabel,
     isAppPresetNetwork,
     resolveRefs,
     descriptionToPlain
@@ -40,6 +38,27 @@
   let payloadBreakdown = $derived(
     Object.entries(live?.payloadTypes ?? {}).sort((a, b) => b[1] - a[1])
   );
+
+  // Registry node counts (all-time total, the map-plotted subset, and that subset
+  // split by node type), matching the map popup. Type cards only show when present.
+  let nodeStats = $derived.by(() => {
+    if (!live) return [];
+    const out = [
+      { label: m.nd_nodes_total(), value: (live.totalNodes ?? 0).toLocaleString() },
+      { label: m.nd_nodes_on_map(), value: (live.nodesOnMap ?? 0).toLocaleString() }
+    ];
+    const byType = live.nodesByType ?? {};
+    const types = [
+      ['repeater', m.nd_nodes_repeaters()],
+      ['chat', m.nd_nodes_companions()],
+      ['room', m.nd_nodes_rooms()],
+      ['sensor', m.nd_nodes_sensors()]
+    ];
+    for (const [key, label] of types) {
+      if (byType[key]) out.push({ label, value: byType[key].toLocaleString() });
+    }
+    return out;
+  });
 
   // Live per-analyzer stats keyed by analyzer name (matches network.yaml).
   let liveAnalyzerByName = $derived(
@@ -64,6 +83,12 @@
 
   let refs = $derived(resolveRefs(n.refs));
   let alternateNames = $derived(n.also_known_as ?? []);
+
+  // The compatible-device list lives on the Devices page; link there filtered to
+  // this network's frequency band(s) instead of duplicating the grid here.
+  let compatibleHref = $derived(
+    href(`/devices/${networkBands(n).length ? `?band=${networkBands(n).join(',')}` : ''}`)
+  );
 
   let radioSettings = $derived(networkRadioSettings(n));
   let joinPresets = $derived(
@@ -218,6 +243,26 @@
     {/each}
   </div>
 {/snippet}
+
+{#if LIVE_ENABLED && live && (live.totalNodes || live.nodesOnMap)}
+  <section class="mb-7">
+    <h2 class="mb-3 flex items-center gap-2 border-b border-edge pb-1.5 text-[1.1rem] font-semibold">
+      {m.nd_nodes()}
+      <span class="inline-flex items-center gap-1.5 text-[0.72rem] font-normal text-dim">
+        <span class="h-1.5 w-1.5 rounded-full bg-accent"></span>
+        {m.nd_live()}
+      </span>
+    </h2>
+    <div class="grid gap-2 [grid-template-columns:repeat(auto-fit,minmax(110px,1fr))]">
+      {#each nodeStats as stat}
+        <div class="rounded-xl border border-edge bg-elev px-3 py-2">
+          <div class="text-[0.68rem] tracking-wide text-dim uppercase">{stat.label}</div>
+          <div class="mt-0.5 font-mono text-[1.05rem] tabular-nums">{stat.value}</div>
+        </div>
+      {/each}
+    </div>
+  </section>
+{/if}
 
 {#if parentNetworks.length || subnetworks.length}
   <section class="mb-7 space-y-5">
@@ -393,27 +438,18 @@
 {/if}
 
 <section class="mb-7">
-  <h2 class="border-b border-edge pb-1.5 text-[1.1rem] font-semibold">
-    {m.nd_compatible_devices({ count: data.devices.length })}
-  </h2>
   {#if data.devices.length}
-    <p class="mt-2 text-[0.85rem] text-dim">
-      {m.nd_compatible_blurb({ band: networkBandLabel(n) ?? m.nd_this_network() })}
-    </p>
-    <div class="mt-3 grid gap-2 [grid-template-columns:repeat(auto-fill,minmax(240px,1fr))]">
-      {#each data.devices as d (d.id)}
-        <a class="flex items-center gap-3 rounded-xl border border-edge bg-elev px-3.5 py-2.5 hover:border-accent" href={href(`/device/${d.id}/`)}>
-          <div class="flex h-[46px] w-[46px] shrink-0 items-center justify-center overflow-hidden rounded-lg bg-elev2">
-            {#if d.imageUrl}<img src={d.imageUrl} alt={d.name} loading="lazy" class="max-h-full max-w-full object-contain" />{/if}
-          </div>
-          <div>
-            <span class="block text-[0.9rem]">{d.name}</span>
-            <span class="block font-mono text-[0.76rem] text-dim">{deviceMcuLabel(d)} · {deviceRadioLabel(d)}</span>
-          </div>
-        </a>
-      {/each}
-    </div>
+    <a
+      class="inline-flex items-center gap-2.5 rounded-xl border border-edge bg-elev px-4 py-3 font-medium hover:border-accent"
+      href={compatibleHref}
+    >
+      <span>{m.nd_compatible_devices({ count: data.devices.length })}</span>
+      <span class="text-dim" aria-hidden="true">→</span>
+    </a>
   {:else}
+    <h2 class="border-b border-edge pb-1.5 text-[1.1rem] font-semibold">
+      {m.nd_compatible_devices({ count: 0 })}
+    </h2>
     <p class="mt-3 text-dim">
       {#if networkBandLabel(n)}
         {m.nd_no_compatible()}
@@ -423,36 +459,5 @@
     </p>
   {/if}
 </section>
-
-{#if data.incompatibleDevices.length}
-  <section class="mb-7">
-    <details>
-      <summary class="cursor-pointer list-none border-b border-edge pb-1.5 text-[1.1rem] font-semibold marker:content-none">
-        <span class="inline-flex items-center gap-2">
-          {m.nd_incompatible_devices({ count: data.incompatibleDevices.length })}
-          <span class="text-[0.8rem] font-normal text-dim">{m.nd_incompatible_show()}</span>
-        </span>
-      </summary>
-      <p class="mt-2 text-[0.85rem] text-dim">
-        {m.nd_incompatible_blurb({ band: networkBandLabel(n) ?? m.nd_this_network() })}
-      </p>
-      <div class="mt-3 grid gap-2 [grid-template-columns:repeat(auto-fill,minmax(240px,1fr))]">
-        {#each data.incompatibleDevices as d (d.id)}
-          <a class="flex items-center gap-3 rounded-xl border border-edge bg-elev px-3.5 py-2.5 opacity-70 hover:border-bad hover:opacity-100" href={href(`/device/${d.id}/`)}>
-            <div class="flex h-[46px] w-[46px] shrink-0 items-center justify-center overflow-hidden rounded-lg bg-elev2 grayscale">
-              {#if d.imageUrl}<img src={d.imageUrl} alt={d.name} loading="lazy" class="max-h-full max-w-full object-contain" />{/if}
-            </div>
-            <div>
-              <span class="block text-[0.9rem]">{d.name}</span>
-              <span class="block font-mono text-[0.76rem] text-dim">
-                {[...new Set((d.hardware?.radios ?? []).flatMap((r) => r.bands ?? []))].map((b) => bandLabel(b) ?? b).join(', ') || m.nd_no_lora_band()}
-              </span>
-            </div>
-          </a>
-        {/each}
-      </div>
-    </details>
-  </section>
-{/if}
 
 <RecordFooter source={n.source} jsonPath="{base}/network/{n.id}.json" />
